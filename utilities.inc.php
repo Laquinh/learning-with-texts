@@ -2462,6 +2462,38 @@ function echodebug($var,$text) {
 
 // -------------------------------------------------------------
 
+/**
+ * Original: https://bueltge.de/einfaches-php-debugging-in-browser-console/, consulted on 2022/10/10
+ * 
+ * Simple helper to debug to the console
+ * 
+ * @param  Array, Object, String $data, @param String $messageType ("log", "warn" or "error", default value = "log")
+ * @return String
+ */
+function consoleLog($data, $messageType = "log") {
+	$output = '';
+		
+	if ( is_array( $data ) ) {
+		$output .= "<script>console.".$messageType."( 'Debug Objects with Array.' ); console.log( '" . implode( ',', $data) . "' );</script>";
+	} else if ( is_object( $data ) ) {
+		$data    = var_export( $data, TRUE );
+		$data    = explode( "\n", $data );
+		foreach( $data as $line ) {
+			if ( trim( $line ) ) {
+				$line    = addslashes( $line );
+				$output .= "console.".$messageType."( '{$line}' );";
+			}
+		}
+			$output = "<script>console.".$messageType."( 'Debug Objects with Object.' ); $output</script>";
+	} else {
+		$output .= "<script>console.".$messageType."( 'Debug Objects: {$data}' );</script>";
+	}
+		
+	echo $output;
+}
+
+// -------------------------------------------------------------
+
 function splitCheckText($text, $lid, $id) {   
 	// $id = -1     => Check, return protocol
 	// $id = -2     => Only return sentence array
