@@ -39,7 +39,7 @@ Plus (at end): Database Connect, .. Select, .. Updates
 
 function get_version() {
 	global $debug;
-	return '1.6.3 (April 06 2020)'  . 
+	return '2.0.3 (February 15 2022)'  . 
 	($debug ? ' <span class="red">DEBUG</span>' : '');
 }
 
@@ -71,10 +71,14 @@ function my_die($text) {
 // -------------------------------------------------------------
 
 function stripTheSlashesIfNeeded($s) {
-	if(get_magic_quotes_gpc())
-		return stripslashes($s);
-	else
+	if (function_exists("get_magic_quotes_gpc")) {
+		if(get_magic_quotes_gpc())
+			return stripslashes($s);
+		else 
+			return $s;
+	} else {
 		return $s;
+	}
 }
 
 // -------------------------------------------------------------
@@ -963,7 +967,12 @@ function showRequest() {
 	echo "<pre>** DEBUGGING **********************************\n";
 	echo '$GLOBALS...'; print_r($GLOBALS);
 	echo 'get_version_number()...'; echo get_version_number() . "\n";
-	echo 'get_magic_quotes_gpc()...'; echo get_magic_quotes_gpc() . "\n";
+	echo 'get_magic_quotes_gpc()...'; 
+	if (function_exists("get_magic_quotes_gpc")) {
+		echo (get_magic_quotes_gpc() ? "TRUE" : "FALSE") . "\n";
+	} else {
+		echo "NOT EXISTS (FALSE)\n";
+	}
 	echo "********************************** DEBUGGING **</pre>";
 	error_reporting($olderr);
 }
@@ -3347,17 +3356,19 @@ if ($dspltime) get_execution_time();
 
 // Connection, @ suppresses messages from function
 
+@mysqli_report(MYSQLI_REPORT_OFF); // added because mysqli_report default setting in PHP 8.1+ has changed
+
 $DBCONNECTION = @mysqli_connect($server, $userid, $passwd, $dbname);
 
 if ((! $DBCONNECTION) && mysqli_connect_errno() == 1049) {
 	$DBCONNECTION = @mysqli_connect($server, $userid, $passwd);
-	if (! $DBCONNECTION) my_die('DB connect error (MySQL not running or connection parameters are wrong; start MySQL and/or correct file "connect.inc.php"). Please read the documentation: http://lwt.sf.net [Error Code: ' . mysqli_connect_errno() . ' / Error Message: ' . mysqli_connect_error() . ']');
+	if (! $DBCONNECTION) my_die('DB connect error (MySQL not running or connection parameters are wrong; start MySQL and/or correct file "connect.inc.php"). Please read the documentation: https://learning-with-texts.sourceforge.io [Error Code: ' . mysqli_connect_errno() . ' / Error Message: ' . mysqli_connect_error() . ']');
 	runsql("CREATE DATABASE `" . $dbname . "` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci",'');
 	mysqli_close($DBCONNECTION);
 	$DBCONNECTION = @mysqli_connect($server, $userid, $passwd, $dbname);
 }
 
-if (! $DBCONNECTION) my_die('DB connect error (MySQL not running or connection parameters are wrong; start MySQL and/or correct file "connect.inc.php"). Please read the documentation: http://lwt.sf.net [Error Code: ' . mysqli_connect_errno() . ' / Error Message: ' . mysqli_connect_error() . ']');
+if (! $DBCONNECTION) my_die('DB connect error (MySQL not running or connection parameters are wrong; start MySQL and/or correct file "connect.inc.php"). Please read the documentation: https://learning-with-texts.sourceforge.io [Error Code: ' . mysqli_connect_errno() . ' / Error Message: ' . mysqli_connect_error() . ']');
 
 @mysqli_query($DBCONNECTION, "SET NAMES 'utf8'");
 
