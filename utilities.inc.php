@@ -3358,7 +3358,7 @@ if ($dspltime) get_execution_time();
 
 @mysqli_report(MYSQLI_REPORT_OFF); // added because mysqli_report default setting in PHP 8.1+ has changed
 
-$DBCONNECTION = @mysqli_connect($server, $userid, $passwd, $dbname);
+$DBCONNECTION = @mysqli_connect($server, $userid, $passwd, $dbname, $port);
 
 if ((! $DBCONNECTION) && mysqli_connect_errno() == 1049) {
 	$DBCONNECTION = @mysqli_connect($server, $userid, $passwd);
