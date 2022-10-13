@@ -40,6 +40,9 @@ $server = $dbcredentials['server'];
 $userid = $dbcredentials['userid'];
 $passwd = $dbcredentials['password'];
 $dbname = $dbcredentials['dbname'];
-$port = $dbcredentials['port'];
+if(($port = $dbcredentials['port']) == "")
+{
+    $port = "3306";
+}
 
 ?>
