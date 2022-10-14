@@ -93,7 +93,8 @@ echo '<div id="thetext" ' .  ($rtlScript ? 'dir="rtl"' : '') . '><p style="' . (
 'font-size:' . $textsize . '%;line-height: 1.4; margin-bottom: 10px;">';
 
 $currcharcount = 0;
-
+/*
+#region OLD VERSION
 $sql = 'select TiWordCount as Code, TiText, TiTextLC, TiOrder, TiIsNotWord, CHAR_LENGTH(TiText) AS TiTextLength, WoID, WoText, WoTextLC, WoStatus, WoTranslation, WoRomanization from (' . $tbpref . 'textitems left join ' . $tbpref . 'words on (TiTextLC = WoTextLC) and (TiLgID = WoLgID)) where TiTxID = ' . $_REQUEST['text'] . ' order by TiOrder asc, TiWordCount desc';
 
 $titext = array('','','','','','','','','','','');
@@ -186,6 +187,107 @@ while ($record = mysqli_fetch_assoc($res)) {  // MAIN LOOP
 } // while ($record = mysqli_fetch_assoc($res))  -- MAIN LOOP
 
 mysqli_free_result($res);
+#endregion
+*/
+
+#region NEW VERSION
+function get_word_index($word, $wordsInDB)
+{
+	for($i = 0; $i < count($wordsInDB); ++$i)
+	{
+		if(strtolower($word) == strtolower($wordsInDB[$i]["WoText"]))
+		{
+			return $i;
+		}
+	}
+	return -1;
+}
+
+function get_word_data($word, $wordsInDB)
+{
+	$index = get_word_index($word, $wordsInDB);
+	if($index < 0)
+	{
+		return null;
+	}
+	else
+	{
+		return $wordsInDB[$index];
+	}
+}
+
+function is_word($item)
+{
+	return (strpbrk($item, "., \n") === FALSE);
+}
+
+//Get text
+$sqlGetText = 'select * from texts where TxID = ' . $_REQUEST['text'];
+$resGetText = do_mysqli_query($sqlGetText);
+$recordGetText = mysqli_fetch_assoc($resGetText);
+mysqli_free_result($resGetText);
+
+//Get array of items (words + special characters) from text
+$lines = preg_split('#(\R)#', $recordGetText['TxText'], -1, PREG_SPLIT_DELIM_CAPTURE|PREG_SPLIT_NO_EMPTY);
+$items = [];
+foreach($lines as $line)
+{
+	$itemsInLine = preg_split('/([ ,.\s])/', $line, -1, PREG_SPLIT_DELIM_CAPTURE|PREG_SPLIT_NO_EMPTY);
+	foreach($itemsInLine as $item)
+	{
+		array_push($items, $item);
+	}
+}
+
+//Get array of words seen in this language from database
+$sqlGetWordsInDB = 'select * from words where WoLgId = ' . $langid;
+$resGetWordsInDB = do_mysqli_query($sqlGetWordsInDB);
+$wordsInDB = [];
+while($wordInDB = mysqli_fetch_assoc($resGetWordsInDB))
+{
+	array_push($wordsInDB, $wordInDB);
+}
+mysqli_free_result($resGetWordsInDB);
+
+//Main loop
+$showNextSpace = true;
+foreach($items as $item)
+{
+	if($item === " ") //item is space
+	{
+		if($showNextSpace)
+		{
+			echo ' ';
+			$showNextSpace = false;
+		}
+	}
+	else if(is_word($item)) //item is a word
+	{
+		$showNextSpace = false;
+		$wordData = get_word_data($item, $wordsInDB);
+		if ($wordData) //seen word
+		{  
+			echo '<span class="click word wsty ' . 'word' . $wordData['WoID'] . ' ' . 'status'. $wordData['WoStatus'] . ' ' . 'TERM' . strToClassName($wordData['WoTextLC']) . '" data_wid="' . $wordData['WoID'] . '" data_trans="' . tohtml(repl_tab_nl($wordData['WoTranslation']) . getWordTagList($wordData['WoID'],' ',1,0)) . '" data_rom="' . tohtml($wordData['WoRomanization']) . '" data_status="' . $wordData['WoStatus'] .'">' . tohtml($item) . '</span>';
+		}   
+		else //new word
+		{    		
+			echo '<span class="click word wsty status0 TERM' . strToClassName($wordData['WoTextLC']) . '" data_trans="" data_rom="" data_status="0" data_wid="">' . tohtml($item) . '</span>';	
+		}
+	}
+	else //item is a special character
+	{
+		echo '<span>' . 
+			str_replace(
+			"\n",
+			'<br />',
+			tohtml($item)) . '</span>';
+		$showNextSpace = true;
+	}
+
+	$showNextSpace = true;
+}
+#endregion
+
 echo '<span id="totalcharcount" class="hide">' . $currcharcount . '</span></p><p style="font-size:' . $textsize . '%;line-height: 1.4; margin-bottom: 300px;">&nbsp;</p></div>';
 
 pageend();
