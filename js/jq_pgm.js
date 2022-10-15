@@ -428,7 +428,8 @@ function word_click_event_do_text_text() {
 		run_overlib_status_unknown(WBLINK1,WBLINK2,WBLINK3,$(this).attr('title'),
 			TID,$(this).attr('data_order'),$(this).text(),RTL);
 		top.frames['ro'].location.href='edit_word.php?tid=' + TID + '&ord=' + 
-			$(this).attr('data_order') + '&wid=';
+			$(this).attr('data_order') + '&term=' + $(this).attr('data_term') +
+			'&lang=' + $(this).attr('data_language') + '&wid=';
 	}
 	else if ( status == 99 )
 		run_overlib_status_99(WBLINK1,WBLINK2,WBLINK3,$(this).attr('title'),
