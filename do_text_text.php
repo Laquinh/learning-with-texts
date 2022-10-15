@@ -195,7 +195,7 @@ function get_word_index($word, $wordsInDB)
 {
 	for($i = 0; $i < count($wordsInDB); ++$i)
 	{
-		if(strtolower($word) == strtolower($wordsInDB[$i]["WoText"]))
+		if(mb_strtolower($word, 'UTF-8') == mb_strtolower($wordsInDB[$i]["WoText"], 'UTF-8'))
 		{
 			return $i;
 		}
@@ -275,8 +275,8 @@ foreach($items as $item)
 		}   
 		else //new word
 		{    		
-			echo '<span class="click word wsty status0 TERM' . strToClassName(strtolower($item)) .
-			'" data_trans="" data_rom="" data_status="0" data_wid="" data_term="' . strtolower($item) . '" data_language="' . $langid . '">' . tohtml($item) . '</span>';	
+			echo '<span class="click word wsty status0 TERM' . strToClassName(mb_strtolower($item, 'UTF-8')) .
+			'" data_trans="" data_rom="" data_status="0" data_wid="" data_term="' . mb_strtolower($item, 'UTF-8') . '" data_language="' . $langid . '">' . tohtml($item) . '</span>';	
 		}
 	}
 	else //item is a special character
