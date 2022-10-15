@@ -364,7 +364,8 @@ function word_dblclick_event_do_text_text() {
 	if (typeof (window.parent.frames['h'].new_pos) == 'function')
 		window.parent.frames['h'].new_pos(p);
 }
-
+/*
+//#region OLD VERSION
 function word_click_event_do_text_text() {
 	var status = $(this).attr('data_status');
 	var ann = '';
@@ -400,7 +401,7 @@ function word_click_event_do_text_text() {
 			$(this).attr('data_mw8'),$(this).attr('data_mw9'),RTL,ann);
 	return false;
 }
-	
+
 function mword_click_event_do_text_text() {
 	var status = $(this).attr('data_status');
 	if (status != '') {
@@ -413,6 +414,47 @@ function mword_click_event_do_text_text() {
 	}
 	return false;
 }
+//#endregion
+*/
+
+//#region NEW VERSION
+function word_click_event_do_text_text() {
+	var status = $(this).attr('data_status');
+	var ann = '';
+	if ((typeof $(this).attr('data_ann')) != 'undefined') 
+		ann = $(this).attr('data_ann');
+		
+	if ( status < 1 ) {
+		run_overlib_status_unknown(WBLINK1,WBLINK2,WBLINK3,$(this).attr('title'),
+			TID,$(this).attr('data_order'),$(this).text(),RTL);
+		top.frames['ro'].location.href='edit_word.php?tid=' + TID + '&ord=' + 
+			$(this).attr('data_order') + '&wid=';
+	}
+	else if ( status == 99 )
+		run_overlib_status_99(WBLINK1,WBLINK2,WBLINK3,$(this).attr('title'),
+			TID,$(this).attr('data_order'),$(this).text(),$(this).attr('data_wid'),RTL,ann);
+	else if ( status == 98 )
+		run_overlib_status_98(WBLINK1,WBLINK2,WBLINK3,$(this).attr('title'),
+			TID,$(this).attr('data_order'),$(this).text(),$(this).attr('data_wid'),RTL,ann);
+	else
+		run_overlib_status_1_to_5(WBLINK1,WBLINK2,WBLINK3,$(this).attr('title'),
+			TID,$(this).attr('data_order'),$(this).text(),$(this).attr('data_wid'),status,RTL,ann);
+	return false;
+}
+
+function mword_click_event_do_text_text() {
+	var status = $(this).attr('data_status');
+	if (status != '') {
+		var ann = '';
+		if ((typeof $(this).attr('data_ann')) != 'undefined') 
+			ann = $(this).attr('data_ann');
+		run_overlib_multiword(WBLINK1,WBLINK2,WBLINK3,$(this).attr('title'),
+		TID, $(this).attr('data_order'),$(this).attr('data_text'),
+		$(this).attr('data_wid'), status,$(this).attr('data_code'), ann);
+	}
+	return false;
+}
+//#endregion
 
 function get_position_from_id(id_string) {
 	if ((typeof id_string) == 'undefined') return -1;
