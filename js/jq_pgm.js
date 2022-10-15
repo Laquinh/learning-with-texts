@@ -372,22 +372,62 @@ function word_click_event_do_text_text() {
 	if ((typeof $(this).attr('data_ann')) != 'undefined') 
 		ann = $(this).attr('data_ann');
 		
-	if ( status < 1 ) {
+	if ( status < 1 )
+	{
+		var data_term = $(this).attr('data_term');
+		var data_language = $(this).attr('data_language');
+
 		run_overlib_status_unknown(WBLINK1,WBLINK2,WBLINK3,$(this).attr('title'),
 			TID,$(this).attr('data_order'),$(this).text(),RTL);
 		top.frames['ro'].location.href='edit_word.php?tid=' + TID + '&ord=' + 
-			$(this).attr('data_order') + '&term=' + $(this).attr('data_term') +
-			'&lang=' + $(this).attr('data_language') + '&wid=';
+			$(this).attr('data_order') +
+			'&term=' + data_term +
+			'&lang=' + data_language +
+			'&wid=';
 	}
 	else if ( status == 99 )
+	{
+		var data_term = $(this).attr('data_term');
+		var data_language = $(this).attr('data_language');
+		var data_wid = $(this).attr('data_wid');
+
 		run_overlib_status_99(WBLINK1,WBLINK2,WBLINK3,$(this).attr('title'),
-			TID,$(this).attr('data_order'),$(this).text(),$(this).attr('data_wid'),RTL,ann);
+			TID,$(this).attr('data_order'),$(this).text(),data_term, data_language, data_wid,RTL,ann);
+		top.frames['ro'].location.href='edit_word.php?tid=' + TID + '&ord=' + 
+			$(this).attr('data_order') +
+			'&term=' + data_term +
+			'&lang=' + data_language +
+			'&wid=' + data_wid;
+	}
 	else if ( status == 98 )
+	{
+		var data_term = $(this).attr('data_term');
+		var data_language = $(this).attr('data_language');
+		var data_wid = $(this).attr('data_wid');
+
 		run_overlib_status_98(WBLINK1,WBLINK2,WBLINK3,$(this).attr('title'),
-			TID,$(this).attr('data_order'),$(this).text(),$(this).attr('data_wid'),RTL,ann);
+			TID,$(this).attr('data_order'),$(this).text(),data_term, data_language, data_wid,RTL,ann);
+		top.frames['ro'].location.href='edit_word.php?tid=' + TID + '&ord=' + 
+			$(this).attr('data_order') +
+			'&term=' + data_term +
+			'&lang=' + data_language +
+			'&wid=' + data_wid;
+	}
 	else
+	{
+		var data_term = $(this).attr('data_term');
+		var data_language = $(this).attr('data_language');
+		var data_wid = $(this).attr('data_wid');
+
 		run_overlib_status_1_to_5(WBLINK1,WBLINK2,WBLINK3,$(this).attr('title'),
-			TID,$(this).attr('data_order'),$(this).text(),$(this).attr('data_wid'),status,RTL,ann);
+			TID,$(this).attr('data_order'),$(this).text(),data_term, data_language, data_wid, status, RTL, ann);
+		top.frames['ro'].location.href='edit_word.php?tid=' + TID + '&ord=' + 
+			$(this).attr('data_order') +
+			'&term=' + data_term +
+			'&lang=' + data_language +
+			'&wid=' + data_wid;
+	}
+		
 	return false;
 }
 
