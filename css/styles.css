@@ -91,12 +91,14 @@ span.status98 {
 	color: #000000;
 }
 span.mwsty {
+	border-radius: .25rem;
 	font-size: 60%;
 	font-weight: bold;
 	color: #000000;
 	vertical-align: top; 
 }
 span.wsty {
+	border-radius: .25rem;
 	color: #000000;
 }
 span.todosty {
