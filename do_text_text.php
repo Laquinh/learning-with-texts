@@ -271,12 +271,12 @@ foreach($items as $item)
 			echo '<span class="click word wsty ' . 'word' . $wordData['WoID'] . ' ' . 'status'. $wordData['WoStatus'] . ' ' . 'TERM' . strToClassName($wordData['WoText']) .
 			'" data_wid="' . $wordData['WoID'] . '" data_trans="' . tohtml(repl_tab_nl($wordData['WoTranslation']) . getWordTagList($wordData['WoID'],' ',1,0)) .
 			'" data_rom="' . tohtml($wordData['WoRomanization']) . '" data_status="' . $wordData['WoStatus'] .
-			'" data_term="' . $wordData['WoText'] . '">' . tohtml($item) . '</span>';
+			'" data_term="' . $wordData['WoText'] . '" data_language="' . $langid . '">' . tohtml($item) . '</span>';
 		}   
 		else //new word
 		{    		
-			echo '<span class="click word wsty status0 TERM' . strToClassName($item) .
-			'" data_trans="" data_rom="" data_status="0" data_wid="" data_term="' . $item . '">' . tohtml($item) . '</span>';	
+			echo '<span class="click word wsty status0 TERM' . strToClassName(strtolower($item)) .
+			'" data_trans="" data_rom="" data_status="0" data_wid="" data_term="' . strtolower($item) . '" data_language="' . $langid . '">' . tohtml($item) . '</span>';	
 		}
 	}
 	else //item is a special character
