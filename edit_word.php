@@ -52,7 +52,7 @@ else $translation = $translation_raw;
 
 $fromAnn = getreq("fromAnn"); // from-recno or empty
 
-// INS/UPD
+#region INS/UPD
 
 if (isset($_REQUEST['op'])) {
 	
@@ -167,9 +167,10 @@ window.parent.frames['l'].setTimeout('cClick()', 100);
 	
 <?php
 
-} // if (isset($_REQUEST['op']))
+}
+#endregion
 
-// FORM
+#region FORM
 
 else {  // if (! isset($_REQUEST['op']))
 
@@ -218,7 +219,7 @@ else {  // if (! isset($_REQUEST['op']))
 <?php
 	$scrdir = getScriptDirectionTag($lang);
 
-	// NEW
+	#region NEW
 	
 	if ($new) {
 		
@@ -276,7 +277,9 @@ else {  // if (! isset($_REQUEST['op']))
 		
 	}
 	
-	// CHG
+	#endregion
+	
+	#region CHG
 	
 	else {
 		
@@ -352,9 +355,9 @@ else {  // if (! isset($_REQUEST['op']))
 		}
 		mysqli_free_result($res);
 	}
-
+	#endregion
 }
-
+#endregion
 pageend();
 
 ?>
