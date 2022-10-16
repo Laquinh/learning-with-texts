@@ -66,16 +66,17 @@ else
     echo "<p>OK, term status set to " . $status . "!</p>";
 }
 
-$hex = strToClassName($wordlc);
+$hex = strToClassName($term);
 
 ?>
 <script type="text/javascript">
 //<![CDATA[
 var context = window.parent.frames['l'].document;
 var contexth = window.parent.frames['h'].document;
-var title = make_tooltip(<?php echo prepare_textdata_js($word); ?>,'*','',$status);
-$('.TERM<?php echo $hex; ?>', context).removeClass('status0').addClass('status'.$status.' word<?php echo $wid; ?>').attr('data_status',$status).attr('data_wid','<?php echo $wid; ?>').attr('title',title);
-$('#learnstatus', contexth).html('<?php echo texttodocount2($_REQUEST['tid']); ?>');
+var title = make_tooltip(<?php echo prepare_textdata_js($term); ?>,'*','',<?php echo $status; ?>);
+
+$('.TERM<?php echo $hex; ?>',   context).removeClass('status0').addClass('status<?php echo $status; ?> word<?php echo $wid; ?>').attr('data_status',<?php echo $status; ?>).attr('data_wid','<?php echo $wid; ?>').attr('title',title);
+$('#learnstatus', contexth).html('<?php echo texttodocount2($textId); ?>');
 window.parent.frames['l'].focus();
 window.parent.frames['l'].setTimeout('cClick()', 100);
 //]]>
