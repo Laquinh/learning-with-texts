@@ -193,14 +193,15 @@ mysqli_free_result($res);
 #region NEW VERSION
 function get_word_data($word, $wordsInDB)
 {
-	$index = array_search(mb_strtolower($word, 'UTF-8'), $wordsInDB);
-	if($index < 0)
+	$index = array_search(mb_strtolower($word, 'UTF-8'), array_column($wordsInDB, "WoText"));
+	
+	if($index)
 	{
-		return null;
+		return $wordsInDB[$index];
 	}
 	else
 	{
-		return $wordsInDB[$index];
+		return null;
 	}
 }
 
@@ -255,7 +256,7 @@ foreach($items as $item)
 		$wordData = get_word_data($item, $wordsInDB);
 		
 		if ($wordData) //seen word
-		{  
+		{
 			echo '<span class="click word wsty ' . 'word' . $wordData['WoID'] . ' ' . 'status'. $wordData['WoStatus'] . ' ' . 'TERM' . strToClassName($wordData['WoText']) .
 			'" data_wid="' . $wordData['WoID'] . '" data_trans="' . tohtml(repl_tab_nl($wordData['WoTranslation']) . getWordTagList($wordData['WoID'],' ',1,0)) .
 			'" data_rom="' . tohtml($wordData['WoRomanization']) . '" data_status="' . $wordData['WoStatus'] .
