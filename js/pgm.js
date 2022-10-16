@@ -88,12 +88,12 @@ function run_overlib_status_1_to_5(wblink1,wblink2,wblink3,hints,txid,torder,txt
 		'Word &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;',txid,torder,wid));
 }
 
-function run_overlib_status_unknown(wblink1,wblink2,wblink3,hints,txid,torder,txt,rtl)
+function run_overlib_status_unknown(wblink1,wblink2,wblink3,hints,txid,torder,term,txt,rtl)
 {
 	return overlib(
 		'<b>' + escape_html_chars(hints) + '</b><br /> ' +
-		make_overlib_link_wellknown_word(txid,torder) + ' <br /> ' +  
-		make_overlib_link_ignore_word(txid,torder) + 
+		make_overlib_link_wellknown_word(txid,term) + ' <br /> ' +  
+		make_overlib_link_ignore_word(txid,term) + 
 		+ ' <br /> ' +
 		make_overlib_link_wb(wblink1,wblink2,wblink3,txt,txid,torder),
 		CAPTION, 'New Word');
@@ -299,14 +299,16 @@ function make_overlib_link_delete_multiword(txid,wid) {
 		wid + '&amp;tid=' + txid + '\x22 target=\x22ro\x22>Delete term</a> ';
 }
 
-function make_overlib_link_wellknown_word(txid,torder) {
-	return ' <a href=\x22insert_word_wellknown.php?tid=' + 
-		txid + '&amp;ord=' + torder + '\x22 target=\x22ro\x22>I know this term well</a> ';
+function make_overlib_link_wellknown_word(txid,term) {
+	return ' <a href=\x22insert_word_anystatus.php?tid=' + txid + 
+		'&amp;term=' + term +
+		'&amp;status=99\x22 target=\x22ro\x22>I know this term well</a> ';
 }
 
-function make_overlib_link_ignore_word(txid,torder) {
-	return ' <a href=\x22insert_word_ignore.php?tid=' + txid + 
-		'&amp;ord=' + torder + '\x22 target=\x22ro\x22>Ignore this term</a> ';
+function make_overlib_link_ignore_word(txid,term) {
+	return ' <a href=\x22insert_word_anystatus.php?tid=' + txid + 
+		'&amp;term=' + term +
+		'&amp;status=98\x22 target=\x22ro\x22>Ignore this term</a> ';
 }
 
 /**************************************************************

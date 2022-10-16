@@ -378,7 +378,7 @@ function word_click_event_do_text_text() {
 		var data_language = $(this).attr('data_language');
 
 		run_overlib_status_unknown(WBLINK1,WBLINK2,WBLINK3,$(this).attr('title'),
-			TID,$(this).attr('data_order'),$(this).text(),RTL);
+			TID,$(this).attr('data_order'),data_term,$(this).text(),RTL);
 		top.frames['ro'].location.href='edit_word.php?tid=' + TID + '&ord=' + 
 			$(this).attr('data_order') +
 			'&term=' + data_term +
