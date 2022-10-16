@@ -51,6 +51,7 @@ if ( $translation_raw == '' ) $translation = '*';
 else $translation = $translation_raw;
 
 $fromAnn = getreq("fromAnn"); // from-recno or empty
+$textId = $_REQUEST['tid'];
 
 #region INS/UPD
 
@@ -124,12 +125,14 @@ if (isset($_REQUEST['op'])) {
 	
 	<p>OK: <?php echo tohtml($message); ?></p>
 	
+	
 <script type="text/javascript">
 //<![CDATA[
+
 <?php
 if ($fromAnn !== '') {
 ?>
-window.opener.do_ajax_edit_impr_text(<?php echo $fromAnn; ?>, <?php echo prepare_textdata_js($textlc); ?>);
+window.opener.do_ajax_edit_impr_text(<?php echo $fromAnn; ?>, <?php echo prepare_textdata_js($woTextLC); ?>);
 <?php
 } else {
 ?>
@@ -141,17 +144,30 @@ var trans = <?php echo prepare_textdata_js($translation . getWordTagList($wid,' 
 var roman = <?php echo prepare_textdata_js($_REQUEST["WoRomanization"]); ?>;
 var title = make_tooltip(<?php echo prepare_textdata_js($_REQUEST["WoText"]); ?>,trans,roman,status);
 <?php
-	if ($_REQUEST['op'] == 'Save') {
+if ($_REQUEST['op'] == 'Save') {
 ?>
-$('.TERM<?php echo $hex; ?>', context).removeClass('status0').addClass('word' + woid + ' ' + 'status' + status).attr('data_trans',trans).attr('data_rom',roman).attr('data_status',status).attr('data_wid',woid).attr('title',title);
+	$('.TERM<?php echo $hex; ?>', context)
+		.removeClass('status0')
+		.addClass('word' + woid + ' ' + 'status' + status)
+		.attr('data_trans',trans)
+		.attr('data_rom',roman)
+		.attr('data_status',status)
+		.attr('data_wid',woid)
+		.attr('title',title);
 <?php
-	} else {
+} else {
 ?>
-$('.word' + woid, context).removeClass('status<?php echo $_REQUEST['WoOldStatus']; ?>').addClass('status' + status).attr('data_trans',trans).attr('data_rom',roman).attr('data_status',status).attr('title',title);
+	$('.word' + woid, context)
+		.removeClass('status<?php echo $_REQUEST['WoOldStatus']; ?>')
+		.addClass('status' + status)
+		.attr('data_trans',trans)
+		.attr('data_rom',roman)
+		.attr('data_status',status)
+		.attr('title',title);
 <?php
-	}
+}
 ?>
-$('#learnstatus', contexth).html('<?php echo texttodocount2($_REQUEST['tid']); ?>');
+$('#learnstatus', contexth).html('<?php echo texttodocount2($textId); ?>');
 window.parent.frames['l'].focus();
 window.parent.frames['l'].setTimeout('cClick()', 100);
 <?php
@@ -193,6 +209,7 @@ else {  // if (! isset($_REQUEST['op']))
 		<input type="hidden" name="fromAnn" value="<?php echo $fromAnn; ?>" />
 		<input type="hidden" name="WoLgID" id="langfield" value="<?php echo $lang; ?>" />
 		<input type="hidden" name="WoText" value="<?php echo tohtml($term); ?>" />
+		<input type="hidden" name="tid" value="<?php echo getreq('tid'); ?>" />
 		<table class="tab2" cellspacing="0" cellpadding="5">
 		<tr title="Only change uppercase/lowercase!">
 		<td class="td1 right"><b>New Term:</b></td>
@@ -253,6 +270,7 @@ else {  // if (! isset($_REQUEST['op']))
 			<input type="hidden" name="fromAnn" value="<?php echo $fromAnn; ?>" />
 			<input type="hidden" name="WoID" value="<?php echo $wid; ?>" />
 			<input type="hidden" name="WoOldStatus" value="<?php echo $record['WoStatus']; ?>" />
+			<input type="hidden" name="tid" value="<?php echo getreq('tid'); ?>" />
 			<table class="tab2" cellspacing="0" cellpadding="5">
 			<tr title="Only change uppercase/lowercase!">
 			<td class="td1 right"><b>Edit Term:</b></td>
