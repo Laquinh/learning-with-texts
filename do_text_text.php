@@ -191,21 +191,9 @@ mysqli_free_result($res);
 */
 
 #region NEW VERSION
-function get_word_index($word, $wordsInDB)
-{
-	for($i = 0; $i < count($wordsInDB); ++$i)
-	{
-		if(mb_strtolower($word, 'UTF-8') == mb_strtolower($wordsInDB[$i]["WoText"], 'UTF-8'))
-		{
-			return $i;
-		}
-	}
-	return -1;
-}
-
 function get_word_data($word, $wordsInDB)
 {
-	$index = get_word_index($word, $wordsInDB);
+	$index = array_search(mb_strtolower($word, 'UTF-8'), $wordsInDB);
 	if($index < 0)
 	{
 		return null;
@@ -240,7 +228,7 @@ foreach($lines as $line)
 }
 
 //Get array of words seen in this language from database
-$sqlGetWordsInDB = 'select * from words where WoLgId = ' . $langid;
+$sqlGetWordsInDB = 'select WoID, LOWER(WoText) as WoText, WoStatus, WoTranslation, WoRomanization from words where WoLgId = ' . $langid;
 $resGetWordsInDB = do_mysqli_query($sqlGetWordsInDB);
 $wordsInDB = [];
 while($wordInDB = mysqli_fetch_assoc($resGetWordsInDB))
@@ -276,7 +264,8 @@ foreach($items as $item)
 		else //new word
 		{    		
 			echo '<span class="click word wsty status0 TERM' . strToClassName(mb_strtolower($item, 'UTF-8')) .
-			'" data_trans="" data_rom="" data_status="0" data_wid="" data_term="' . mb_strtolower($item, 'UTF-8') . '" data_language="' . $langid . '">' . tohtml($item) . '</span>';	
+			'" data_trans="" data_rom="" data_status="0" data_wid="" data_term="' . mb_strtolower($item, 'UTF-8') .
+			'" data_language="' . $langid . '">' . tohtml($item) . '</span>';
 		}
 	}
 	else //item is a special character
