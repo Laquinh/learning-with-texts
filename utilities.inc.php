@@ -2181,7 +2181,10 @@ function mask_term_in_sentence($s,$regexword) {
 
 function textwordcount($text) {
 	global $tbpref;
-	return get_first_value('select count(distinct TiTextLC) as value from ' . $tbpref . 'textitems where TiIsNotWord = 0 and TiWordCount = 1 and TiTxID = ' . $text);
+	$txText = get_first_value('select TxText as value from ' . $tbpref . 'texts where TxID = ' . $text);
+	$words = preg_split("/ |[,.] /", $txText);
+
+	return count($words);
 }
 
 // -------------------------------------------------------------
