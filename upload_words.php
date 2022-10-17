@@ -132,14 +132,13 @@ if (isset($_REQUEST['op'])) {
   		$protokoll .= '<tr><td class="td1 right">' . ($i+1) . '</td><td class="td1">' . tohtml($w) . '</td><td class="td1">' . tohtml($t) . '</td><td class="td1">' . tohtml($r) . '</td><td class="td1">' . tohtml($s) . '</td><td class="td1">' . implode(", ", $g) . '</td>';
  			if ( $w != '' ) {
  				if ($t == '') $t = '*';
- 				$excnt = get_first_value('select count(*) as value from ' . $tbpref . 'words where WoLgID = ' . $lang . ' and WoTextLC=' . convert_string_to_sqlsyntax($wl));
+ 				$excnt = get_first_value('select count(*) as value from ' . $tbpref . 'words where WoLgID = ' . $lang . ' and LOWER(WoText)=' . convert_string_to_sqlsyntax($wl));
  				if ($excnt > 0 ) { // exists
  					if ($overwrite) { // update
-	 					$msg1 = runsql('delete from ' . $tbpref . 'words where WoLgID = ' . $lang . ' and WoTextLC=' . convert_string_to_sqlsyntax($wl), "Exists, deleted");
+	 					$msg1 = runsql('delete from ' . $tbpref . 'words where WoLgID = ' . $lang . ' and LOWER(WoText)=' . convert_string_to_sqlsyntax($wl), "Exists, deleted");
 	 					runsql("DELETE " . $tbpref . "wordtags FROM (" . $tbpref . "wordtags LEFT JOIN " . $tbpref . "words on WtWoID = WoID) WHERE WoID IS NULL",'');
-	 					$msg2 = runsql('insert into ' . $tbpref . 'words (WoLgID, WoTextLC, WoText, WoStatus, WoTranslation, WoRomanization, WoSentence, WoStatusChanged,' .  make_score_random_insert_update('iv') . ') values ( ' . $lang . ', ' .
+	 					$msg2 = runsql('insert into ' . $tbpref . 'words (WoLgID, WoText, WoStatus, WoTranslation, WoRomanization, WoSentence, WoStatusChanged,' .  make_score_random_insert_update('iv') . ') values ( ' . $lang . ', ' .
 						convert_string_to_sqlsyntax($wl) . ', ' .
-						convert_string_to_sqlsyntax($w) . ', ' .
 						$status . ', ' .
 						convert_string_to_sqlsyntax($t) . ', ' .
 						convert_string_to_sqlsyntax($r) . ', ' .
@@ -155,9 +154,8 @@ make_score_random_insert_update('id') . ')',"Imported");
  					} // no overwrite
  				} // exists
  				else { // exists not
- 					$msg1 = runsql('insert into ' . $tbpref . 'words (WoLgID, WoTextLC, WoText, WoStatus, WoTranslation, WoRomanization, WoSentence, WoStatusChanged,' .  make_score_random_insert_update('iv') . ') values ( ' . $lang . ', ' .
+ 					$msg1 = runsql('insert into ' . $tbpref . 'words (WoLgID, WoText, WoStatus, WoTranslation, WoRomanization, WoSentence, WoStatusChanged,' .  make_score_random_insert_update('iv') . ') values ( ' . $lang . ', ' .
 					convert_string_to_sqlsyntax($wl) . ', ' .
-					convert_string_to_sqlsyntax($w) . ', ' .
 					$status . ', ' .
 					convert_string_to_sqlsyntax($t) . ', ' .
 					convert_string_to_sqlsyntax($r) . ', ' .
