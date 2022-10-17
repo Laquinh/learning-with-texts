@@ -135,7 +135,6 @@ if (! areCookiesEnabled()) document.write('<p class="red">*** Cookies are not en
 	<br /><br /></li>
 <li><a href="statistics.php">My Statistics</a>
 	<br /><br /></li>
-<li><a href="check_text.php">Check a Text</a></li>
 <li><a href="long_text_import.php">Long Text Import</a></li>
 <li><a href="upload_words.php">Import Terms</a></li>
 <li><a href="backup_restore.php">Backup/Restore/Empty Database</a>

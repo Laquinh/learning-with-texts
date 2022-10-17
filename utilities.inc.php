@@ -834,7 +834,6 @@ function quickMenu() {
 <option value="edit_words">Terms</option>
 <option value="edit_tags">Term Tags</option>
 <option value="statistics">Statistics</option>
-<option value="check_text">Text Check</option>
 <option value="long_text_import">Long Text Import</option>
 <option value="upload_words">Term Import</option>
 <option value="backup_restore">Backup/Restore</option>
