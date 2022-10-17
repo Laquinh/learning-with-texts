@@ -1541,7 +1541,6 @@ function get_multiplewordsactions_selectoptions() {
 	$r .= "<option value=\"today\">Set Status Date to Today</option>";
 	$r .= "<option disabled=\"disabled\">------------</option>";
 	$r .= "<option value=\"lower\">Set Marked Terms to Lowercase</option>";
-	$r .= "<option value=\"cap\">Capitalize Marked Terms</option>";
 	$r .= "<option value=\"delsent\">Delete Sentences of Marked Terms</option>";
 	$r .= "<option disabled=\"disabled\">------------</option>";
 	$r .= "<option value=\"addtag\">Add Tag</option>";
@@ -2069,7 +2068,6 @@ function flexible_export($sql) {
 			$span1 = ($rtlScript ? '<span dir="rtl">' : '');
 			$span2 = ($rtlScript ? '</span>' : '');
 			$term = repl_tab_nl($record['WoText']);
-			$term_lc = repl_tab_nl($record['WoTextLC']);
 			$transl = repl_tab_nl($record['WoTranslation']);
 			$rom = repl_tab_nl($record['WoRomanization']);
 			$sent_raw = repl_tab_nl($record['WoSentence']);
