@@ -79,11 +79,11 @@ function get_similar_terms($lang_id, $compared_term, $max_count,
 	// If string is already in database, it will be excluded in results.
 	global $tbpref;
 	$compared_term_lc = mb_strtolower($compared_term, 'UTF-8');
-	$sql = "select WoID, WoTextLC from " . $tbpref . "words where WoLgID = " . $lang_id . " AND WoTextLC <> " . convert_string_to_sqlsyntax($compared_term_lc);
+	$sql = "select WoID, LOWER(WoText) as WoText from " . $tbpref . "words where WoLgID = " . $lang_id . " AND WoText <> " . convert_string_to_sqlsyntax($compared_term);
 	$res = do_mysqli_query($sql);
 	$termlsd = array();
 	while ($record = mysqli_fetch_assoc($res)) {
-		$termlsd[$record["WoID"]] = getSimilarityRanking($compared_term_lc, $record["WoTextLC"]);
+		$termlsd[$record["WoID"]] = getSimilarityRanking($compared_term_lc, $record["WoText"]);
 	}
 	mysqli_free_result($res);
 	arsort($termlsd, SORT_NUMERIC);
