@@ -78,37 +78,6 @@ function scrollToAnchor(aid){
   document.location.href = '#' + aid;
 }
 
-function changeImprAnnText() {
-	var textid = $('#editimprtextdata').attr('data_id');
-	$(this).prev('input:radio').attr('checked', 'checked');
-	var elem = $(this).attr('name');
-	var idwait = '#wait' + elem.substring(2);
-	$(idwait).html('<img src="icn/waiting2.gif" />');
-	var thedata = JSON.stringify($('form').serializeObject());
-	$.post('ajax_save_impr_text.php', { id: textid, elem: elem, data : thedata }
-		, function(d) { 
-				$(idwait).html('<img src="icn/empty.gif" />');
-				if(d != 'OK') 
-					alert('Saving your changes failed, please reload page and try again!'); 
-			} 
-	);
-}
- 
-function changeImprAnnRadio() {
-	var textid = $('#editimprtextdata').attr('data_id');
-	var elem = $(this).attr('name');
-	var idwait = '#wait' + elem.substring(2);
-	$(idwait).html('<img src="icn/waiting2.gif" />');
-	var thedata = JSON.stringify($('form').serializeObject());
-	$.post('ajax_save_impr_text.php', { id: textid, elem: elem, data : thedata }
-		, function(d) { 
-				$(idwait).html('<img src="icn/empty.gif" />');
-				if(d != 'OK') 
-					alert('Saving your changes failed, please reload page and try again!'); 
-			} 
-	);
-}
-
 function addTermTranslation(wordid,txid,word,lang) {
 	var thedata = $(txid).val().trim();
 	var pagepos = $(document).scrollTop();
@@ -120,8 +89,6 @@ function addTermTranslation(wordid,txid,word,lang) {
 		, function(d) { 
 				if(d == '') {
 					alert('Adding translation to term OR term creation failed, please reload page and try again!'); 
-				} else {
-					do_ajax_edit_impr_text(pagepos,d);
 				}
 			} 
 	);
@@ -646,20 +613,6 @@ function do_ajax_word_counts() {
 	);
 }
 
-function do_ajax_edit_impr_text(pagepos, word) {
-	if (word=='') $('#editimprtextdata').html('<img src="icn/waiting2.gif" />');
-	var textid = $('#editimprtextdata').attr('data_id');
-	$.post('ajax_edit_impr_text.php', { id: textid, word: word }, 
-		function(data) {
-			// alert(data);
-			eval(data);
-			$.scrollTo(pagepos); 
-			$('input.impr-ann-text').change(changeImprAnnText);
-			$('input.impr-ann-radio').change(changeImprAnnRadio);
-		} 
-	);
-}
-
 $.fn.serializeObject = function()
 {
     var o = {};
@@ -689,8 +642,6 @@ $(document).ready( function() {
 			cols      : 35
 		}
 	);
-	$('input.impr-ann-text').change(changeImprAnnText);
-	$('input.impr-ann-radio').change(changeImprAnnRadio);
 	$('form.validate').submit(check);
 	$('input.markcheck').click(markClick);
 	$('.confirmdelete').click(confirmDelete);

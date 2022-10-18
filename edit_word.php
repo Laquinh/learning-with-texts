@@ -34,7 +34,6 @@ For more information, please refer to [http://unlicense.org/].
 Call: edit_word.php?....
       ... op=Save ... do insert new
       ... op=Change ... do update
-      ... fromAnn=recno ... calling from impr. annotation editing
       ... tid=[textid]&ord=[textpos]&wid= ... new word  
       ... tid=[textid]&ord=[textpos]&wid=[wordid] ... edit word 
 New/Edit single word
@@ -129,13 +128,6 @@ if (isset($_REQUEST['op'])) {
 <script type="text/javascript">
 //<![CDATA[
 
-<?php
-if ($fromAnn !== '') {
-?>
-window.opener.do_ajax_edit_impr_text(<?php echo $fromAnn; ?>, <?php echo prepare_textdata_js($woTextLC); ?>);
-<?php
-} else {
-?>
 var context = window.parent.frames['l'].document;
 var contexth = window.parent.frames['h'].document;
 var woid = <?php echo prepare_textdata_js($wid); ?>;
@@ -170,9 +162,7 @@ if ($_REQUEST['op'] == 'Save') {
 $('#learnstatus', contexth).html('<?php echo texttodocount2($textId); ?>');
 window.parent.frames['l'].focus();
 window.parent.frames['l'].setTimeout('cClick()', 100);
-<?php
-}  // $fromAnn !== ''
-?>
+
 //]]>
 </script>
 	

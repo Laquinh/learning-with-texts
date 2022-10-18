@@ -2188,14 +2188,16 @@ function textwordcount($text) {
 
 function textexprcount($text) {
 	global $tbpref;
-	return get_first_value('select count(distinct TiTextLC) as value from ' . $tbpref . 'textitems left join ' . $tbpref . 'words on TiTextLC = WoTextLC where TiWordCount > 1 and TiIsNotWord = 0 and TiTxID = ' . $text . ' and WoID is not null and TiLgID = WoLgID');
+	return 1;
+	//return get_first_value('select count(distinct TiTextLC) as value from ' . $tbpref . 'textitems left join ' . $tbpref . 'words on TiTextLC = WoTextLC where TiWordCount > 1 and TiIsNotWord = 0 and TiTxID = ' . $text . ' and WoID is not null and TiLgID = WoLgID');
 }
 
 // -------------------------------------------------------------
 
 function textworkcount($text) {
 	global $tbpref;
-	return get_first_value('select count(distinct TiTextLC) as value from ' . $tbpref . 'textitems left join ' . $tbpref . 'words on TiTextLC = WoTextLC where TiWordCount = 1 and TiIsNotWord = 0 and TiTxID = ' . $text . ' and WoID is not null and TiLgID = WoLgID');
+	return 1;
+	//return get_first_value('select count(distinct TiTextLC) as value from ' . $tbpref . 'textitems left join ' . $tbpref . 'words on TiTextLC = WoTextLC where TiWordCount = 1 and TiIsNotWord = 0 and TiTxID = ' . $text . ' and WoID is not null and TiLgID = WoLgID');
 }
 
 // -------------------------------------------------------------
@@ -2945,16 +2947,6 @@ function get_first_translation($trans) {
 	$r = trim($arr[0]);
 	if ($r == '*') $r ="";
 	return $r;
-}
-
-// -------------------------------------------------------------
-
-function get_annotation_link($textid) {
-	global $tbpref;
-	if ( get_first_value('select length(TxAnnotatedText) as value from ' . $tbpref . 'texts where TxID=' . $textid) > 0) 
-	return ' &nbsp;<a href="print_impr_text.php?text=' . $textid . '" target="_top"><img src="icn/tick.png" title="Annotated Text" alt="Annotated Text" /></a>';
-	else 
-		return '';
 }
 
 // -------------------------------------------------------------
