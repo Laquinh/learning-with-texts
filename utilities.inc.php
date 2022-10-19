@@ -2712,64 +2712,6 @@ function splitCheckText($text, $lid, $id) {
 
 // -------------------------------------------------------------
 
-function restore_file($handle, $title) {
-	global $tbpref;
-	$message = "";
-	$lines = 0;
-	$ok = 0;
-	$errors = 0;
-	$drops = 0;
-	$inserts = 0;
-	$creates = 0;
-	$start = 1;
-	while (! gzeof($handle)) {
-		$sql_line = trim(
-			str_replace("\r","",
-			str_replace("\n","",
-			gzgets($handle, 99999))));
-		if ($sql_line != "") {
-			if($start) {
-				if (strpos($sql_line,"-- lwt-backup-") === false ) {
-					$message = "Error: Invalid " . $title . " Restore file (possibly not created by LWT backup)";
-					$errors = 1;
-					break;
-				}
-				$start = 0;
-				continue;
-			}
-			if ( substr($sql_line,0,3) !== '-- ' ) {
-				$res = mysqli_query($GLOBALS['DBCONNECTION'], insert_prefix_in_sql($sql_line));
-				$lines++;
-				if ($res == FALSE) $errors++;
-				else {
-					$ok++;
-					if (substr($sql_line,0,11) == "INSERT INTO") $inserts++;
-					elseif (substr($sql_line,0,10) == "DROP TABLE") $drops++;
-					elseif (substr($sql_line,0,12) == "CREATE TABLE") $creates++;
-				}
-				// echo $ok . " / " . tohtml(insert_prefix_in_sql($sql_line)) . "<br />";
-			}
-		}
-	} // while (! feof($handle))
-	gzclose ($handle);
-	if ($errors == 0) {
-		reparse_all_texts();
-		optimizedb();
-		get_tags($refresh = 1);
-		get_texttags($refresh = 1);
-		$message = "Success: " . $title . " restored - " .
-		$lines . " queries - " . $ok . " successful (" . $drops . "/" . $creates . " tables dropped/created, " . $inserts . " records added), " . $errors . " failed.";
-	} else {
-		if ($message == "") {
-			$message = "Error: " . $title . " NOT restored - " .
-			$lines . " queries - " . $ok . " successful (" . $drops . "/" . $creates . " tables dropped/created, " . $inserts . " records added), " . $errors . " failed.";
-		}
-	}
-	return $message;
-}
-
-// -------------------------------------------------------------
-
 function str_replace_first ($needle, $replace, $haystack) {
 	if ($needle === '') 
 		return $haystack;
