@@ -53,10 +53,10 @@ Helper functions for overlib
 ***************************************************************/
 
 //#region NEW VERSION
-function run_overlib_status_98(wblink1,wblink2,wblink3,hints,txid,torder,txt,term,lang,wid,rtl,ann)
+function run_overlib_status_98(wblink1,wblink2,wblink3,hints,txid,torder,txt,term,lang,wid,rtl)
 {
 	return overlib(
-		'<b>' + escape_html_chars_2(hints,ann) + '</b><br /> ' +
+		'<b>' + escape_html_chars_2(hints) + '</b><br /> ' +
 		make_overlib_link_new_word(txid,torder,term,lang,wid) + ' | ' +
 		make_overlib_link_delete_word(txid,wid) + 
 		+ ' <br /> ' +
@@ -64,10 +64,10 @@ function run_overlib_status_98(wblink1,wblink2,wblink3,hints,txid,torder,txt,ter
 		CAPTION, 'Word');
 }
 
-function run_overlib_status_99(wblink1,wblink2,wblink3,hints,txid,torder,txt,term,lang,wid,rtl,ann)
+function run_overlib_status_99(wblink1,wblink2,wblink3,hints,txid,torder,txt,term,lang,wid,rtl)
 {
 	return overlib(
-		'<b>' + escape_html_chars_2(hints,ann) + '</b><br /> ' +
+		'<b>' + escape_html_chars_2(hints) + '</b><br /> ' +
 		make_overlib_link_new_word(txid,torder,term,lang,wid) + ' | ' +
 		make_overlib_link_delete_word(txid,wid) + 
 		+ ' <br /> ' +
@@ -75,10 +75,10 @@ function run_overlib_status_99(wblink1,wblink2,wblink3,hints,txid,torder,txt,ter
 		CAPTION, 'Word');
 }
 
-function run_overlib_status_1_to_5(wblink1,wblink2,wblink3,hints,txid,torder,txt,term,lang,wid,stat,rtl,ann)
+function run_overlib_status_1_to_5(wblink1,wblink2,wblink3,hints,txid,torder,txt,term,lang,wid,stat,rtl)
 {
 	return overlib(
-		'<b>' + escape_html_chars_2(hints,ann) + '</b><br /> ' +
+		'<b>' + escape_html_chars_2(hints) + '</b><br /> ' +
 		make_overlib_link_change_status_all(txid,torder,wid,stat) + ' <br /> ' +
 		make_overlib_link_edit_word(txid,torder,term,lang,wid) + ' | ' +
 		make_overlib_link_delete_word(txid,wid) + 
@@ -100,10 +100,10 @@ function run_overlib_status_unknown(wblink1,wblink2,wblink3,hints,txid,torder,te
 }
 //#endregion
 
-function run_overlib_multiword(wblink1,wblink2,wblink3,hints,txid,torder,txt,wid,stat,wcnt,ann)
+function run_overlib_multiword(wblink1,wblink2,wblink3,hints,txid,torder,txt,wid,stat,wcnt)
 {
 	return overlib(
-		'<b>' + escape_html_chars_2(hints,ann) + '</b><br /> ' +
+		'<b>' + escape_html_chars_2(hints) + '</b><br /> ' +
 		make_overlib_link_change_status_all(txid,torder,wid,stat) + ' <br /> ' +
 		make_overlib_link_edit_multiword(txid,torder,wid) + ' | ' +
 		make_overlib_link_delete_multiword(txid,wid) + ' <br /> ' +
@@ -401,14 +401,9 @@ function make_tooltip(word,trans,roman,status) {
 	return title;
 }
 
-function escape_html_chars_2 (title, ann) {
-	if (ann != '' ) {
-		var ann2 = escape_html_chars(ann);
-		return escape_html_chars(title).replace(ann2,
-			'<span style="color:red">' + ann2 + '</span>');
-	}
-	else
-		return escape_html_chars(title);
+function escape_html_chars_2 (title)
+{
+	return escape_html_chars(title);
 }
 
 function owin(url) {

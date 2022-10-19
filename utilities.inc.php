@@ -83,7 +83,7 @@ function stripTheSlashesIfNeeded($s) {
 
 // -------------------------------------------------------------
 
-function getPreviousAndNextTextLinks($textid,$url,$onlyann,$add) {
+function getPreviousAndNextTextLinks($textid,$url,$add) {
 	global $tbpref;
 	$currentlang = validateLang(processDBParam("filterlang",'currentlanguage','',0));
 	$wh_lang = ($currentlang != '') ? (' and TxLgID=' . $currentlang) : '';
@@ -124,10 +124,7 @@ function getPreviousAndNextTextLinks($textid,$url,$onlyann,$add) {
 	if ($currentsort < 1) $currentsort = 1;
 	if ($currentsort > $lsorts) $currentsort = $lsorts;
 
-	if ($onlyann) 
-		$sql = 'select TxID from ((' . $tbpref . 'texts left JOIN ' . $tbpref . 'texttags ON TxID = TtTxID) left join ' . $tbpref . 'tags2 on T2ID = TtT2ID), ' . $tbpref . 'languages where LgID = TxLgID AND LENGTH(TxAnnotatedText) > 0 ' . $wh_lang . $wh_query . ' group by TxID ' . $wh_tag . ' order by ' . $sorts[$currentsort-1];
-	else
-		$sql = 'select TxID from ((' . $tbpref . 'texts left JOIN ' . $tbpref . 'texttags ON TxID = TtTxID) left join ' . $tbpref . 'tags2 on T2ID = TtT2ID), ' . $tbpref . 'languages where LgID = TxLgID ' . $wh_lang . $wh_query . ' group by TxID ' . $wh_tag . ' order by ' . $sorts[$currentsort-1];
+	$sql = 'select TxID from ((' . $tbpref . 'texts left JOIN ' . $tbpref . 'texttags ON TxID = TtTxID) left join ' . $tbpref . 'tags2 on T2ID = TtT2ID), ' . $tbpref . 'languages where LgID = TxLgID ' . $wh_lang . $wh_query . ' group by TxID ' . $wh_tag . ' order by ' . $sorts[$currentsort-1];
 
 	$list = array(0);
 	$res = do_mysqli_query($sql);		
@@ -2773,88 +2770,6 @@ function restore_file($handle, $title) {
 
 // -------------------------------------------------------------
 
-function recreate_save_ann($textid, $oldann) {
-	global $tbpref;
-	$newann = create_ann($textid);
-	// Get the translations from $oldann:
-	$oldtrans = array();
-	$olditems = preg_split('/[\n]/u', $oldann);
-	foreach ($olditems as $olditem) {
-		$oldvals = preg_split('/[\t]/u', $olditem);
-		if ($oldvals[0] > -1) {
-			$trans = '';
-			if (count($oldvals) > 3) $trans = $oldvals[3];
-			$oldtrans[$oldvals[0] . "\t" . $oldvals[1]] = $trans;
-		}
-	}
-	// Reset the translations from $oldann in $newann and rebuild in $ann:
-	$newitems = preg_split('/[\n]/u', $newann);
-	$ann = '';
-	foreach ($newitems as $newitem) {
-		$newvals = preg_split('/[\t]/u', $newitem);
-		if ($newvals[0] > -1) {
-			$key = $newvals[0] . "\t";
-			if (isset($newvals[1])) $key .= $newvals[1];
-			if (array_key_exists($key, $oldtrans)) {
-				$newvals[3] = $oldtrans[$key];
-			}
-			$item = implode("\t", $newvals);
-		} else {
-			$item = $newitem;
-		}
-		$ann .= $item . "\n";
-	}
-	$dummy = runsql('update ' . $tbpref . 'texts set ' .
-		'TxAnnotatedText = ' . convert_string_to_sqlsyntax($ann) . ' where TxID = ' . $textid, "");
-	return get_first_value("select TxAnnotatedText as value from " . $tbpref . "texts where TxID = " . $textid);
-}
-
-// -------------------------------------------------------------
-
-function create_ann($textid) {
-	global $tbpref;
-	$ann = '';
-	$sql = 'select TiWordCount as Code, TiText, TiOrder, TiIsNotWord, WoID, WoTranslation from (' . $tbpref . 'textitems left join ' . $tbpref . 'words on (TiTextLC = WoTextLC) and (TiLgID = WoLgID)) where TiTxID = ' . $textid . ' and (not (TiWordCount > 1 and WoID is null)) order by TiOrder asc, TiWordCount desc';
-	$savenonterm = '';
-	$saveterm = '';
-	$savetrans = '';
-	$savewordid = '';
-	$until = 0;
-	$res = do_mysqli_query($sql);
-	while ($record = mysqli_fetch_assoc($res)) {
-		$actcode = $record['Code'] + 0;
-		$order = $record['TiOrder'] + 0;
-		if ( $order <= $until ) {
-			continue;
-		}
-		if ( $order > $until ) {
-			$ann = $ann . process_term($savenonterm, $saveterm, $savetrans, $savewordid, $order);
-			$savenonterm = '';
-			$saveterm = '';
-			$savetrans = '';
-			$savewordid = '';
-			$until = $order;
-		}
-		if ($record['TiIsNotWord'] != 0) {
-			$savenonterm = $savenonterm . $record['TiText'];
-		}
-		else {
-			$until = $order + 2 * ($actcode-1);
-			$saveterm = $record['TiText'];
-			$savetrans = '';
-			if(isset($record['WoID'])) {
-				$savetrans = $record['WoTranslation'];
-				$savewordid = $record['WoID'];
-			}
-		}
-	} // while
-	mysqli_free_result($res);
-	$ann .= process_term($savenonterm, $saveterm, $savetrans, $savewordid, $order);
-	return $ann;
-}
-
-// -------------------------------------------------------------
-
 function str_replace_first ($needle, $replace, $haystack) {
 	if ($needle === '') 
 		return $haystack;
@@ -2863,21 +2778,6 @@ function str_replace_first ($needle, $replace, $haystack) {
     return substr_replace($haystack,$replace,$pos,strlen($needle));
 	}
 	return $haystack;
-}
-
-// -------------------------------------------------------------
-
-function annotation_to_json ($ann) {
-	if ($ann == '') return "{}";
-	$arr = array();
-	$items = preg_split('/[\n]/u', $ann);
-	foreach ($items as $item) {
-		$vals = preg_split('/[\t]/u', $item);
-		if (count($vals) > 3 && $vals[0] >= 0 && $vals[2] > 0) {
-			$arr[$vals[0]-1] = array($vals[1],$vals[2],$vals[3]);
-		}
-	}
-	return json_encode($arr);
 }
 
 // -------------------------------------------------------------
@@ -2918,16 +2818,6 @@ function insert_prefix_in_sql ($sql_line) {
 		return substr($sql_line,0,13) . $tbpref . substr($sql_line,13);
 	else
 		return $sql_line;
-}
-
-// -------------------------------------------------------------
-
-function create_save_ann($textid) {
-	global $tbpref;
-	$ann = create_ann($textid);
-	$dummy = runsql('update ' . $tbpref . 'texts set ' .
-		'TxAnnotatedText = ' . convert_string_to_sqlsyntax($ann) . ' where TxID = ' . $textid, "");
-	return get_first_value("select TxAnnotatedText as value from " . $tbpref . "texts where TxID = " . $textid);
 }
 
 // -------------------------------------------------------------

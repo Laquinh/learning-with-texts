@@ -40,13 +40,11 @@ require_once( 'connect.inc.php' );
 require_once( 'dbutils.inc.php' );
 require_once( 'utilities.inc.php' );
 
-$sql = 'select TxLgID, TxTitle, TxAnnotatedText from ' . $tbpref . 'texts where TxID = ' . $_REQUEST['text'];
+$sql = 'select TxLgID, TxTitle from ' . $tbpref . 'texts where TxID = ' . $_REQUEST['text'];
 $res = do_mysqli_query($sql);
 $record = mysqli_fetch_assoc($res);
 $title = $record['TxTitle'];
 $langid = $record['TxLgID'];
-$ann = $record['TxAnnotatedText'];
-$ann_exists = (strlen($ann) > 0);
 mysqli_free_result($res);
 
 pagestart_nobody(tohtml($title));
@@ -67,7 +65,6 @@ $showAll = getSettingZeroOrOne('showallwords',1);
 ?>
 <script type="text/javascript">
 //<![CDATA[
-ANN_ARRAY = <?php echo annotation_to_json($ann); ?>;
 TEXTPOS = -1;
 OPENED = 0;
 WBLINK1 = '<?php echo $wb1; ?>';

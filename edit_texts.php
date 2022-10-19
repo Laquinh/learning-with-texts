@@ -133,7 +133,7 @@ if (isset($_REQUEST['markaction'])) {
 					$res = do_mysqli_query($sql);
 					while ($record = mysqli_fetch_assoc($res)) {
 						$id = $record['TxID'];
-						$count += (0 + runsql('insert into ' . $tbpref . 'archivedtexts (AtLgID, AtTitle, AtText, AtAnnotatedText, AtAudioURI, AtSourceURI) select TxLgID, TxTitle, TxText, TxAnnotatedText, TxAudioURI, TxSourceURI from ' . $tbpref . 'texts where TxID = ' . $id, ""));
+						$count += (0 + runsql('insert into ' . $tbpref . 'archivedtexts (AtLgID, AtTitle, AtText, AtAudioURI, AtSourceURI) select TxLgID, TxTitle, TxText, TxAudioURI, TxSourceURI from ' . $tbpref . 'texts where TxID = ' . $id, ""));
 						$aid = get_last_key();
 						runsql('insert into ' . $tbpref . 'archtexttags (AgAtID, AgT2ID) select ' . $aid . ', TtT2ID from ' . $tbpref . 'texttags where TtTxID = ' . $id, "");	
 					}
@@ -222,7 +222,7 @@ elseif (isset($_REQUEST['arch'])) {
 		"Text items deleted");
 	$message2 = runsql('delete from ' . $tbpref . 'sentences where SeTxID = ' . $_REQUEST['arch'], 
 		"Sentences deleted");
-	$message4 = runsql('insert into ' . $tbpref . 'archivedtexts (AtLgID, AtTitle, AtText, AtAnnotatedText, AtAudioURI, AtSourceURI) select TxLgID, TxTitle, TxText, TxAnnotatedText, TxAudioURI, TxSourceURI from ' . $tbpref . 'texts where TxID = ' . $_REQUEST['arch'], "Archived Texts saved");
+	$message4 = runsql('insert into ' . $tbpref . 'archivedtexts (AtLgID, AtTitle, AtText, AtAudioURI, AtSourceURI) select TxLgID, TxTitle, TxText, TxAudioURI, TxSourceURI from ' . $tbpref . 'texts where TxID = ' . $_REQUEST['arch'], "Archived Texts saved");
 	$id = get_last_key();
 	runsql('insert into ' . $tbpref . 'archtexttags (AgAtID, AgT2ID) select ' . $id . ', TtT2ID from ' . $tbpref . 'texttags where TtTxID = ' . $_REQUEST['arch'], "");	
 	$message1 = runsql('delete from ' . $tbpref . 'texts where TxID = ' . $_REQUEST['arch'], "Texts deleted");
@@ -257,7 +257,7 @@ elseif (isset($_REQUEST['op'])) {
 		// INSERT
 		
 		elseif (substr($_REQUEST['op'],0,4) == 'Save') {
-			$message1 = runsql('insert into ' . $tbpref . 'texts (TxLgID, TxTitle, TxText, TxAnnotatedText, TxAudioURI, TxSourceURI) values( ' . 
+			$message1 = runsql('insert into ' . $tbpref . 'texts (TxLgID, TxTitle, TxText, TxAudioURI, TxSourceURI) values( ' . 
 			$_REQUEST["TxLgID"] . ', ' . 
 			convert_string_to_sqlsyntax($_REQUEST["TxTitle"]) . ', ' . 
 			convert_string_to_sqlsyntax(remove_soft_hyphens($_REQUEST["TxText"])) . ", '', " .
@@ -374,7 +374,7 @@ if (isset($_REQUEST['new'])) {
 
 elseif (isset($_REQUEST['chg'])) {
 	
-	$sql = 'select TxLgID, TxTitle, TxText, TxAudioURI, TxSourceURI, length(TxAnnotatedText) as annotlen from ' . $tbpref . 'texts where TxID = ' . $_REQUEST['chg'];
+	$sql = 'select TxLgID, TxTitle, TxText, TxAudioURI, TxSourceURI, from ' . $tbpref . 'texts where TxID = ' . $_REQUEST['chg'];
 	$res = do_mysqli_query($sql);
 	if ($record = mysqli_fetch_assoc($res)) {
 
@@ -539,7 +539,7 @@ Marked Texts:&nbsp;
 <th class="th1 sorttable_nosort">Read<br />&amp;&nbsp;Test</th>
 <th class="th1 sorttable_nosort">Actions</th>
 <?php if ($currentlang == '') echo '<th class="th1 clickable">Lang.</th>'; ?>
-<th class="th1 clickable">Title [Tags] / Audio:&nbsp;<img src="icn/speaker-volume.png" title="With Audio" alt="With Audio" />, Src.Link:&nbsp;<img src="icn/chain.png" title="Source Link available" alt="Source Link available" />, Ann.Text:&nbsp;<img src="icn/tick.png" title="Annotated Text available" alt="Annotated Text available" /></th>
+<th class="th1 clickable">Title [Tags] / Audio:&nbsp;<img src="icn/speaker-volume.png" title="With Audio" alt="With Audio" />, Src.Link:&nbsp;<img src="icn/chain.png" title="Source Link available" alt="Source Link available" /></th>
 <th class="th1 sorttable_numeric clickable">Total<br />Words</th>
 <th class="th1 sorttable_numeric clickable">Saved<br />Wo+Ex</th>
 <th class="th1 sorttable_numeric clickable">Unkn.<br />Words</th>
@@ -548,7 +548,7 @@ Marked Texts:&nbsp;
 
 <?php
 
-$sql = 'select TxID, TxTitle, LgName, TxAudioURI, TxSourceURI, length(TxAnnotatedText) as annotlen, ifnull(concat(\'[\',group_concat(distinct T2Text order by T2Text separator \', \'),\']\'),\'\') as taglist from ((' . $tbpref . 'texts left JOIN ' . $tbpref . 'texttags ON TxID = TtTxID) left join ' . $tbpref . 'tags2 on T2ID = TtT2ID), ' . $tbpref . 'languages where LgID=TxLgID ' . $wh_lang . $wh_query . ' group by TxID ' . $wh_tag . ' order by ' . $sorts[$currentsort-1] . ' ' . $limit;
+$sql = 'select TxID, TxTitle, LgName, TxAudioURI, TxSourceURI, ifnull(concat(\'[\',group_concat(distinct T2Text order by T2Text separator \', \'),\']\'),\'\') as taglist from ((' . $tbpref . 'texts left JOIN ' . $tbpref . 'texttags ON TxID = TtTxID) left join ' . $tbpref . 'tags2 on T2ID = TtT2ID), ' . $tbpref . 'languages where LgID=TxLgID ' . $wh_lang . $wh_query . ' group by TxID ' . $wh_tag . ' order by ' . $sorts[$currentsort-1] . ' ' . $limit;
 if ($debug) echo $sql;
 $res = do_mysqli_query($sql);
 $showCounts = getSettingWithDefault('set-show-text-word-counts')+0;

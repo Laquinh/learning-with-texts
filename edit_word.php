@@ -49,7 +49,6 @@ $translation_raw = repl_tab_nl(getreq("WoTranslation"));
 if ( $translation_raw == '' ) $translation = '*';
 else $translation = $translation_raw;
 
-$fromAnn = getreq("fromAnn"); // from-recno or empty
 $textId = $_REQUEST['tid'];
 
 #region INS/UPD
@@ -196,7 +195,6 @@ else {  // if (! isset($_REQUEST['op']))
 ?>
 	
 		<form name="newword" class="validate" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-		<input type="hidden" name="fromAnn" value="<?php echo $fromAnn; ?>" />
 		<input type="hidden" name="WoLgID" id="langfield" value="<?php echo $lang; ?>" />
 		<input type="hidden" name="WoText" value="<?php echo tohtml($term); ?>" />
 		<input type="hidden" name="tid" value="<?php echo getreq('tid'); ?>" />
@@ -257,7 +255,6 @@ else {  // if (! isset($_REQUEST['op']))
 		
 			<form name="editword" class="validate" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
 			<input type="hidden" name="WoLgID" id="langfield" value="<?php echo $lang; ?>" />
-			<input type="hidden" name="fromAnn" value="<?php echo $fromAnn; ?>" />
 			<input type="hidden" name="WoID" value="<?php echo $wid; ?>" />
 			<input type="hidden" name="WoOldStatus" value="<?php echo $record['WoStatus']; ?>" />
 			<input type="hidden" name="tid" value="<?php echo getreq('tid'); ?>" />
@@ -290,9 +287,7 @@ else {  // if (! isset($_REQUEST['op']))
 			</tr>
 			<tr>
 			<td class="td1 right" colspan="2">  
-			<?php echo (($fromAnn !== '') ? 
-				createDictLinksInEditWin2($lang,'document.forms[0].WoSentence','document.forms[0].WoText') : 
-				createDictLinksInEditWin ($lang,$term,'document.forms[0].WoSentence',1)); ?>
+			<?php createDictLinksInEditWin ($lang,$term,'document.forms[0].WoSentence',1); ?>
 			&nbsp; &nbsp; &nbsp; 
 			<input type="submit" name="op" value="Change" /></td>
 			</tr>

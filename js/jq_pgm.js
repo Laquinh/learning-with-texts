@@ -42,7 +42,6 @@ var WBLINK3 = '';
 var SOLUTION = '';
 var ADDFILTER = '';
 var RTL = 0;
-var ANN_ARRAY = {};
  
 /**************************************************************
 LWT jQuery functions
@@ -243,7 +242,7 @@ function keydown_event_do_test_test(e) {
 	if (e.which == 32 && OPENED == 0) {  // space : show sol.
 		$('.word').click();
 		cClick();
-		window.parent.frames['ro'].location.href = 'show_word.php?wid=' + $('.word').attr('data_wid') + '&ann=';
+		window.parent.frames['ro'].location.href = 'show_word.php?wid=' + $('.word').attr('data_wid');
 		OPENED = 1;
 		return false;
 	}
@@ -291,15 +290,6 @@ function keydown_event_do_test_test(e) {
 function word_each_do_text_text(i) {
 	this.title = make_tooltip($(this).text(), $(this).attr('data_trans'), 
 		$(this).attr('data_rom'), $(this).attr('data_status'));
-	var wid = $(this).attr('data_wid');
-	if (wid != '') {
-		var order = $(this).attr('data_order');
-		if (order in ANN_ARRAY) {
-			if (wid == ANN_ARRAY[order][1]) {
-				$(this).attr('data_ann',ANN_ARRAY[order][2]);
-			}
-		}
-	}
 }
 
 function mword_each_do_text_text(i) {
@@ -307,19 +297,6 @@ function mword_each_do_text_text(i) {
 		this.title = make_tooltip($(this).attr('data_text'), 
 		$(this).attr('data_trans'), $(this).attr('data_rom'), 
 		$(this).attr('data_status'));
-		var wid = $(this).attr('data_wid');
-		if (wid != '') {
-			var order = parseInt($(this).attr('data_order'));
-			for (var j = 2; j <= 16; j = j+2) {
-				var index = (order+j).toString();
-				if (index in ANN_ARRAY) {
-					if (wid == ANN_ARRAY[index][1]) {
-						$(this).attr('data_ann',ANN_ARRAY[index][2]);
-						break;
-					}
-				}
-			}
-		}
 	}
 }
 
@@ -335,9 +312,6 @@ function word_dblclick_event_do_text_text() {
 //#region NEW VERSION
 function word_click_event_do_text_text() {
 	var status = $(this).attr('data_status');
-	var ann = '';
-	if ((typeof $(this).attr('data_ann')) != 'undefined') 
-		ann = $(this).attr('data_ann');
 		
 	if ( status < 1 )
 	{
@@ -359,7 +333,7 @@ function word_click_event_do_text_text() {
 		var data_wid = $(this).attr('data_wid');
 
 		run_overlib_status_99(WBLINK1,WBLINK2,WBLINK3,$(this).attr('title'),
-			TID,$(this).attr('data_order'),$(this).text(),data_term, data_language, data_wid,RTL,ann);
+			TID,$(this).attr('data_order'),$(this).text(),data_term, data_language, data_wid,RTL);
 		top.frames['ro'].location.href='edit_word.php?tid=' + TID + '&ord=' + 
 			$(this).attr('data_order') +
 			'&term=' + data_term +
@@ -373,7 +347,7 @@ function word_click_event_do_text_text() {
 		var data_wid = $(this).attr('data_wid');
 
 		run_overlib_status_98(WBLINK1,WBLINK2,WBLINK3,$(this).attr('title'),
-			TID,$(this).attr('data_order'),$(this).text(),data_term, data_language, data_wid,RTL,ann);
+			TID,$(this).attr('data_order'),$(this).text(),data_term, data_language, data_wid,RTL);
 		top.frames['ro'].location.href='edit_word.php?tid=' + TID + '&ord=' + 
 			$(this).attr('data_order') +
 			'&term=' + data_term +
@@ -387,7 +361,7 @@ function word_click_event_do_text_text() {
 		var data_wid = $(this).attr('data_wid');
 
 		run_overlib_status_1_to_5(WBLINK1,WBLINK2,WBLINK3,$(this).attr('title'),
-			TID,$(this).attr('data_order'),$(this).text(),data_term, data_language, data_wid, status, RTL, ann);
+			TID,$(this).attr('data_order'),$(this).text(),data_term, data_language, data_wid, status, RTL);
 		top.frames['ro'].location.href='edit_word.php?tid=' + TID + '&ord=' + 
 			$(this).attr('data_order') +
 			'&term=' + data_term +
@@ -401,12 +375,9 @@ function word_click_event_do_text_text() {
 function mword_click_event_do_text_text() {
 	var status = $(this).attr('data_status');
 	if (status != '') {
-		var ann = '';
-		if ((typeof $(this).attr('data_ann')) != 'undefined') 
-			ann = $(this).attr('data_ann');
 		run_overlib_multiword(WBLINK1,WBLINK2,WBLINK3,$(this).attr('title'),
 		TID, $(this).attr('data_order'),$(this).attr('data_text'),
-		$(this).attr('data_wid'), status,$(this).attr('data_code'), ann);
+		$(this).attr('data_wid'), status,$(this).attr('data_code'));
 	}
 	return false;
 }
@@ -450,10 +421,7 @@ function keydown_event_do_text_text(e) {
 		curr = knownwordlist.eq(TEXTPOS);
 		curr.addClass('kwordmarked');
 		$(window).scrollTo(curr,{axis:'y', offset:-150});
-		var ann = '';
-		if ((typeof curr.attr('data_ann')) != 'undefined') 
-			ann = curr.attr('data_ann');
-		window.parent.frames['ro'].location.href = 'show_word.php?wid=' + curr.attr('data_wid') + '&ann=' + encodeURIComponent(ann);
+		window.parent.frames['ro'].location.href = 'show_word.php?wid=' + curr.attr('data_wid');
 		return false;
 	}
 	if (e.which == 35) {  // end : known word navigation -> last
@@ -462,10 +430,7 @@ function keydown_event_do_text_text(e) {
 		curr = knownwordlist.eq(TEXTPOS);
 		curr.addClass('kwordmarked');
 		$(window).scrollTo(curr,{axis:'y', offset:-150});
-		var ann = '';
-		if ((typeof curr.attr('data_ann')) != 'undefined') 
-			ann = curr.attr('data_ann');
-		window.parent.frames['ro'].location.href = 'show_word.php?wid=' + curr.attr('data_wid') + '&ann=' + encodeURIComponent(ann);
+		window.parent.frames['ro'].location.href = 'show_word.php?wid=' + curr.attr('data_wid');
 		return false;
 	}
 	if (e.which == 37) {  // left : known word navigation
@@ -488,10 +453,7 @@ function keydown_event_do_text_text(e) {
 		curr = knownwordlist.eq(TEXTPOS);
 		curr.addClass('kwordmarked');
 		$(window).scrollTo(curr,{axis:'y', offset:-150});
-		var ann = '';
-		if ((typeof curr.attr('data_ann')) != 'undefined') 
-			ann = curr.attr('data_ann');
-		window.parent.frames['ro'].location.href = 'show_word.php?wid=' + curr.attr('data_wid') + '&ann=' + encodeURIComponent(ann);
+		window.parent.frames['ro'].location.href = 'show_word.php?wid=' + curr.attr('data_wid');
 		return false;
 	}
 	if (e.which == 39 || e.which == 32) {  // space /right : known word navigation
@@ -514,10 +476,7 @@ function keydown_event_do_text_text(e) {
 		curr = knownwordlist.eq(TEXTPOS);
 		curr.addClass('kwordmarked');
 		$(window).scrollTo(curr,{axis:'y', offset:-150});
-		var ann = '';
-		if ((typeof curr.attr('data_ann')) != 'undefined') 
-			ann = curr.attr('data_ann');
-		window.parent.frames['ro'].location.href = 'show_word.php?wid=' + curr.attr('data_wid') + '&ann=' + encodeURIComponent(ann);
+		window.parent.frames['ro'].location.href = 'show_word.php?wid=' + curr.attr('data_wid');
 		return false;
 	}
 
