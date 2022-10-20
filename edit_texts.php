@@ -224,7 +224,7 @@ elseif (isset($_REQUEST['op'])) {
 			$message1 = runsql('insert into ' . $tbpref . 'texts (TxLgID, TxTitle, TxText, TxAudioURI, TxSourceURI) values( ' . 
 			$_REQUEST["TxLgID"] . ', ' . 
 			convert_string_to_sqlsyntax($_REQUEST["TxTitle"]) . ', ' . 
-			convert_string_to_sqlsyntax(remove_soft_hyphens($_REQUEST["TxText"])) . ", '', " .
+			convert_string_to_sqlsyntax(remove_soft_hyphens($_REQUEST["TxText"])) . ", " .
 			convert_string_to_sqlsyntax($_REQUEST["TxAudioURI"]) . ', ' .
 			convert_string_to_sqlsyntax($_REQUEST["TxSourceURI"]) . ')', "Saved");
 			$id = get_last_key();
@@ -333,7 +333,7 @@ if (isset($_REQUEST['new'])) {
 
 elseif (isset($_REQUEST['chg'])) {
 	
-	$sql = 'select TxLgID, TxTitle, TxText, TxAudioURI, TxSourceURI, from ' . $tbpref . 'texts where TxID = ' . $_REQUEST['chg'];
+	$sql = 'select TxLgID, TxTitle, TxText, TxAudioURI, TxSourceURI from ' . $tbpref . 'texts where TxID = ' . $_REQUEST['chg'];
 	$res = do_mysqli_query($sql);
 	if ($record = mysqli_fetch_assoc($res)) {
 
