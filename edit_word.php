@@ -190,7 +190,6 @@ else {  // if (! isset($_REQUEST['op']))
 	#region NEW
 	
 	if ($new) {
-		consoleLog("NEW");
 
 ?>
 	

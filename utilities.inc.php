@@ -2209,9 +2209,7 @@ function splitTextIntoSentences($text)
 
 function get_word_data($word, $wordsInDB)
 {
-	consoleLog(count($wordsInDB));
 	$index = array_search(mb_strtolower($word, 'UTF-8'), array_column($wordsInDB, "WoText"));
-	consoleLog($index);
 	if($index)
 	{
 		return $wordsInDB[$index];
@@ -2268,7 +2266,6 @@ function databaseWordList($langid)
 	}
 	mysqli_free_result($resGetWordsInDB);
 
-	consoleLog("a" . count($wordsInDB));
 
 	return $wordsInDB;
 }
