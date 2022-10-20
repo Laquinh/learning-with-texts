@@ -2207,6 +2207,74 @@ function splitTextIntoSentences($text)
 
 // -------------------------------------------------------------
 
+function get_word_data($word, $wordsInDB)
+{
+	consoleLog(count($wordsInDB));
+	$index = array_search(mb_strtolower($word, 'UTF-8'), array_column($wordsInDB, "WoText"));
+	consoleLog($index);
+	if($index)
+	{
+		return $wordsInDB[$index];
+	}
+	else
+	{
+		return null; 
+	}
+}
+
+// -------------------------------------------------------------
+
+function is_word($item)
+{
+	return (strpbrk($item, "., \n") === FALSE);
+}
+
+// -------------------------------------------------------------
+
+function textItemList($text)
+{
+	//Get text
+	$sql = 'select * from texts where TxID = ' . $_REQUEST['text'];
+	$res = do_mysqli_query($sql);
+	$record = mysqli_fetch_assoc($res);
+	mysqli_free_result($res);
+
+	//Get array of items (words + special characters) from text
+	$lines = preg_split('#(\R)#', $record['TxText'], -1, PREG_SPLIT_DELIM_CAPTURE|PREG_SPLIT_NO_EMPTY);
+	$items = [];
+	foreach($lines as $line)
+	{
+		$itemsInLine = preg_split('/([ ,.\s])/', $line, -1, PREG_SPLIT_DELIM_CAPTURE|PREG_SPLIT_NO_EMPTY);
+		foreach($itemsInLine as $item)
+		{
+			array_push($items, $item);
+		}
+	}
+
+	return $items;
+}
+
+// -------------------------------------------------------------
+
+function databaseWordList($langid)
+{
+	//Get array of words seen in this language from database
+	$sql = 'select WoID, LOWER(WoText) as WoText, WoStatus, WoTranslation, WoRomanization from words where WoLgId = ' . $langid;
+	$res = do_mysqli_query($sql);
+	$wordsInDB = [];
+	while($wordInDB = mysqli_fetch_assoc($res))
+	{
+		array_push($wordsInDB, $wordInDB);
+	}
+	mysqli_free_result($resGetWordsInDB);
+
+	consoleLog("a" . count($wordsInDB));
+
+	return $wordsInDB;
+}
+
+// -------------------------------------------------------------
+
 function texttodocount($text) {
 	return '<span title="To Do" class="status0">&nbsp;' . 
 	(textwordcount($text) - textworkcount($text)) . '&nbsp;</span>';

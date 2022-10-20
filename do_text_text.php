@@ -91,53 +91,8 @@ echo '<div id="thetext" ' .  ($rtlScript ? 'dir="rtl"' : '') . '><p style="' . (
 
 $currcharcount = 0;
 
-#region NEW VERSION
-function get_word_data($word, $wordsInDB)
-{
-	$index = array_search(mb_strtolower($word, 'UTF-8'), array_column($wordsInDB, "WoText"));
-	
-	if($index)
-	{
-		return $wordsInDB[$index];
-	}
-	else
-	{
-		return null;
-	}
-}
-
-function is_word($item)
-{
-	return (strpbrk($item, "., \n") === FALSE);
-}
-
-//Get text
-$sqlGetText = 'select * from texts where TxID = ' . $_REQUEST['text'];
-$resGetText = do_mysqli_query($sqlGetText);
-$recordGetText = mysqli_fetch_assoc($resGetText);
-mysqli_free_result($resGetText);
-
-//Get array of items (words + special characters) from text
-$lines = preg_split('#(\R)#', $recordGetText['TxText'], -1, PREG_SPLIT_DELIM_CAPTURE|PREG_SPLIT_NO_EMPTY);
-$items = [];
-foreach($lines as $line)
-{
-	$itemsInLine = preg_split('/([ ,.\s])/', $line, -1, PREG_SPLIT_DELIM_CAPTURE|PREG_SPLIT_NO_EMPTY);
-	foreach($itemsInLine as $item)
-	{
-		array_push($items, $item);
-	}
-}
-
-//Get array of words seen in this language from database
-$sqlGetWordsInDB = 'select WoID, LOWER(WoText) as WoText, WoStatus, WoTranslation, WoRomanization from words where WoLgId = ' . $langid;
-$resGetWordsInDB = do_mysqli_query($sqlGetWordsInDB);
-$wordsInDB = [];
-while($wordInDB = mysqli_fetch_assoc($resGetWordsInDB))
-{
-	array_push($wordsInDB, $wordInDB);
-}
-mysqli_free_result($resGetWordsInDB);
+$items = textItemList($_REQUEST["text"]);
+$wordsInDB = databaseWordList($langid);
 
 //Main loop
 $showNextSpace = true;
@@ -182,7 +137,6 @@ foreach($items as $item)
 
 	$showNextSpace = true;
 }
-#endregion
 
 echo '<span id="totalcharcount" class="hide">' . $currcharcount . '</span></p><p style="font-size:' . $textsize . '%;line-height: 1.4; margin-bottom: 300px;">&nbsp;</p></div>';
 
