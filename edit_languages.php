@@ -84,14 +84,7 @@ if (isset($_REQUEST['refresh'])) {
 		"Text items deleted");
 	adjust_autoincr('sentences','SeID');
 	adjust_autoincr('textitems','TiID');
-	$sql = "select TxID, TxText from " . $tbpref . "texts where TxLgID = " . $id . " order by TxID";
-	$res = do_mysqli_query($sql);
-	while ($record = mysqli_fetch_assoc($res)) {
-		$txtid = $record["TxID"];
-		$txttxt = $record["TxText"];
-		splitCheckText($txttxt, $id, $txtid );
-	}
-	mysqli_free_result($res);
+
 	$message = $message2 . " / " . $message3 . " / Sentences added: " . get_first_value('select count(*) as value from ' . $tbpref . 'sentences where SeLgID = ' . $id) . " / Text items added: " . get_first_value('select count(*) as value from ' . $tbpref . 'textitems where TiLgID = ' . $id);
 }
 
@@ -185,29 +178,6 @@ elseif (isset($_REQUEST['op'])) {
 		'LgSplitEachChar = ' . $_REQUEST["LgSplitEachChar"] . ', ' . 
 		'LgRightToLeft = ' . $_REQUEST["LgRightToLeft"] . 
 		' where LgID = ' . $_REQUEST["LgID"], 'Updated');
-		
-		if ($needReParse) {
-			$id = $_REQUEST["LgID"] + 0;
-			runsql('delete from ' . $tbpref . 'sentences where SeLgID = ' . $id, 
-				"Sentences deleted");
-			runsql('delete from ' . $tbpref . 'textitems where TiLgID = ' . $id, 
-				"Text items deleted");
-			adjust_autoincr('sentences','SeID');
-			adjust_autoincr('textitems','TiID');
-			$sql = "select TxID, TxText from " . $tbpref . "texts where TxLgID = " . $id . " order by TxID";
-			$res = do_mysqli_query($sql);
-			$cntrp = 0;
-			while ($record = mysqli_fetch_assoc($res)) {
-				$txtid = $record["TxID"];
-				$txttxt = $record["TxText"];
-				splitCheckText($txttxt, $id, $txtid );
-				$cntrp++;
-			}
-			mysqli_free_result($res);
-			$message .= " / Reparsed texts: " . $cntrp;
-		} else {
-			$message .= " / Reparsing not needed";
-		}
 
 	}
 

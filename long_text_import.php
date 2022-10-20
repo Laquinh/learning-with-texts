@@ -87,7 +87,7 @@ if (isset($_REQUEST['op'])) {
 			echo error_message_with_hide($message,0);
 		}
 		else {
-			$sent_array = splitCheckText($data, $langid, -2);
+			$sent_array = array();
 			$texts = array();
 			$text_index = 0;
 			$texts[$text_index] = array();
@@ -186,8 +186,7 @@ if (isset($_REQUEST['op'])) {
 				convert_string_to_sqlsyntax($texts[$i]) . ", '', NULL, " .
 				convert_string_to_sqlsyntax($source_uri) . ')', '');
 				$id = get_last_key();
-				saveTextTags($id);	
-				splitCheckText ($texts[$i], $langid, $id);
+				saveTextTags($id);
 			}
 		
 		}

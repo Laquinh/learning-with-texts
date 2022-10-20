@@ -133,11 +133,6 @@ if (isset($_REQUEST['markaction'])) {
 						$count += $mess;
 						$id = get_last_key();
 						runsql('insert into ' . $tbpref . 'texttags (TtTxID, TtT2ID) select ' . $id . ', AgT2ID from ' . $tbpref . 'archtexttags where AgAtID = ' . $ida, "");	
-						splitCheckText(
-							get_first_value(
-							'select TxText as value from ' . $tbpref . 'texts where TxID = ' . $id), 
-							$record['AtLgID'], 
-							$id );	
 						runsql('delete from ' . $tbpref . 'archivedtexts where AtID = ' . $ida, "");
 					}
 					mysqli_free_result($res);
@@ -165,13 +160,7 @@ if (isset($_REQUEST['del'])) {
 elseif (isset($_REQUEST['unarch'])) {
 	$message2 = runsql('insert into ' . $tbpref . 'texts (TxLgID, TxTitle, TxText, TxAudioURI, TxSourceURI) select AtLgID, AtTitle, AtText, AtAudioURI, AtSourceURI from ' . $tbpref . 'archivedtexts where AtID = ' . $_REQUEST['unarch'], "Texts added");
 	$id = get_last_key();
-	runsql('insert into ' . $tbpref . 'texttags (TtTxID, TtT2ID) select ' . $id . ', AgT2ID from ' . $tbpref . 'archtexttags where AgAtID = ' . $_REQUEST['unarch'], "");	
-	splitCheckText(
-		get_first_value(
-		'select TxText as value from ' . $tbpref . 'texts where TxID = ' . $id), 
-		get_first_value(
-		'select TxLgID as value from ' . $tbpref . 'texts where TxID = ' . $id), 
-		$id );	
+	runsql('insert into ' . $tbpref . 'texttags (TtTxID, TtT2ID) select ' . $id . ', AgT2ID from ' . $tbpref . 'archtexttags where AgAtID = ' . $_REQUEST['unarch'], "");		
 	$message1 = runsql('delete from ' . $tbpref . 'archivedtexts where AtID = ' . $_REQUEST['unarch'], "Archived Texts deleted");
 	$message = $message1 . " / " . $message2 . " / Sentences added: " . get_first_value('select count(*) as value from ' . $tbpref . 'sentences where SeTxID = ' . $id) . " / Text items added: " . get_first_value('select count(*) as value from ' . $tbpref . 'textitems where TiTxID = ' . $id);
 	adjust_autoincr('archivedtexts','AtID');

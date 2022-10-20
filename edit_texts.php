@@ -166,32 +166,6 @@ if (isset($_REQUEST['markaction'])) {
 					}
 					mysqli_free_result($res);
 					$message = 'Term Sentences set from Text(s): ' . $count;
-				} 
-				
-				elseif ($markaction == 'rebuild') {
-					$count = 0;
-					$sql = "select TxID, TxLgID from " . $tbpref . "texts where TxID in " . $list;
-					$res = do_mysqli_query($sql);
-					while ($record = mysqli_fetch_assoc($res)) {
-						$id = $record['TxID'];
-						$message2 = runsql('delete from ' . $tbpref . 'sentences where SeTxID = ' . $id, "Sentences deleted");
-						$message3 = runsql('delete from ' . $tbpref . 'textitems where TiTxID = ' . $id, "Text items deleted");
-						adjust_autoincr('sentences','SeID');
-						adjust_autoincr('textitems','TiID');
-						splitCheckText(
-							get_first_value(
-								'select TxText as value from ' . $tbpref . 'texts where TxID = ' . $id), 
-								$record['TxLgID'], $id );
-						$count++;
-					}
-					mysqli_free_result($res);
-					$message = 'Text(s) reparsed: ' . $count;
-				}
-				
-				elseif ($markaction == 'test' ) {
-					$_SESSION['testsql'] = ' ' . $tbpref . 'words, ' . $tbpref . 'textitems where TiLgID = WoLgID and TiTextLC = WoTextLC and TiTxID in ' . $list . ' ';
-					header("Location: do_test.php?selection=1");
-					exit();
 				}
 				
 			}
@@ -243,20 +217,10 @@ elseif (isset($_REQUEST['op'])) {
 	}
 
 	else {
-	
-		// CHECK
-		
-		if ($_REQUEST['op'] == 'Check') {
-			echo '<p><input type="button" value="&lt;&lt; Back" onclick="history.back();" /></p>';
-			echo splitCheckText(remove_soft_hyphens($_REQUEST['TxText']), $_REQUEST['TxLgID'], -1);
-			echo '<p><input type="button" value="&lt;&lt; Back" onclick="history.back();" /></p>';
-			pageend();
-			exit();
-		} 
 		
 		// INSERT
 		
-		elseif (substr($_REQUEST['op'],0,4) == 'Save') {
+		if (substr($_REQUEST['op'],0,4) == 'Save') {
 			$message1 = runsql('insert into ' . $tbpref . 'texts (TxLgID, TxTitle, TxText, TxAudioURI, TxSourceURI) values( ' . 
 			$_REQUEST["TxLgID"] . ', ' . 
 			convert_string_to_sqlsyntax($_REQUEST["TxTitle"]) . ', ' . 
@@ -289,11 +253,6 @@ elseif (isset($_REQUEST['op'])) {
 			"Textitems deleted");
 		adjust_autoincr('sentences','SeID');
 		adjust_autoincr('textitems','TiID');
-	
-		splitCheckText(
-			get_first_value(
-				'select TxText as value from ' . $tbpref . 'texts where TxID = ' . $id), 
-			$_REQUEST["TxLgID"], $id );
 			
 		$message = $message1 . " / " . $message2 . " / " . $message3 . " / Sentences added: " . get_first_value('select count(*) as value from ' . $tbpref . 'sentences where SeTxID = ' . $id) . " / Text items added: " . get_first_value('select count(*) as value from ' . $tbpref . 'textitems where TiTxID = ' . $id);
 		
