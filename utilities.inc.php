@@ -2210,8 +2210,9 @@ function splitTextIntoSentences($text)
 function get_word_data($word, $wordsInDB)
 {
 	$index = array_search(mb_strtolower($word, 'UTF-8'), array_column($wordsInDB, "WoText"));
-	if($index)
+	if($index !== false)
 	{
+		consoleLog($word . " " . $index);
 		return $wordsInDB[$index];
 	}
 	else
@@ -2265,7 +2266,6 @@ function databaseWordList($langid)
 		array_push($wordsInDB, $wordInDB);
 	}
 	mysqli_free_result($resGetWordsInDB);
-
 
 	return $wordsInDB;
 }
