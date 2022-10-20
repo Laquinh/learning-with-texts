@@ -176,34 +176,22 @@ if (isset($_REQUEST['markaction'])) {
 // DEL
 
 if (isset($_REQUEST['del'])) {
-	$message3 = runsql('delete from ' . $tbpref . 'textitems where TiTxID = ' . $_REQUEST['del'], 
-		"Text items deleted");
-	$message2 = runsql('delete from ' . $tbpref . 'sentences where SeTxID = ' . $_REQUEST['del'], 
-		"Sentences deleted");
 	$message1 = runsql('delete from ' . $tbpref . 'texts where TxID = ' . $_REQUEST['del'], 
 		"Texts deleted");
-	$message = $message1 . " / " . $message2 . " / " . $message3;
+	$message = $message1;
 	adjust_autoincr('texts','TxID');
-	adjust_autoincr('sentences','SeID');
-	adjust_autoincr('textitems','TiID');
 	runsql("DELETE " . $tbpref . "texttags FROM (" . $tbpref . "texttags LEFT JOIN " . $tbpref . "texts on TtTxID = TxID) WHERE TxID IS NULL",'');
 }
 
 // ARCH
 
 elseif (isset($_REQUEST['arch'])) {
-	$message3 = runsql('delete from ' . $tbpref . 'textitems where TiTxID = ' . $_REQUEST['arch'], 
-		"Text items deleted");
-	$message2 = runsql('delete from ' . $tbpref . 'sentences where SeTxID = ' . $_REQUEST['arch'], 
-		"Sentences deleted");
 	$message4 = runsql('insert into ' . $tbpref . 'archivedtexts (AtLgID, AtTitle, AtText, AtAudioURI, AtSourceURI) select TxLgID, TxTitle, TxText, TxAudioURI, TxSourceURI from ' . $tbpref . 'texts where TxID = ' . $_REQUEST['arch'], "Archived Texts saved");
 	$id = get_last_key();
 	runsql('insert into ' . $tbpref . 'archtexttags (AgAtID, AgT2ID) select ' . $id . ', TtT2ID from ' . $tbpref . 'texttags where TtTxID = ' . $_REQUEST['arch'], "");	
 	$message1 = runsql('delete from ' . $tbpref . 'texts where TxID = ' . $_REQUEST['arch'], "Texts deleted");
-	$message = $message4 . " / " . $message1 . " / " . $message2 . " / " . $message3;
+	$message = $message4 . " / " . $message1;
 	adjust_autoincr('texts','TxID');
-	adjust_autoincr('sentences','SeID');
-	adjust_autoincr('textitems','TiID');
 	runsql("DELETE " . $tbpref . "texttags FROM (" . $tbpref . "texttags LEFT JOIN " . $tbpref . "texts on TtTxID = TxID) WHERE TxID IS NULL",'');
 }
 
@@ -246,15 +234,6 @@ elseif (isset($_REQUEST['op'])) {
 			$id = $_REQUEST["TxID"];
 			saveTextTags($id);
 		}
-		
-		$message2 = runsql('delete from ' . $tbpref . 'sentences where SeTxID = ' . $id, 
-			"Sentences deleted");
-		$message3 = runsql('delete from ' . $tbpref . 'textitems where TiTxID = ' . $id, 
-			"Textitems deleted");
-		adjust_autoincr('sentences','SeID');
-		adjust_autoincr('textitems','TiID');
-			
-		$message = $message1 . " / " . $message2 . " / " . $message3 . " / Sentences added: " . get_first_value('select count(*) as value from ' . $tbpref . 'sentences where SeTxID = ' . $id) . " / Text items added: " . get_first_value('select count(*) as value from ' . $tbpref . 'textitems where TiTxID = ' . $id);
 		
 		if(substr($_REQUEST['op'],-8) == "and Open") {
 			header('Location: do_text.php?start=' . $id);
