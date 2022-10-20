@@ -87,7 +87,7 @@ if (isset($_REQUEST['op'])) {
 			echo error_message_with_hide($message,0);
 		}
 		else {
-			$sent_array = array();
+			$sent_array = splitTextIntoSentences($data);
 			$texts = array();
 			$text_index = 0;
 			$texts[$text_index] = array();
