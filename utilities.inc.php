@@ -2212,7 +2212,6 @@ function get_word_data($word, $wordsInDB)
 	$index = array_search(mb_strtolower($word, 'UTF-8'), array_column($wordsInDB, "WoText"));
 	if($index !== false)
 	{
-		consoleLog($word . " " . $index);
 		return $wordsInDB[$index];
 	}
 	else
@@ -2230,7 +2229,7 @@ function is_word($item)
 
 // -------------------------------------------------------------
 
-function textWordList($text, $allLowercase)
+function textWordList($text, $allLowercase = false)
 {
 	//Get text
 	$sql = 'select * from texts where TxID = ' . $_REQUEST['text'];
@@ -2246,7 +2245,10 @@ function textWordList($text, $allLowercase)
 		$itemsInLine = preg_split('/([ ,.\s])/', $line, -1, PREG_SPLIT_DELIM_CAPTURE|PREG_SPLIT_NO_EMPTY);
 		foreach($itemsInLine as $item)
 		{
-			array_push($items, ($allLowercase ? mb_strtolower($item, 'UTF-8') : $item));
+			if(is_word($item))
+			{
+				array_push($items, ($allLowercase ? mb_strtolower($item, 'UTF-8') : $item));
+			}
 		}
 	}
 
@@ -2255,7 +2257,7 @@ function textWordList($text, $allLowercase)
 
 // -------------------------------------------------------------
 
-function textItemList($text, $onlyWords = false)
+function textItemList($text)
 {
 	//Get text
 	$sql = 'select * from texts where TxID = ' . $_REQUEST['text'];
@@ -2271,10 +2273,7 @@ function textItemList($text, $onlyWords = false)
 		$itemsInLine = preg_split('/([ ,.\s])/', $line, -1, PREG_SPLIT_DELIM_CAPTURE|PREG_SPLIT_NO_EMPTY);
 		foreach($itemsInLine as $item)
 		{
-			if(!$onlyWords || is_word($item))
-			{
-				array_push($items, $item);
-			}
+			array_push($items, $item);
 		}
 	}
 

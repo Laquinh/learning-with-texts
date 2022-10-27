@@ -45,10 +45,11 @@ $langid = get_first_value("select TxLgID as value from " . $tbpref . "texts wher
 pagestart("Setting all blue words to Well-known",false);
 
 $wordsInDB = databaseWordList($langid);
-$words = textItemList($_REQUEST['text'], true);
-$words = array_unique(textWordList($_REQUEST['text']));
+$wordList = textWordList($_REQUEST['text'], true);
+$words = array_unique($wordList);
 $count = 0;
 $javascript = "var title='';";
+$changedWords = [];
 foreach($words as $word) {
 	$wordlc = mb_strtolower($word, 'UTF-8');
 	$wordData = get_word_data($wordlc, $wordsInDB);
@@ -63,6 +64,8 @@ foreach($words as $word) {
 			$javascript .= "title = make_tooltip(" . prepare_textdata_js($term) . ",'*','','99');";
 			$javascript .= "$('.TERM" . strToClassName($termlc) . "', context).removeClass('status0').addClass('status99 word" . $wid . "').attr('data_status','99').attr('data_wid','" . $wid . "').attr('title',title);";
 		$count += $count1;
+		
+		array_push($changedWords, $wordlc);
 	}
 }
 
