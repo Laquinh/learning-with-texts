@@ -320,8 +320,7 @@ function word_click_event_do_text_text() {
 
 		run_overlib_status_unknown(WBLINK1,WBLINK2,WBLINK3,$(this).attr('title'),
 			TID,$(this).attr('data_order'),data_term,$(this).text(),RTL);
-		top.frames['ro'].location.href='edit_word.php?tid=' + TID + '&ord=' + 
-			$(this).attr('data_order') +
+		top.frames['ro'].location.href='edit_word.php?tid=' + TID +
 			'&term=' + data_term +
 			'&lang=' + data_language +
 			'&wid=';
@@ -334,8 +333,7 @@ function word_click_event_do_text_text() {
 
 		run_overlib_status_99(WBLINK1,WBLINK2,WBLINK3,$(this).attr('title'),
 			TID,$(this).attr('data_order'),$(this).text(),data_term, data_language, data_wid,RTL);
-		top.frames['ro'].location.href='edit_word.php?tid=' + TID + '&ord=' + 
-			$(this).attr('data_order') +
+		top.frames['ro'].location.href='edit_word.php?tid=' + TID +
 			'&term=' + data_term +
 			'&lang=' + data_language +
 			'&wid=' + data_wid;
@@ -348,8 +346,7 @@ function word_click_event_do_text_text() {
 
 		run_overlib_status_98(WBLINK1,WBLINK2,WBLINK3,$(this).attr('title'),
 			TID,$(this).attr('data_order'),$(this).text(),data_term, data_language, data_wid,RTL);
-		top.frames['ro'].location.href='edit_word.php?tid=' + TID + '&ord=' + 
-			$(this).attr('data_order') +
+		top.frames['ro'].location.href='edit_word.php?tid=' + TID +
 			'&term=' + data_term +
 			'&lang=' + data_language +
 			'&wid=' + data_wid;
@@ -362,8 +359,7 @@ function word_click_event_do_text_text() {
 
 		run_overlib_status_1_to_5(WBLINK1,WBLINK2,WBLINK3,$(this).attr('title'),
 			TID,$(this).attr('data_order'),$(this).text(),data_term, data_language, data_wid, status, RTL);
-		top.frames['ro'].location.href='edit_word.php?tid=' + TID + '&ord=' + 
-			$(this).attr('data_order') +
+		top.frames['ro'].location.href='edit_word.php?tid=' + TID +
 			'&term=' + data_term +
 			'&lang=' + data_language +
 			'&wid=' + data_wid;
