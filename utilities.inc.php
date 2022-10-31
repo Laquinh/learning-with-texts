@@ -2207,6 +2207,68 @@ function splitTextIntoSentences($text)
 
 // -------------------------------------------------------------
 
+function get_longest_multiword($i, $j, $items, $wordsInDB)
+{
+	if($j >= count($items))
+	{
+		return null;
+	}
+	$potentialMultiword = "";
+	for($k = $i; $k <= $j; ++$k)
+	{
+		$potentialMultiword .= $items[$k];
+	}
+
+	$multiwords = find_multiword($potentialMultiword, $wordsInDB);
+
+	if(count($multiwords) > 1)
+	{
+		$nextLongest = get_longest_multiword($i, $j+1, $items, $wordsInDB);
+		$wordData = get_word_data($potentialMultiword, $wordsInDB);
+		if($nextLongest)
+		{
+			return $nextLongest;
+		}
+		else if($wordData && $i < $j)
+		{
+			return $wordData;
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	for($k = 0; $k < count($items)-$k-1 && strlen($multiwords[0]) > strlen($potentialMultiword); ++$k)
+	{
+		$potentialMultiword .= $items[$j+$k+1];
+	}
+	if(count($multiwords) === 1 && $multiwords[0] === $potentialMultiword && $i < $j)
+	{
+		return get_word_data($multiwords[0], $wordsInDB);
+	}
+	else
+	{
+		return null;
+	}
+}
+
+// -------------------------------------------------------------
+
+function find_multiword($beginning, $array)
+{
+	$multiwords = [];
+	foreach ($array as $key => $string) {
+		#consoleLog($key . " ------- " . $string['WoText']);
+		if (strpos($string['WoText'], $beginning) === 0) {
+			array_push($multiwords, $string['WoText']);
+		}
+	}
+	return $multiwords;
+}
+
+// -------------------------------------------------------------
+
 function get_word_data($word, $wordsInDB)
 {
 	$index = array_search(mb_strtolower($word, 'UTF-8'), array_column($wordsInDB, "WoText"));

@@ -96,8 +96,10 @@ $wordsInDB = databaseWordList($langid);
 
 //Main loop
 $showNextSpace = true;
-foreach($items as $item)
+for($i = 0; $i < count($items); ++$i)
 {
+	$item = $items[$i];
+
 	if($item === " ") //item is space
 	{
 		if($showNextSpace)
@@ -108,6 +110,15 @@ foreach($items as $item)
 	}
 	else if(is_word($item)) //item is a word
 	{
+		$multiwordData = get_longest_multiword($i, $i, $items, $wordsInDB);
+		if($multiwordData)
+		{
+			consoleLog($i . ": " . $multiwordData['WoText'], "warn");
+			echo '&nbsp<span class="click mword mwsty word' . $multiwordData['WoID'] . ' status'. $multiwordData['WoStatus'] . ' TERM' . strToClassName($multiwordData['WoText']) . '" data_wid="' . $multiwordData['WoID'] . '" data_trans="' . tohtml(repl_tab_nl($multiwordData['WoTranslation']) . getWordTagList($multiwordData['WoID'],' ',1,0)) .
+			'" data_rom="' . tohtml($multiwordData['WoRomanization']) . '" data_status="' . $multiwordData['WoStatus'] .
+			'" data_term="' . $multiwordData['WoText'] . '" data_language="' . $langid . '">&nbsp' . str_word_count($multiwordData['WoText']) . '&nbsp</span>&nbsp';
+		}
+
 		$showNextSpace = false;
 		$wordData = get_word_data($item, $wordsInDB);
 		
