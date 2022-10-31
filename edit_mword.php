@@ -49,8 +49,7 @@ $translation_raw = repl_tab_nl(getreq("WoTranslation"));
 if ( $translation_raw == '' ) $translation = '*';
 else $translation = $translation_raw;
 
-// INS/UPD
-
+#region INS/UPD
 if (isset($_REQUEST['op'])) {
 	
 	$textlc = trim(prepare_textdata($_REQUEST["WoTextLC"]));
@@ -58,7 +57,7 @@ if (isset($_REQUEST['op'])) {
 	
 	if (mb_strtolower($text, 'UTF-8') == $textlc) {
 	
-		// INSERT
+		#region INSERT
 		
 		if ($_REQUEST['op'] == 'Save') {
 	
@@ -82,8 +81,9 @@ make_score_random_insert_update('id') . ')', "Term saved");
 	
 			
 		} // $_REQUEST['op'] == 'Save'
-		
-		// UPDATE
+		#endregion
+
+		#region UPDATE
 		
 		else {  // $_REQUEST['op'] != 'Save'
 			
@@ -105,7 +105,7 @@ make_score_random_insert_update('id') . ')', "Term saved");
 			$wid = $_REQUEST["WoID"];
 			
 		} // $_REQUEST['op'] != 'Save'
-		
+		#endregion
 		saveWordTags($wid);
 		
 	} // (mb_strtolower($text, 'UTF-8') == $textlc)
@@ -161,6 +161,9 @@ window.parent.frames['l'].setTimeout('cClick()', 100);
 <?php
 
 } // if (isset($_REQUEST['op']))
+#endregion
+
+#region FORM
 
 else {  // if (! isset($_REQUEST['op']))
 
@@ -201,7 +204,7 @@ else {  // if (! isset($_REQUEST['op']))
 <?php
 	$scrdir = getScriptDirectionTag($lang);
 	
-	// NEW
+	#region NEW
 	
 	if ($new) {
 		
@@ -258,7 +261,9 @@ else {  // if (! isset($_REQUEST['op']))
 		<?php
 	}
 	
-	// CHG
+	#endregion
+	
+	#region CHG
 	
 	else {
 		
@@ -330,8 +335,9 @@ else {  // if (! isset($_REQUEST['op']))
 		}
 		mysqli_free_result($res);
 	}
-
+	#endregion
 }
+#endregion
 
 pageend();
 
