@@ -286,7 +286,7 @@ else {  // if (! isset($_REQUEST['op']))
 			</tr>
 			<tr>
 			<td class="td1 right" colspan="2">  
-			<?php createDictLinksInEditWin ($lang,$term,'document.forms[0].WoSentence',1); ?>
+			<?php echo createDictLinksInEditWin($lang,$term,'document.forms[0].WoSentence',1); ?>
 			&nbsp; &nbsp; &nbsp; 
 			<input type="submit" name="op" value="Change" /></td>
 			</tr>
