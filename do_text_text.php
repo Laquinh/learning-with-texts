@@ -116,7 +116,7 @@ for($i = 0; $i < count($items); ++$i)
 			consoleLog($i . ": " . $multiwordData['WoText'], "warn");
 			echo '&nbsp<span class="click mword mwsty word' . $multiwordData['WoID'] . ' status'. $multiwordData['WoStatus'] . ' TERM' . strToClassName($multiwordData['WoText']) . '" data_wid="' . $multiwordData['WoID'] . '" data_trans="' . tohtml(repl_tab_nl($multiwordData['WoTranslation']) . getWordTagList($multiwordData['WoID'],' ',1,0)) .
 			'" data_rom="' . tohtml($multiwordData['WoRomanization']) . '" data_status="' . $multiwordData['WoStatus'] .
-			'" data_term="' . $multiwordData['WoText'] . '" data_language="' . $langid . '">&nbsp' . str_word_count($multiwordData['WoText']) . '&nbsp</span>&nbsp';
+			'" data_term="' . $multiwordData['WoText'] . '" data_language="' . $langid . '" data_wordcount="'. str_word_count($multiwordData['WoText']) .'">&nbsp' . str_word_count($multiwordData['WoText']) . '&nbsp</span>&nbsp';
 		}
 
 		$showNextSpace = false;

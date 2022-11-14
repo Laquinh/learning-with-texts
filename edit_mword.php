@@ -49,6 +49,7 @@ $translation_raw = repl_tab_nl(getreq("WoTranslation"));
 if ( $translation_raw == '' ) $translation = '*';
 else $translation = $translation_raw;
 
+
 #region INS/UPD
 if (isset($_REQUEST['op'])) {
 	
@@ -207,9 +208,6 @@ else {  // if (! isset($_REQUEST['op']))
 	#region NEW
 	
 	if ($new) {
-		
-		$seid = get_first_value("select TiSeID as value from " . $tbpref . "textitems where TiTxID = " . $_REQUEST['tid'] . " and TiOrder = " . $_REQUEST['ord']);
-		$sent = getSentence($seid, $termlc, (int) getSettingWithDefault('set-term-sentence-count'));
 			
 		?>
 	
@@ -217,7 +215,6 @@ else {  // if (! isset($_REQUEST['op']))
 		<input type="hidden" name="WoLgID" id="langfield" value="<?php echo $lang; ?>" />
 		<input type="hidden" name="WoTextLC" value="<?php echo tohtml($termlc); ?>" />
 		<input type="hidden" name="tid" value="<?php echo $_REQUEST['tid']; ?>" />
-		<input type="hidden" name="ord" value="<?php echo $_REQUEST['ord']; ?>" />
 		<table class="tab2" cellspacing="0" cellpadding="5">
 		<tr title="Only change uppercase/lowercase!">
 		<td class="td1 right"><b>New Term:</b></td>
@@ -235,12 +232,8 @@ else {  // if (! isset($_REQUEST['op']))
 		</td>
 		</tr>
 		<tr>
-		<td class="td1 right">Romaniz.:</td>
+		<td class="td1 right">Reading:</td>
 		<td class="td1"><input type="text" class="checkoutsidebmp" data_info="Romanization" name="WoRomanization" value="" maxlength="100" size="35" /></td>
-		</tr>
-		<tr>
-		<td class="td1 right">Sentence<br />Term in {...}:</td>
-		<td class="td1"><textarea <?php echo $scrdir; ?> name="WoSentence" class="textarea-noreturn checklength checkoutsidebmp" data_maxlength="1000" data_info="Sentence" cols="35" rows="3"><?php echo tohtml(repl_tab_nl($sent[1])); ?></textarea></td>
 		</tr>
 		<tr>
 		<td class="td1 right">Status:</td>
@@ -273,12 +266,6 @@ else {  // if (! isset($_REQUEST['op']))
 		
 			$status = $record['WoStatus'];
 			if ($status >= 98) $status = 1;
-			$sentence = repl_tab_nl($record['WoSentence']);
-			if ($sentence == '') {
-				$seid = get_first_value("select TiSeID as value from " . $tbpref . "textitems where TiTxID = " . $_REQUEST['tid'] . " and TiOrder = " . $_REQUEST['ord']);
-				$sent = getSentence($seid, $termlc, (int) getSettingWithDefault('set-term-sentence-count'));
-				$sentence = repl_tab_nl($sent[1]);
-			}
 			$transl = repl_tab_nl($record['WoTranslation']);
 			if($transl == '*') $transl='';
 			?>
@@ -290,7 +277,6 @@ else {  // if (! isset($_REQUEST['op']))
 			<input type="hidden" name="WoStatus" value="<?php echo $status; ?>" />
 			<input type="hidden" name="WoTextLC" value="<?php echo tohtml($termlc); ?>" />
 			<input type="hidden" name="tid" value="<?php echo $_REQUEST['tid']; ?>" />
-			<input type="hidden" name="ord" value="<?php echo $_REQUEST['ord']; ?>" />
 			<table class="tab2" cellspacing="0" cellpadding="5">
 			<tr title="Only change uppercase/lowercase!">
 			<td class="td1 right"><b>Edit Term:</b></td>
@@ -308,13 +294,9 @@ else {  // if (! isset($_REQUEST['op']))
 			</td>
 			</tr>
 			<tr>
-			<td class="td1 right">Romaniz.:</td>
+			<td class="td1 right">Reading:</td>
 			<td class="td1"><input type="text" class="checkoutsidebmp" data_info="Romanization" name="WoRomanization" maxlength="100" size="35" 
 			value="<?php echo tohtml($record['WoRomanization']); ?>" /></td>
-			</tr>
-			<tr>
-			<td class="td1 right">Sentence<br />Term in {...}:</td>
-			<td class="td1"><textarea <?php echo $scrdir; ?> name="WoSentence" class="textarea-noreturn checklength checkoutsidebmp" data_maxlength="1000" data_info="Sentence" cols="35" rows="3"><?php echo tohtml($sentence); ?></textarea></td>
 			</tr>
 			<tr>
 			<td class="td1 right">Status:</td>

@@ -369,11 +369,12 @@ function word_click_event_do_text_text() {
 }
 
 function mword_click_event_do_text_text() {
+	console.log("clicked!");
 	var status = $(this).attr('data_status');
-	if (status != '') {
+	if (status !== '') {
 		run_overlib_multiword(WBLINK1,WBLINK2,WBLINK3,$(this).attr('title'),
-		TID, $(this).attr('data_order'),$(this).attr('data_text'),
-		$(this).attr('data_wid'), status,$(this).attr('data_code'));
+		TID, $(this).attr('data_order'),$(this).attr('data_term'),
+		$(this).attr('data_wid'), status,$(this).attr('data_wordcount'));
 	}
 	return false;
 }
