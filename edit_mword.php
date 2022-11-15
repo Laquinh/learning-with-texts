@@ -66,14 +66,12 @@ if (isset($_REQUEST['op'])) {
 			pagestart_nobody($titletext);
 			echo '<h4><span class="bigger">' . $titletext . '</span></h4>';
 					
-			$message = runsql('insert into ' . $tbpref . 'words (WoLgID, WoTextLC, WoText, ' .
-				'WoStatus, WoTranslation, WoSentence, WoRomanization, WoStatusChanged,' .  make_score_random_insert_update('iv') . ') values( ' . 
+			$message = runsql('insert into ' . $tbpref . 'words (WoLgID, WoText, ' .
+				'WoStatus, WoTranslation, WoRomanization, WoStatusChanged,' .  make_score_random_insert_update('iv') . ') values( ' . 
 				$_REQUEST["WoLgID"] . ', ' .
-				convert_string_to_sqlsyntax($_REQUEST["WoTextLC"]) . ', ' .
 				convert_string_to_sqlsyntax($_REQUEST["WoText"]) . ', ' .
 				$_REQUEST["WoStatus"] . ', ' .
 				convert_string_to_sqlsyntax($translation) . ', ' .
-				convert_string_to_sqlsyntax(repl_tab_nl($_REQUEST["WoSentence"])) . ', ' .
 				convert_string_to_sqlsyntax($_REQUEST["WoRomanization"]) . ', NOW(), ' .  
 make_score_random_insert_update('id') . ')', "Term saved");
 			$wid = get_last_key();
@@ -99,8 +97,7 @@ make_score_random_insert_update('id') . ')', "Term saved");
 		
 			$message = runsql('update ' . $tbpref . 'words set WoText = ' . 
 			convert_string_to_sqlsyntax($_REQUEST["WoText"]) . ', WoTranslation = ' . 
-			convert_string_to_sqlsyntax($translation) . ', WoSentence = ' . 
-			convert_string_to_sqlsyntax(repl_tab_nl($_REQUEST["WoSentence"])) . ', WoRomanization = ' .
+			convert_string_to_sqlsyntax($translation) . ', WoRomanization = ' .
 			convert_string_to_sqlsyntax($_REQUEST["WoRomanization"]) . $xx . ',' . make_score_random_insert_update('u') . ' where WoID = ' . $_REQUEST["WoID"], "Updated");
 			
 			$wid = $_REQUEST["WoID"];
