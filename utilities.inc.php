@@ -868,13 +868,11 @@ function optimizedb() {
 	global $tbpref;
 	adjust_autoincr('archivedtexts','AtID');
 	adjust_autoincr('languages','LgID');
-	adjust_autoincr('sentences','SeID');
-	adjust_autoincr('textitems','TiID');
 	adjust_autoincr('texts','TxID');
 	adjust_autoincr('words','WoID');
 	adjust_autoincr('tags','TgID');
 	adjust_autoincr('tags2','T2ID');
-	$dummy = runsql('OPTIMIZE TABLE ' . $tbpref . 'archivedtexts,' . $tbpref . 'languages,' . $tbpref . 'sentences,' . $tbpref . 'textitems,' . $tbpref . 'texts,' . $tbpref . 'words,' . $tbpref . 'settings,' . $tbpref . 'tags,' . $tbpref . 'wordtags,' . $tbpref . 'tags2,' . $tbpref . 'texttags,' . $tbpref . 'archtexttags, _lwtgeneral', '');
+	$dummy = runsql('OPTIMIZE TABLE ' . $tbpref . 'archivedtexts,' . $tbpref . 'languages,' . $tbpref . 'texts,' . $tbpref . 'words,' . $tbpref . 'settings,' . $tbpref . 'tags,' . $tbpref . 'wordtags,' . $tbpref . 'tags2,' . $tbpref . 'texttags,' . $tbpref . 'archtexttags, _lwtgeneral', '');
 }
 
 // -------------------------------------------------------------
