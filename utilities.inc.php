@@ -1416,8 +1416,6 @@ function get_wordssort_selectoptions($v) {
 	$r .= ">Status</option>";
 	$r .= "<option value=\"5\"" . get_selected($v,5);
 	$r .= ">Score Value (%)</option>";
-	$r .= "<option value=\"6\"" . get_selected($v,6);
-	$r .= ">Word Count Active Texts</option>";
 	return $r;
 }
 
