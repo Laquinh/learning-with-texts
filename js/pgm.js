@@ -136,18 +136,14 @@ function make_overlib_link_new_multiword(txid,torder,mw2,mw3,mw4,mw5,mw6,mw7,mw8
 function make_overlib_link_wb(wblink1,wblink2,wblink3,txt,txid,torder) {
 	var s =  
 	createTheDictLink(wblink1,txt,'Dict1','Lookup Term: ') +
-	createTheDictLink(wblink2,txt,'Dict2','') +
-	createTheDictLink(wblink3,txt,'GTr','') + 
-	((torder < 1 || txid < 1) ? '' : '<br />Lookup Sentence: ' + createSentLookupLink(torder,txid,wblink3,'GTr'));
+	createTheDictLink(wblink2,txt,'Dict2','');
 	return s;
 }
 
 function make_overlib_link_wbnl(wblink1,wblink2,wblink3,txt,txid,torder) {
 	var s =  
 	createTheDictLink(wblink1,txt,'Dict1','Term: ') +
-	createTheDictLink(wblink2,txt,'Dict2','') +
-	createTheDictLink(wblink3,txt,'GTr','') + 
-	((torder < 1 || txid < 1) ? '' : ' | Sentence: ' + createSentLookupLink(torder,txid,wblink3,'GTr'));
+	createTheDictLink(wblink2,txt,'Dict2','');
 	return s;
 }
 
@@ -385,21 +381,6 @@ function createTheDictLink(u,w,t,b) {
 		else {
 			r = ' ' + txtbefore + 
 			' <a href=\x22' + createTheDictUrl(url,trm) + '\x22 target=\x22ru\x22>' + txt + '</a> ';
-		} 
-	}
-	return r;
-}
-
-function createSentLookupLink(torder,txid,url,txt) {
-	var url = url.trim();
-	var txt = txt.trim();
-	var r = '';
-	if (url != '' && txt != '') {
-		if((url.substr(0,8) == '*http://') || (url.substr(0,9) == '*https://')) {
-			r = ' <span class=\x22click\x22 onclick=\x22owin(\'trans.php?x=1&i=' + torder + '&t=' + txid + '\');\x22>' + txt + '</span> ';
-		} 
-		else if ((url.substr(0,7) == 'http://') || (url.substr(0,8) == 'https://')) {
-			r = ' <a href=\x22trans.php?x=1&i=' + torder + '&t=' + txid + '\x22 target=\x22ru\x22>' + txt + '</a> ';
 		} 
 	}
 	return r;
