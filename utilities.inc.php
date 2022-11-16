@@ -2155,16 +2155,14 @@ function textwordcount($text) {
 
 function textexprcount($text) {
 	global $tbpref;
-	return 1;
-	//return get_first_value('select count(distinct TiTextLC) as value from ' . $tbpref . 'textitems left join ' . $tbpref . 'words on TiTextLC = WoTextLC where TiWordCount > 1 and TiIsNotWord = 0 and TiTxID = ' . $text . ' and WoID is not null and TiLgID = WoLgID');
+	return 1; //TODO
 }
 
 // -------------------------------------------------------------
 
 function textworkcount($text) {
 	global $tbpref;
-	return 1;
-	//return get_first_value('select count(distinct TiTextLC) as value from ' . $tbpref . 'textitems left join ' . $tbpref . 'words on TiTextLC = WoTextLC where TiWordCount = 1 and TiIsNotWord = 0 and TiTxID = ' . $text . ' and WoID is not null and TiLgID = WoLgID');
+	return 1; //TODO
 }
 
 // -------------------------------------------------------------
