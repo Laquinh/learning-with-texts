@@ -51,17 +51,6 @@ if ($tbpref == '') {
 	$span2 = "Table Set: <i>" . tohtml(substr($tbpref,0,-1)) . "</i></span>";
 }
 
-if ($fixed_tbpref) {
-	$span1 = '<span>';
-	$span3 = '<span>';
-} else {
-	$span1 = '<span title="Manage Table Sets" onclick="location.href=\'table_set_management.php\';" class="click">';
-	if (count(getprefixes()) > 0)
-		$span3 = '<span title="Select Table Set" onclick="location.href=\'start.php\';" class="click">';
-	else
-		$span3 = '<span>';	
-}
-
 pagestart_nobody("Home");
 echo '<h4>' . $span3;
 echo_lwt_logo();
