@@ -93,7 +93,7 @@ if (! $no_pagestart) {
 
 $message = '';
 
-// MARK ACTIONS
+#region MARK ACTIONS
 
 if (isset($_REQUEST['markaction'])) {
 	$markaction = $_REQUEST['markaction'];
@@ -146,7 +146,9 @@ if (isset($_REQUEST['markaction'])) {
 	}
 }
 
-// DEL
+#endregion
+
+#region DEL
 
 if (isset($_REQUEST['del'])) {
 	$message = runsql('delete from ' . $tbpref . 'archivedtexts where AtID = ' . $_REQUEST['del'], 
@@ -155,7 +157,9 @@ if (isset($_REQUEST['del'])) {
 	runsql("DELETE " . $tbpref . "archtexttags FROM (" . $tbpref . "archtexttags LEFT JOIN " . $tbpref . "archivedtexts on AgAtID = AtID) WHERE AtID IS NULL",'');
 }
 
-// UNARCH
+#endregion
+
+#region UNARCH
 
 elseif (isset($_REQUEST['unarch'])) {
 	$message2 = runsql('insert into ' . $tbpref . 'texts (TxLgID, TxTitle, TxText, TxAudioURI, TxSourceURI) select AtLgID, AtTitle, AtText, AtAudioURI, AtSourceURI from ' . $tbpref . 'archivedtexts where AtID = ' . $_REQUEST['unarch'], "Texts added");
@@ -167,7 +171,9 @@ elseif (isset($_REQUEST['unarch'])) {
 	runsql("DELETE " . $tbpref . "archtexttags FROM (" . $tbpref . "archtexttags LEFT JOIN " . $tbpref . "archivedtexts on AgAtID = AtID) WHERE AtID IS NULL",'');
 }
 
-// UPD
+#endregion
+
+#region UPDATE
 
 elseif (isset($_REQUEST['op'])) {
 	
@@ -189,7 +195,9 @@ elseif (isset($_REQUEST['op'])) {
 	
 }
 
-// CHG
+#endregion
+
+#region CHANGE
 
 if (isset($_REQUEST['chg'])) {
 	
@@ -255,7 +263,9 @@ if (isset($_REQUEST['chg'])) {
 
 }
 
-// DISPLAY
+#endregion
+
+#region DISPLAY
 
 else {
 
@@ -399,6 +409,8 @@ mysqli_free_result($res);
 <?php
 
 }
+
+#endregion
 
 pageend();
 
