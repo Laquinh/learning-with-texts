@@ -54,7 +54,7 @@ require_once( 'connect.inc.php' );
 require_once( 'dbutils.inc.php' );
 require_once( 'utilities.inc.php' );
 
-// Page, Sort, etc. 
+#region Page, Sort, etc.
 
 $currentlang = validateLang(processDBParam("filterlang",'currentlanguage','',0));
 $currentsort = processDBParam("sort",'currenttextsort','1',1);
@@ -100,7 +100,9 @@ if (! $no_pagestart) {
 
 $message = '';
 
-// MARK ACTIONS
+#endregion
+
+#region MARK ACTIONS
 
 if (isset($_REQUEST['markaction'])) {
 	$markaction = $_REQUEST['markaction'];
@@ -173,7 +175,9 @@ if (isset($_REQUEST['markaction'])) {
 	}
 }
 
-// DEL
+#endregion
+
+#region DELETE
 
 if (isset($_REQUEST['del'])) {
 	$message1 = runsql('delete from ' . $tbpref . 'texts where TxID = ' . $_REQUEST['del'], 
@@ -183,7 +187,9 @@ if (isset($_REQUEST['del'])) {
 	runsql("DELETE " . $tbpref . "texttags FROM (" . $tbpref . "texttags LEFT JOIN " . $tbpref . "texts on TtTxID = TxID) WHERE TxID IS NULL",'');
 }
 
-// ARCH
+#endregion
+
+#region ARCHIVE
 
 elseif (isset($_REQUEST['arch'])) {
 	$message4 = runsql('insert into ' . $tbpref . 'archivedtexts (AtLgID, AtTitle, AtText, AtAudioURI, AtSourceURI) select TxLgID, TxTitle, TxText, TxAudioURI, TxSourceURI from ' . $tbpref . 'texts where TxID = ' . $_REQUEST['arch'], "Archived Texts saved");
@@ -195,7 +201,9 @@ elseif (isset($_REQUEST['arch'])) {
 	runsql("DELETE " . $tbpref . "texttags FROM (" . $tbpref . "texttags LEFT JOIN " . $tbpref . "texts on TtTxID = TxID) WHERE TxID IS NULL",'');
 }
 
-// INS/UPD
+#endregion
+
+#region INSERT/UPDATE
 
 elseif (isset($_REQUEST['op'])) {
 
@@ -206,7 +214,7 @@ elseif (isset($_REQUEST['op'])) {
 
 	else {
 		
-		// INSERT
+		#region INSERT
 		
 		if (substr($_REQUEST['op'],0,4) == 'Save') {
 			$message1 = runsql('insert into ' . $tbpref . 'texts (TxLgID, TxTitle, TxText, TxAudioURI, TxSourceURI) values( ' . 
@@ -219,7 +227,9 @@ elseif (isset($_REQUEST['op'])) {
 			saveTextTags($id);
 		} 
 		
-		// UPDATE
+		#endregion
+
+		#region UPDATE
 		
 		elseif (substr($_REQUEST['op'],0,6) == 'Change') {
 			$oldtext = get_first_value('select TxText as value from ' . $tbpref . 'texts where TxID = ' . $_REQUEST["TxID"]);
@@ -240,13 +250,16 @@ elseif (isset($_REQUEST['op'])) {
 			exit();
 		}
 	
+		#endregion
 	}
 
 }
 
-if (isset($_REQUEST['new'])) {
+#endregion
 
-// NEW
+#region NEW
+
+if (isset($_REQUEST['new'])) {
 	
 	?>
 
@@ -308,7 +321,9 @@ if (isset($_REQUEST['new'])) {
 	
 }
 
-// CHG
+#endregion
+
+#region CHANGE
 
 elseif (isset($_REQUEST['chg'])) {
 	
@@ -377,7 +392,9 @@ elseif (isset($_REQUEST['chg'])) {
 
 }
 
-// DISPLAY
+#endregion
+
+#region DISPLAY
 
 else {
 
@@ -553,6 +570,8 @@ mysqli_free_result($res);
 <?php
 
 }
+
+#endregion
 
 pageend();
 
