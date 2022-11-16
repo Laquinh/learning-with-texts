@@ -2363,18 +2363,6 @@ function getsqlscoreformula ($method) {
 
 // -------------------------------------------------------------
 
-function AreUnknownWordsInSentence ($sentno) {
-	global $tbpref;
-	$x = get_first_value("SELECT distinct ifnull(WoTextLC,'') as value FROM (" . $tbpref . "textitems left join " . $tbpref . "words on (TiTextLC = WoTextLC) and (TiLgID = WoLgID)) where TiSeID = " . $sentno . " AND TiWordCount = 1 AND TiIsNotWord = 0 order by WoTextLC asc limit 1");
-	// echo $sentno . '/' . isset($x) . '/' . $x . '/';
-	if ( isset($x) ) {
-		if ( $x == '' ) return true;
-	}
-	return false;
-}
-
-// -------------------------------------------------------------
-
 function get_statuses() {
 	static $statuses;
 	if (!$statuses) {
