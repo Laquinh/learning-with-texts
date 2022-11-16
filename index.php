@@ -151,7 +151,6 @@ $mb = get_first_value("SELECT round(sum(data_length+index_length)/1024/1024,1) a
 	"CONCAT(" . $p . ",'settings')," .
 	"CONCAT(" . $p . ",'tags')," .
 	"CONCAT(" . $p . ",'tags2')," .
-	"CONCAT(" . $p . ",'textitems')," .
 	"CONCAT(" . $p . ",'texts')," .
 	"CONCAT(" . $p . ",'texttags')," .
 	"CONCAT(" . $p . ",'words')," .
