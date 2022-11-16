@@ -74,21 +74,15 @@ function check_dupl_lang(curr) {
 
 $message = '';
 
-// REFRESH 
+#region REFRESH
 
 if (isset($_REQUEST['refresh'])) {
 	$id = $_REQUEST['refresh'] + 0;
-	$message2 = runsql('delete from ' . $tbpref . 'sentences where SeLgID = ' . $id, 
-		"Sentences deleted");
-	$message3 = runsql('delete from ' . $tbpref . 'textitems where TiLgID = ' . $id, 
-		"Text items deleted");
-	adjust_autoincr('sentences','SeID');
-	adjust_autoincr('textitems','TiID');
-
-	$message = $message2 . " / " . $message3 . " / Sentences added: " . get_first_value('select count(*) as value from ' . $tbpref . 'sentences where SeLgID = ' . $id) . " / Text items added: " . get_first_value('select count(*) as value from ' . $tbpref . 'textitems where TiLgID = ' . $id);
 }
 
-// DEL
+#endregion
+
+#region DELETE
 
 if (isset($_REQUEST['del'])) {
 	$anztexts = get_first_value(
@@ -109,11 +103,13 @@ if (isset($_REQUEST['del'])) {
 	}
 }
 
-// INS/UPD
+#endregion
+
+#region INS/UPD
 
 elseif (isset($_REQUEST['op'])) {
 	
-	// INSERT
+	#region INSERT
 	
 	if ($_REQUEST['op'] == 'Save')
 		$message = runsql('insert into ' . $tbpref . 'languages (LgName, LgDict1URI, LgDict2URI, LgGoogleTranslateURI, LgExportTemplate, LgTextSize, LgCharacterSubstitutions, LgRegexpSplitSentences, LgExceptionsSplitSentences, LgRegexpWordCharacters, LgRemoveSpaces, LgSplitEachChar, LgRightToLeft) values(' . 
@@ -132,7 +128,9 @@ elseif (isset($_REQUEST['op'])) {
 		$_REQUEST["LgRightToLeft"] . 
 		')', 'Saved');
 	
-	// UPDATE
+	#endregion
+	
+	#region UPDATE
 	
 	elseif ($_REQUEST['op'] == 'Change') {
 		// Get old values
@@ -180,10 +178,12 @@ elseif (isset($_REQUEST['op'])) {
 		' where LgID = ' . $_REQUEST["LgID"], 'Updated');
 
 	}
-
+	#endregion
 }
 
-// NEW
+#endregion
+
+#region NEW
 
 if (isset($_REQUEST['new'])) {
 	
@@ -265,7 +265,9 @@ if (isset($_REQUEST['new'])) {
 	
 }
 
-// CHG
+#endregion
+
+#region CHANGE
 
 elseif (isset($_REQUEST['chg'])) {
 	
@@ -345,7 +347,9 @@ elseif (isset($_REQUEST['chg'])) {
 	mysqli_free_result($res);
 }
 
-// DISPLAY
+#endregion
+
+#region DISPLAY
 
 else {
 	
@@ -422,6 +426,8 @@ mysqli_free_result($res);
 
 }
 }
+
+#endregion
 
 pageend();
 
