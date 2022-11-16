@@ -464,13 +464,6 @@ function do_ajax_update_media_select() {
 	);
 }
 
-function do_ajax_show_sentences(lang,word,ctl) {
-	$('#exsent').html('<img src="icn/waiting2.gif" />');
-	$.post('ajax_show_sentences.php', { lang: lang, word: word, ctl: ctl }, 
-		function(data) { $('#exsent').html(data); } 
-	);
-}
-
 function do_ajax_show_similar_terms() {
 	$('#simwords').html('<img src="icn/waiting2.gif" />');
 	$.post('ajax_show_similar_terms.php', { lang: $('#langfield').val(), word: $('#wordfield').val() }, 
