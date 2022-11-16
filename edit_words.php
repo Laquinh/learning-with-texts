@@ -111,7 +111,7 @@ if (! $no_pagestart) {
 
 $message = '';
 
-// MARK ACTIONS
+#region MARK ACTIONS
 
 if (isset($_REQUEST['markaction'])) {
 	$markaction = $_REQUEST['markaction'];
@@ -178,8 +178,9 @@ if (isset($_REQUEST['markaction'])) {
 	}
 }
 
+#endregion
 
-// ALL ACTIONS 
+#region ALL ACTIONS
 
 if (isset($_REQUEST['allaction'])) {
 	$allaction = $_REQUEST['allaction'];
@@ -276,7 +277,9 @@ if (isset($_REQUEST['allaction'])) {
 	}
 }
 
-// DEL
+#endregion
+
+#region DELETE
 
 elseif (isset($_REQUEST['del'])) {
 	$message = runsql('delete from ' . $tbpref . 'words where WoID = ' . $_REQUEST['del'], "Deleted");
@@ -284,7 +287,9 @@ elseif (isset($_REQUEST['del'])) {
 	runsql("DELETE " . $tbpref . "wordtags FROM (" . $tbpref . "wordtags LEFT JOIN " . $tbpref . "words on WtWoID = WoID) WHERE WoID IS NULL",'');
 }
 
-// INS/UPD
+#endregion
+
+#region INSERT/UPDATE
 
 elseif (isset($_REQUEST['op'])) {
 
@@ -292,7 +297,7 @@ elseif (isset($_REQUEST['op'])) {
 	if ( $translation_raw == '' ) $translation = '*';
 	else $translation = $translation_raw;
 	
-	// INSERT
+	#region INSERT
 	
 	if ($_REQUEST['op'] == 'Save') {
 	
@@ -308,7 +313,9 @@ make_score_random_insert_update('id') . ')', "Saved", $sqlerrdie = FALSE);
 		$wid = get_last_key();
 	}	
 	
-	// UPDATE
+	#endregion
+	
+	#region UPDATE
 	
 	else {
 
@@ -324,12 +331,16 @@ make_score_random_insert_update('id') . ')', "Saved", $sqlerrdie = FALSE);
 			convert_string_to_sqlsyntax($_REQUEST["WoRomanization"]) . $xx . ',' . make_score_random_insert_update('u') . ' where WoID = ' . $_REQUEST["WoID"],
 			"Updated", $sqlerrdie = FALSE);
 	}
+
+	#endregion
 	
 	saveWordTags($wid);
 
 }
 
-// NEW
+#endregion
+
+#region NEW
 
 if (isset($_REQUEST['new']) && isset($_REQUEST['lang'])) {
 
@@ -389,7 +400,9 @@ if (isset($_REQUEST['new']) && isset($_REQUEST['lang'])) {
 	
 }
 
-// CHG
+#endregion
+
+#region CHANGE
 
 elseif (isset($_REQUEST['chg'])) {
 	
@@ -459,7 +472,9 @@ elseif (isset($_REQUEST['chg'])) {
 	mysqli_free_result($res);
 }
 
-// DISPLAY
+#endregion
+
+#region DISPLAY
 
 else {
 	
@@ -674,6 +689,8 @@ $('#waitinfo').addClass('hide');
 }
 
 }
+
+#endregion
 
 pageend();
 
