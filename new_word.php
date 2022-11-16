@@ -34,7 +34,7 @@ For more information, please refer to [http://unlicense.org/].
 Call: new_word.php?...
 			... text=[textid]&lang=[langid] ... new term input  
 			... op=Save ... do the insert
-New word, created while reading or testing
+New word, created while reading
 ***************************************************************/
 
 require_once( 'settings.inc.php' );

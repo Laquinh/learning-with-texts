@@ -370,7 +370,6 @@ if ($recno==0) {
 <table class="sortable tab1" cellspacing="0" cellpadding="5">
 <tr>
 <th class="th1 sorttable_nosort">Curr.<br />Lang.</th>
-<th class="th1 sorttable_nosort">Test<br />↓↓↓</th>
 <th class="th1 sorttable_nosort">Actions</th>
 <th class="th1 clickable">Language</th>
 <th class="th1 sorttable_numeric clickable">Texts,<br />Reparse</th>
@@ -396,7 +395,6 @@ while ($record = mysqli_fetch_assoc($res)) {
 		$tdth = 'td';
 		echo '<td class="td1 center"><a href="save_setting_redirect.php?k=currentlanguage&amp;v=' . $record['LgID'] . '&amp;u=edit_languages.php"><img src="icn/tick-button.png" title="Set as Current Language" alt="Set as Current Language" /></a></td>';
 	}
-	echo '<' . $tdth . ' class="' . $tdth . '1 center"><a href="do_test.php?lang=' . $record['LgID'] . '"><img src="icn/question-balloon.png" title="Test" alt="Test" /></a></' . $tdth . '>';
 	echo '<' . $tdth . ' class="' . $tdth . '1 center" nowrap="nowrap">&nbsp;<a href="' . $_SERVER['PHP_SELF'] . '?chg=' . $record['LgID'] . '"><img src="icn/document--pencil.png" title="Edit" alt="Edit" /></a>';
 	if ($textcount == 0 && $archtextcount == 0 && $wordcount == 0) 
 		echo '&nbsp; <span class="click" onclick="if (confirmDelete()) location.href=\'' . $_SERVER['PHP_SELF'] . '?del=' . $record['LgID'] . '\';"><img src="icn/minus-button.png" title="Delete" alt="Delete" /></span>';

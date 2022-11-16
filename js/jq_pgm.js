@@ -92,16 +92,6 @@ function addTermTranslation(wordid,txid,word,lang) {
 			} 
 	);
 }
-
-function changeTableTestStatus(wordid,up) {
-	$.post('ajax_chg_term_status.php', { id: wordid, data: (up ? 1 : 0) }
-		, function(data) { 
-				if(data != '') {
-					$('#STAT' + wordid).html(data);
-				}
-			} 
-	);
-}
  
 function check() {
 	var count = 0;
@@ -222,69 +212,6 @@ function noShowAfter3Secs() {
 
 function setTheFocus() {
 	$('.setfocus').focus().select();
-}
-
-function word_click_event_do_test_test() {
-	run_overlib_test(
-		WBLINK1, WBLINK2, WBLINK3, 
-		$(this).attr('data_wid'),
-		$(this).attr('data_text'),
-		$(this).attr('data_trans'),
-		$(this).attr('data_rom'),
-		$(this).attr('data_status'),
-		$(this).attr('data_sent'),
-		$(this).attr('data_todo'));
-	$('.todo').text(SOLUTION);
-	return false;
-}
-
-function keydown_event_do_test_test(e) {
-	if (e.which == 32 && OPENED == 0) {  // space : show sol.
-		$('.word').click();
-		cClick();
-		window.parent.frames['ro'].location.href = 'show_word.php?wid=' + $('.word').attr('data_wid');
-		OPENED = 1;
-		return false;
-	}
-	if (OPENED == 0) return true;
-	if (e.which == 38) {  // up : status+1
-		window.parent.frames['ro'].location.href = 
-			'set_test_status.php?wid=' + WID + '&stchange=1';
-		return false;
-	}
-	if (e.which == 40) {  // down : status-1
-		window.parent.frames['ro'].location.href = 
-			'set_test_status.php?wid=' + WID + '&stchange=-1';
-		return false;
-	}
-	if (e.which == 27) {  // esc : dont change status
-		window.parent.frames['ro'].location.href = 
-			'set_test_status.php?wid=' + WID + '&status=' + $('.word').attr('data_status');
-		return false;
-	}
-	for (var i=1; i<=5; i++) {
-		if (e.which == (48+i) || e.which == (96+i)) {  // 1,.. : status=i
-			window.parent.frames['ro'].location.href = 
-				'set_test_status.php?wid=' + WID + '&status=' + i;
-			return false;
-		}
-	}
-	if (e.which == 73) {  // I : status=98
-		window.parent.frames['ro'].location.href = 
-			'set_test_status.php?wid=' + WID + '&status=98';
-		return false;
-	}
-	if (e.which == 87) {  // W : status=99
-		window.parent.frames['ro'].location.href = 
-			'set_test_status.php?wid=' + WID + '&status=99';
-		return false;
-	}
-	if (e.which == 69) {  // E : EDIT
-		window.parent.frames['ro'].location.href = 
-			'edit_tword.php?wid=' + WID;
-		return false;
-	}
-	return true;
 }
 
 function word_each_do_text_text(i) {

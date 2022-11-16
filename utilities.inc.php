@@ -1274,25 +1274,6 @@ function get_selected($value,$selval) {
 
 // -------------------------------------------------------------
 
-function make_status_controls_test_table($score, $status, $wordid) {
-	if ( $score < 0 ) 
-		$scoret = '<span class="red2">' . get_status_abbr($status) . '</span>';
-	else
-		$scoret = get_status_abbr($status);
-		
-	if ( $status <= 5 || $status == 98 ) 
-		$plus = '<img src="icn/plus.png" class="click" title="+" alt="+" onclick="changeTableTestStatus(' . $wordid .',true);" />';
-	else
-		$plus = '<img src="icn/placeholder.png" title="" alt="" />';
-	if ( $status >= 1 ) 
-		$minus = '<img src="icn/minus.png" class="click" title="-" alt="-" onclick="changeTableTestStatus(' . $wordid .',false);" />';
-	else
-		$minus = '<img src="icn/placeholder.png" title="" alt="" />';
-	return ($status == 98 ? '' : $minus . ' ') . $scoret . ($status == 99 ? '' : ' ' . $plus);
-}
-
-// -------------------------------------------------------------
-
 function get_languages_selectoptions($v,$dt) {
 	global $tbpref;
 	$sql = "select LgID, LgName from " . $tbpref . "languages order by LgName";
@@ -1525,8 +1506,6 @@ function get_colored_status_msg($n) {
 function get_multiplewordsactions_selectoptions() {
 	$r = "<option value=\"\" selected=\"selected\">[Choose...]</option>";
 	$r .= "<option disabled=\"disabled\">------------</option>";
-	$r .= "<option value=\"test\">Test Marked Terms</option>";
-	$r .= "<option disabled=\"disabled\">------------</option>";
 	$r .= "<option value=\"spl1\">Increase Status by 1 [+1]</option>";
 	$r .= "<option value=\"smi1\">Reduce Status by 1 [-1]</option>";
 	$r .= "<option disabled=\"disabled\">------------</option>";
@@ -1563,8 +1542,6 @@ function get_multipletagsactions_selectoptions() {
 
 function get_allwordsactions_selectoptions() {
 	$r = "<option value=\"\" selected=\"selected\">[Choose...]</option>";
-	$r .= "<option disabled=\"disabled\">------------</option>";
-	$r .= "<option value=\"testall\">Test ALL Terms</option>";
 	$r .= "<option disabled=\"disabled\">------------</option>";
 	$r .= "<option value=\"spl1all\">Increase Status by 1 [+1]</option>";
 	$r .= "<option value=\"smi1all\">Reduce Status by 1 [-1]</option>";
@@ -1603,8 +1580,6 @@ function get_alltagsactions_selectoptions() {
 
 function get_multipletextactions_selectoptions() {
 	$r = "<option value=\"\" selected=\"selected\">[Choose...]</option>";
-	$r .= "<option disabled=\"disabled\">------------</option>";
-	$r .= "<option value=\"test\">Test Marked Texts</option>";
 	$r .= "<option disabled=\"disabled\">------------</option>";
 	$r .= "<option value=\"addtag\">Add Tag</option>";
 	$r .= "<option value=\"deltag\">Remove Tag</option>";
@@ -2530,18 +2505,6 @@ function get_setting_data() {
 		array("dft" => '50', "num" => 1, "min" => 5, "max" => 95),
 		'set-text-r-frameheight-percent' => 
 		array("dft" => '50', "num" => 1, "min" => 5, "max" => 95),
-		'set-test-h-frameheight' => 
-		array("dft" => '140', "num" => 1, "min" => 10, "max" => 999),
-		'set-test-l-framewidth-percent' => 
-		array("dft" => '50', "num" => 1, "min" => 5, "max" => 95),
-		'set-test-r-frameheight-percent' => 
-		array("dft" => '50', "num" => 1, "min" => 5, "max" => 95),
-		'set-test-main-frame-waiting-time' => 
-		array("dft" => '0', "num" => 1, "min" => 0, "max" => 9999),
-		'set-test-edit-frame-waiting-time' => 
-		array("dft" => '500', "num" => 1, "min" => 0, "max" => 99999999),
-		'set-test-sentence-count' => 
-		array("dft" => '1', "num" => 0),
 		'set-term-sentence-count' => 
 		array("dft" => '1', "num" => 0),
 		'set-archivedtexts-per-page' => 

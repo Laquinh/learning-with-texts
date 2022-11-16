@@ -111,37 +111,6 @@ function run_overlib_multiword(wblink1,wblink2,wblink3,hints,txid,torder,txt,wid
 		CAPTION, make_overlib_link_edit_multiword_title(wcnt.trim() + '-Word-Expression',txid,torder,wid));
 }
 
-function run_overlib_test(wblink1,wblink2,wblink3,wid,txt,trans,roman,stat,sent,todo,oldstat)
-{
-	var s = parseInt(stat,10);
-	var c = s+1; 
-	if(c>5) c=5; 
-	var w = s-1; 
-	if(w<1) w=1;
-	var cc = stat + ' ▶ ' + c; if(c==s) cc=c; 
-	var ww = stat + ' ▶ ' + w; if(w==s) ww=w;
-	return overlib(
-	(todo == 1 ?
-		'<center><hr noshade size=1 /><b>' +
-		((stat >= 1 && stat <=5) ? (
-		make_overlib_link_change_status_test(wid,1,'<img src=\x22icn/thumb-up.png\x22 title=\x22Got it!\x22 alt=\x22Got it!\x22 /> Got it! [' + cc + ']') + 
-		'<hr noshade size=1 />' +
-		make_overlib_link_change_status_test(wid,-1,'<img src=\x22icn/thumb.png\x22 title=\x22Oops!\x22 alt=\x22Oops!\x22 /> Oops! [' + ww + ']') + 
-		'<hr noshade size=1 />'
-		) : '' ) + 
-		make_overlib_link_change_status_alltest(wid,stat) +
-		'</b></center><hr noshade size=1 />' : 
-		'') +
-	'<b>' + escape_html_chars(make_tooltip(txt,trans,roman,stat)) +	
-	'</b><br />' +
-	' <a href=\x22edit_tword.php?wid=' + wid + '\x22 target=\x22ro\x22>Edit term</a><br />' +
-	createTheDictLink(wblink1,txt,'Dict1','Lookup Term: ') +
-	createTheDictLink(wblink2,txt,'Dict2','') +
-	createTheDictLink(wblink3,txt,'GTr','') + 
-	createTheDictLink(wblink3,sent,'GTr','<br />Lookup Sentence:'),
-	CAPTION, 'Got it?');
-}
-
 function make_overlib_link_new_multiword(txid,torder,mw2,mw3,mw4,mw5,mw6,mw7,mw8,mw9,rtl) {
 	if (mw2=='' && mw3=='' && mw4=='' && mw5=='' && mw6 =='' && mw7 =='' && mw8 =='' && mw9 =='') return '';
 	if (rtl) return ' <br />Expr: ' +
@@ -200,15 +169,6 @@ function make_overlib_link_change_status_all(txid,torder,wid,oldstat) {
 	return result; 
 }
 
-function make_overlib_link_change_status_alltest(wid,oldstat) {
-	var result = '';
-	for (var newstat=1; newstat<=5; newstat++)
-		result += make_overlib_link_change_status_test2(wid,oldstat,newstat);
-	result += make_overlib_link_change_status_test2(wid,oldstat,99);
-	result += make_overlib_link_change_status_test2(wid,oldstat,98);
-	return result; 
-}
-
 function make_overlib_link_change_status(txid,torder,wid,oldstat,newstat) {
 	if (oldstat == newstat) {
 		return '<span title=\x22' + 
@@ -221,24 +181,6 @@ function make_overlib_link_change_status(txid,torder,wid,oldstat,newstat) {
 			getStatusName(newstat) + '\x22>[' + 
 			getStatusAbbr(newstat) + ']</span></a> ';
 	}
-}
-
-function make_overlib_link_change_status_test2(wid,oldstat,newstat) {
-	if (oldstat == newstat) {
-		return ' <a href=\x22set_test_status.php?wid=' + wid +
-				'&amp;status=' + newstat + '\x22 target=\x22ro\x22><span title=\x22' + 
-			getStatusName(newstat) + '\x22>[◆]</span></a> ';
-	} else {
-		return ' <a href=\x22set_test_status.php?wid=' + wid +
-				'&amp;status=' + newstat + '\x22 target=\x22ro\x22><span title=\x22' + 
-			getStatusName(newstat) + '\x22>[' + 
-				getStatusAbbr(newstat) + ']</span></a> ';
-	}
-}
-
-function make_overlib_link_change_status_test(wid,plusminus,text) {
-	return ' <a href=\x22set_test_status.php?wid=' + wid +
-		'&amp;stchange=' + plusminus + '\x22 target=\x22ro\x22>' + text + '</a> ';
 }
 
 function make_overlib_link_new_word(txid,torder,term,lang,wid) {

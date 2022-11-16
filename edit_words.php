@@ -100,12 +100,10 @@ $no_pagestart =
 	(getreq('markaction') == 'exp') ||
 	(getreq('markaction') == 'exp2') ||
 	(getreq('markaction') == 'exp3') ||
-	(getreq('markaction') == 'test') ||
 	(getreq('markaction') == 'deltag') ||
 	(getreq('allaction') == 'expall') ||
 	(getreq('allaction') == 'expall2') ||
 	(getreq('allaction') == 'expall3') ||
-	(getreq('allaction') == 'testall') ||
 	(getreq('allaction') == 'deltagall');
 if (! $no_pagestart) {
 	pagestart('My ' . getLanguage($currentlang) . ' Terms (Words and Expressions)',true);
@@ -174,11 +172,6 @@ if (isset($_REQUEST['markaction'])) {
 				}
 				elseif ($markaction == 'exp3' ) {
 					flexible_export('select distinct WoID, LgName, LgExportTemplate, LgRightToLeft, WoText, WoTranslation, WoRomanization, WoSentence, WoStatus, ifnull(group_concat(distinct TgText order by TgText separator \' \'),\'\') as taglist from ((' . $tbpref . 'words left JOIN ' . $tbpref . 'wordtags ON WoID = WtWoID) left join ' . $tbpref . 'tags on TgID = WtTgID), ' . $tbpref . 'languages where WoLgID = LgID and WoID in ' . $list . ' group by WoID');
-				}
-				elseif ($markaction == 'test' ) {
-					$_SESSION['testsql'] = ' ' . $tbpref . 'words where WoID in ' . $list . ' ';
-					header("Location: do_test.php?selection=1");
-					exit();
 				}
 			}
 		}
@@ -281,28 +274,6 @@ if (isset($_REQUEST['allaction'])) {
 			flexible_export('select distinct WoID, LgName, LgExportTemplate, LgRightToLeft, WoText, LOWER(WoText), WoTranslation, WoRomanization, WoSentence, WoStatus, ifnull(group_concat(distinct TgText order by TgText separator \' \'),\'\') as taglist from ((' . $tbpref . 'words left JOIN ' . $tbpref . 'wordtags ON WoID = WtWoID) left join ' . $tbpref . 'tags on TgID = WtTgID), ' . $tbpref . 'languages, ' . $tbpref . 'textitems where TiLgID = WoLgID and TiTextLC = LOWER(WoText) and TiTxID = ' . $currenttext . ' and WoLgID = LgID ' . $wh_lang . $wh_stat . $wh_query . ' group by WoID ' . $wh_tag);
 		}
 	}
-	
-	elseif ($allaction == 'testall' ) {
-		if ($currenttext == '') {
-			$sql = 'select distinct WoID from (' . $tbpref . 'words left JOIN ' . $tbpref . 'wordtags ON WoID = WtWoID) where (1=1) ' . $wh_lang . $wh_stat .  $wh_query . ' group by WoID ' . $wh_tag;
-		} else {
-			$sql = 'select distinct WoID from (' . $tbpref . 'words left JOIN ' . $tbpref . 'wordtags ON WoID = WtWoID), ' . $tbpref . 'textitems where TiLgID = WoLgID and TiTextLC = LOWER(WoText) and TiTxID = ' . $currenttext . $wh_lang . $wh_stat . $wh_query . ' group by WoID ' . $wh_tag;
-		}
-		$cnt = 0;
-		$list = '(';
-		$res = do_mysqli_query($sql);
-		while ($record = mysqli_fetch_assoc($res)) {
-			$cnt++;
-			$id = $record['WoID'];
-			$list .= ($cnt==1 ? '' : ',') . $id;
-		}	
-		$list .= ")";
-		mysqli_free_result($res);
-		$_SESSION['testsql'] = ' ' . $tbpref . 'words where WoID in ' . $list . ' ';
-		header("Location: do_test.php?selection=1");
-		exit();
-	}
-
 }
 
 // DEL

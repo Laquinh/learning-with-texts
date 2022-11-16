@@ -103,8 +103,6 @@ if (! areCookiesEnabled()) document.write('<p class="red">*** Cookies are not en
 			<li>My last Text (in <?php echo tohtml($lngname); ?>):<br /> <i><?php echo tohtml($txttit); ?></i>
 			<br />
 			<a href="do_text.php?start=<?php echo $currenttext; ?>"><img src="icn/book-open-bookmark.png" title="Read" alt="Read" />&nbsp;Read</a>
-			&nbsp; &nbsp; 
-			<a href="do_test.php?text=<?php echo $currenttext; ?>"><img src="icn/question-balloon.png" title="Test" alt="Test" />&nbsp;Test</a>
 			</li>
 			</ul>
 <?php

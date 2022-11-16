@@ -92,7 +92,7 @@ else {
 		$wh_tag = " having ((" . $wh_tag1 . ($currenttag12 ? ') AND (' : ') OR (') . $wh_tag2 . ')) ';
 }
 
-$no_pagestart = (getreq('markaction') == 'test' || getreq('markaction') == 'deltag' || substr(getreq('op'),-8) == 'and Open');
+$no_pagestart = (getreq('markaction') == 'deltag' || substr(getreq('op'),-8) == 'and Open');
 
 if (! $no_pagestart) {
 	pagestart('My ' . getLanguage($currentlang) . ' Texts',true);
@@ -491,7 +491,7 @@ Marked Texts:&nbsp;
 <table class="sortable tab1" cellspacing="0" cellpadding="5">
 <tr>
 <th class="th1 sorttable_nosort">Mark</th>
-<th class="th1 sorttable_nosort">Read<br />&amp;&nbsp;Test</th>
+<th class="th1 sorttable_nosort">Read</th>
 <th class="th1 sorttable_nosort">Actions</th>
 <?php if ($currentlang == '') echo '<th class="th1 clickable">Lang.</th>'; ?>
 <th class="th1 clickable">Title [Tags] / Audio:&nbsp;<img src="icn/speaker-volume.png" title="With Audio" alt="With Audio" />, Src.Link:&nbsp;<img src="icn/chain.png" title="Source Link available" alt="Source Link available" /></th>
@@ -528,7 +528,7 @@ while ($record = mysqli_fetch_assoc($res)) {
 	$audio=trim($audio);
 	echo '<tr>';
 	echo '<td class="td1 center"><a name="rec' . $record['TxID'] . '"><input name="marked[]" class="markcheck" type="checkbox" value="' . $record['TxID'] . '" ' . checkTest($record['TxID'], 'marked') . ' /></a></td>';
-	echo '<td nowrap="nowrap" class="td1 center">&nbsp;<a href="do_text.php?start=' . $record['TxID'] . '"><img src="icn/book-open-bookmark.png" title="Read" alt="Read" /></a>&nbsp; <a href="do_test.php?text=' . $record['TxID'] . '"><img src="icn/question-balloon.png" title="Test" alt="Test" /></a>&nbsp;</td>';
+	echo '<td nowrap="nowrap" class="td1 center">&nbsp;<a href="do_text.php?start=' . $record['TxID'] . '"><img src="icn/book-open-bookmark.png" title="Read" alt="Read" /></a>&nbsp;</td>';
 	echo '<td nowrap="nowrap" class="td1 center">&nbsp;<a href="' . $_SERVER['PHP_SELF'] . '?arch=' . $record['TxID'] . '"><img src="icn/inbox-download.png" title="Archive" alt="Archive" /></a>&nbsp; <a href="' . $_SERVER['PHP_SELF'] . '?chg=' . $record['TxID'] . '"><img src="icn/document--pencil.png" title="Edit" alt="Edit" /></a>&nbsp; <span class="click" onclick="if (confirmDelete()) location.href=\'' . $_SERVER['PHP_SELF'] . '?del=' . $record['TxID'] . '\';"><img src="icn/minus-button.png" title="Delete" alt="Delete" /></span>&nbsp;</td>';
 	if ($currentlang == '') echo '<td class="td1 center">' . tohtml($record['LgName']) . '</td>';
 	echo '<td class="td1 center">' . tohtml($record['TxTitle']) . ' <span class="smallgray2">' . tohtml($record['taglist']) . '</span> &nbsp;' . (($audio != '') ? '<img src="icn/speaker-volume.png" title="With Audio" alt="With Audio" />' : '') . (isset($record['TxSourceURI']) ? ' <a href="' . $record['TxSourceURI'] . '" target="_blank"><img src="icn/chain.png" title="Link to Text Source" alt="Link to Text Source" /></a>' : '') . '</td>';
