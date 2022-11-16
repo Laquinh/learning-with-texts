@@ -102,9 +102,7 @@ $('.TERM<?php echo $hex; ?>', context).removeClass('status0 hide').addClass('wor
 $('#learnstatus', contexth).html('<?php echo texttodocount2($_REQUEST['tid']); ?>');
 window.parent.frames['l'].focus();
 window.parent.frames['l'].setTimeout('cClick()', 100);
-<?php 
-		if (! $showAll) echo refreshText($text,$_REQUEST['tid']);
-?>
+
 //]]>
 </script>
 	
