@@ -279,10 +279,6 @@ make_score_random_insert_update('id') . ')',"Imported");
 	</tr>
 	</table>
 	</form>
-	
-	<p>Sentences should contain the term in curly brackets "... {term} ...".<br />
-	If not, such sentences can be automatically created later with the <br />"Set Term Sentences" action in the <input type="button" value="My Texts" onclick="location.href='edit_texts.php?query=&amp;page=1';" /> screen.</p>
-
 <?php
 
 }

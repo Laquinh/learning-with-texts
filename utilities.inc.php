@@ -1585,7 +1585,6 @@ function get_multipletextactions_selectoptions() {
 	$r .= "<option value=\"deltag\">Remove Tag</option>";
 	$r .= "<option disabled=\"disabled\">------------</option>";
 	$r .= "<option value=\"rebuild\">Reparse Texts</option>";
-	$r .= "<option value=\"setsent\">Set Term Sentences</option>";
 	$r .= "<option disabled=\"disabled\">------------</option>";
 	$r .= "<option value=\"arch\">Archive Marked Texts</option>";
 	$r .= "<option disabled=\"disabled\">------------</option>";

@@ -117,19 +117,13 @@ if (isset($_REQUEST['markaction'])) {
 				$list .= ")";
 				
 				if ($markaction == 'del') {
-					$message3 = runsql('delete from ' . $tbpref . 'textitems where TiTxID in ' . $list, "Text items deleted");
-					$message2 = runsql('delete from ' . $tbpref . 'sentences where SeTxID in ' . $list, "Sentences deleted");
 					$message1 = runsql('delete from ' . $tbpref . 'texts where TxID in ' . $list, "Texts deleted");
 					$message = $message1 . " / " . $message2 . " / " . $message3;
 					adjust_autoincr('texts','TxID');
-					adjust_autoincr('sentences','SeID');
-					adjust_autoincr('textitems','TiID');
 					runsql("DELETE " . $tbpref . "texttags FROM (" . $tbpref . "texttags LEFT JOIN " . $tbpref . "texts on TtTxID = TxID) WHERE TxID IS NULL",'');
 				} 
 				
 				elseif ($markaction == 'arch') {
-					runsql('delete from ' . $tbpref . 'textitems where TiTxID in ' . $list, "");
-					runsql('delete from ' . $tbpref . 'sentences where SeTxID in ' . $list, "");
 					$count = 0;
 					$sql = "select TxID from " . $tbpref . "texts where TxID in " . $list;
 					$res = do_mysqli_query($sql);
@@ -144,8 +138,6 @@ if (isset($_REQUEST['markaction'])) {
 					runsql('delete from ' . $tbpref . 'texts where TxID in ' . $list, "");
 					runsql("DELETE " . $tbpref . "texttags FROM (" . $tbpref . "texttags LEFT JOIN " . $tbpref . "texts on TtTxID = TxID) WHERE TxID IS NULL",'');
 					adjust_autoincr('texts','TxID');
-					adjust_autoincr('sentences','SeID');
-					adjust_autoincr('textitems','TiID');
 				} 
 				
 				elseif ($markaction == 'addtag' ) {
@@ -156,20 +148,7 @@ if (isset($_REQUEST['markaction'])) {
 					$message = removetexttaglist($actiondata,$list);
 					header("Location: edit_texts.php");
 					exit();
-				}
-				
-				elseif ($markaction == 'setsent') {
-					$count = 0;
-					$sql = "select WoID, WoTextLC, min(TiSeID) as SeID from " . $tbpref . "words, " . $tbpref . "textitems where TiLgID = WoLgID and TiTextLC = WoTextLC and TiTxID in " . $list . " and ifnull(WoSentence,'') not like concat('%{',WoText,'}%') group by WoID order by WoID, min(TiSeID)";
-					$res = do_mysqli_query($sql);
-					while ($record = mysqli_fetch_assoc($res)) {
-						$sent = getSentence($record['SeID'], $record['WoTextLC'], (int) getSettingWithDefault('set-term-sentence-count'));
-						$count += runsql('update ' . $tbpref . 'words set WoSentence = ' . convert_string_to_sqlsyntax(repl_tab_nl($sent[1])) . ' where WoID = ' . $record['WoID'], '');
-					}
-					mysqli_free_result($res);
-					$message = 'Term Sentences set from Text(s): ' . $count;
-				}
-				
+				}				
 			}
 		}
 	}
