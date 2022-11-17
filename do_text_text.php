@@ -126,7 +126,7 @@ for($i = 0, $wordIndex = 0; $i < count($items); ++$i)
 		if ($wordData) //seen word
 		{
 			echo '<span class="click word wsty ' . 'word' . $wordData['WoID'] . ' ' . 'status'. $wordData['WoStatus'] . ' ' . 'TERM' . strToClassName($wordData['WoText']) .
-			'" data_wid="' . $wordData['WoID'] . '" data_trans="' . tohtml(repl_tab_nl($wordData['WoTranslation']) . getWordTagList($wordData['WoID'],' ',1,0)) .
+			'" data_wid="' . $wordData['WoID'] . '" data_trans="' . tohtml($wordData['WoTranslation'] . getWordTagList($wordData['WoID'],' ',1,0)) .
 			'" data_rom="' . tohtml($wordData['WoRomanization']) . '" data_status="' . $wordData['WoStatus'] .
 			'" data_term="' . $wordData['WoText'] . '" data_language="' . $langid . '" data_index="' . $wordIndex-1 . '">' . tohtml($item) . '</span>';
 		}   

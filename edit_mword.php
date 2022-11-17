@@ -45,7 +45,7 @@ require_once( 'dbutils.inc.php' );
 require_once( 'utilities.inc.php' );
 require_once( 'simterms.inc.php' );
 
-$translation_raw = repl_tab_nl(getreq("WoTranslation"));
+$translation_raw = getreq("WoTranslation");
 if ( $translation_raw == '' ) $translation = '*';
 else $translation = $translation_raw;
 
@@ -216,7 +216,7 @@ else {  // if (! isset($_REQUEST['op']))
 		<?php print_similar_terms_tabrow(); ?>
 		<tr>
 		<td class="td1 right">Translation:</td>
-		<td class="td1"><textarea name="WoTranslation" class="setfocus textarea-noreturn checklength checkoutsidebmp" data_maxlength="500" data_info="Translation" cols="35" rows="3"></textarea></td>
+		<td class="td1"><textarea name="WoTranslation" class="setfocus textarea-noreturn checklength checkoutsidebmp" data_maxlength="500" data_info="Translation" cols="50" rows="10"></textarea></td>
 		</tr>
 		<tr>
 		<td class="td1 right">Tags:</td>
@@ -272,12 +272,12 @@ else {  // if (! isset($_REQUEST['op']))
 			<table class="tab2" cellspacing="0" cellpadding="5">
 			<tr title="Only change uppercase/lowercase!">
 			<td class="td1 right"><b>Edit Term:</b></td>
-			<td class="td1"><input <?php echo $scrdir; ?> class="notempty checkoutsidebmp" data_info="Term" type="text" name="WoText" id="wordfield" value="<?php echo tohtml($term); ?>" maxlength="250" size="35" /> <img src="icn/status-busy.png" title="Field must not be empty" alt="Field must not be empty" />
+			<td class="td1"><input <?php echo $scrdir; ?> class="notempty checkoutsidebmp" data_info="Term" type="text" name="WoText" id="wordfield" value="<?php echo tohtml($term); ?>" maxlength="250" size="50" /> <img src="icn/status-busy.png" title="Field must not be empty" alt="Field must not be empty" />
 			</td></tr>
 			<?php print_similar_terms_tabrow(); ?>
 			<tr>
 			<td class="td1 right">Translation:</td>
-			<td class="td1"><textarea name="WoTranslation" class="setfocus textarea-noreturn checklength checkoutsidebmp" data_maxlength="500" data_info="Translation" cols="35" rows="3"><?php echo tohtml($transl); ?></textarea></td>
+			<td class="td1"><textarea name="WoTranslation" class="setfocus textarea-noreturn checklength checkoutsidebmp" data_maxlength="500" data_info="Translation" cols="50" rows="10"><?php echo tohtml($transl); ?></textarea></td>
 			</tr>
 			<tr>
 			<td class="td1 right">Tags:</td>
@@ -287,7 +287,7 @@ else {  // if (! isset($_REQUEST['op']))
 			</tr>
 			<tr>
 			<td class="td1 right">Reading:</td>
-			<td class="td1"><input type="text" class="checkoutsidebmp" data_info="Romanization" name="WoRomanization" maxlength="100" size="35" 
+			<td class="td1"><input type="text" class="checkoutsidebmp" data_info="Romanization" name="WoRomanization" maxlength="100" size="50" 
 			value="<?php echo tohtml($record['WoRomanization']); ?>" /></td>
 			</tr>
 			<tr>
