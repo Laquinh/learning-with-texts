@@ -2164,7 +2164,8 @@ function get_word_data($word, $wordsInDB)
 
 function is_word($item)
 {
-	return (strpbrk($item, "., \n") === FALSE);
+	return (strpbrk($item, "., ¿?¡!:;()[]\"'{}\n") === FALSE);
+	#return (strpbrk($item, "., \n") === FALSE);
 }
 
 // -------------------------------------------------------------
@@ -2182,7 +2183,7 @@ function textWordList($text, $allLowercase = false)
 	$items = [];
 	foreach($lines as $line)
 	{
-		$itemsInLine = preg_split('/([ ,.\s])/', $line, -1, PREG_SPLIT_DELIM_CAPTURE|PREG_SPLIT_NO_EMPTY);
+		$itemsInLine = preg_split('#([ :;,.¿?¡!()\s])#', $line, -1, PREG_SPLIT_DELIM_CAPTURE|PREG_SPLIT_NO_EMPTY);
 		foreach($itemsInLine as $item)
 		{
 			if(is_word($item))
@@ -2210,7 +2211,7 @@ function textItemList($text)
 	$items = [];
 	foreach($lines as $line)
 	{
-		$itemsInLine = preg_split('/([ ,.\s])/', $line, -1, PREG_SPLIT_DELIM_CAPTURE|PREG_SPLIT_NO_EMPTY);
+		$itemsInLine = preg_split('#([ \r\n"\':;,.¿?¡!()])#', $line, -1, PREG_SPLIT_DELIM_CAPTURE|PREG_SPLIT_NO_EMPTY);
 		foreach($itemsInLine as $item)
 		{
 			array_push($items, $item);
