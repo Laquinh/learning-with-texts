@@ -1873,7 +1873,7 @@ function makeDictLinks($lang,$wordctljs) {
 
 // -------------------------------------------------------------
 
-function createDictLinksInEditWin3($lang,$sentctljs,$wordctljs) {
+function createDictLinksInEditWin3($lang,$wordctljs) {
 	global $tbpref;
 	$sql = 'select LgDict1URI, LgDict2URI, LgGoogleTranslateURI from ' . $tbpref . 'languages where LgID = ' . $lang;
 	$res = do_mysqli_query($sql);
@@ -1894,10 +1894,8 @@ function createDictLinksInEditWin3($lang,$sentctljs,$wordctljs) {
 	$wb3 = isset($record['LgGoogleTranslateURI']) ? $record['LgGoogleTranslateURI'] : "";
 	if(substr($wb3,0,1) == '*') {
 		$f3 = 'translateWord2(' . prepare_textdata_js(substr($wb3,1));
-		$f4 = 'translateSentence2(' . prepare_textdata_js(substr($wb3,1));
 	} else {
 		$f3 = 'translateWord(' . prepare_textdata_js($wb3);
-		$f4 = 'translateSentence(' . prepare_textdata_js($wb3);
 	}
 
 	mysqli_free_result($res);
@@ -1907,7 +1905,7 @@ function createDictLinksInEditWin3($lang,$sentctljs,$wordctljs) {
 	if ($wb2 != "") 
 		$r .= '<span class="click" onclick="' . $f2 . ',' . $wordctljs . ');">Dict2</span> ';
 	if ($wb3 != "") 
-		$r .= '<span class="click" onclick="' . $f3 . ',' . $wordctljs . ');">GTr</span> | Sent.: <span class="click" onclick="' . $f4 . ',' . $sentctljs . ');">GTr</span>'; 
+		$r .= '<span class="click" onclick="' . $f3 . ',' . $wordctljs . ');">GTr</span>'; 
 	return $r;
 }
 

@@ -60,13 +60,12 @@ if (isset($_REQUEST['op'])) {
 		echo '<h4><span class="bigger">' . $titletext . '</span></h4>';
 	
 		$message = runsql('insert into ' . $tbpref . 'words (WoLgID, WoTextLC, WoText, ' .
-			'WoStatus, WoTranslation, WoSentence, WoRomanization, WoStatusChanged,' .  make_score_random_insert_update('iv') . ') values( ' . 
+			'WoStatus, WoTranslation, WoRomanization, WoStatusChanged,' .  make_score_random_insert_update('iv') . ') values( ' . 
 			$_REQUEST["WoLgID"] . ', ' .
 			convert_string_to_sqlsyntax($textlc) . ', ' .
 			convert_string_to_sqlsyntax($text) . ', ' .
 			$_REQUEST["WoStatus"] . ', ' .
 			convert_string_to_sqlsyntax($translation) . ', ' .
-			convert_string_to_sqlsyntax(repl_tab_nl($_REQUEST["WoSentence"])) . ', ' .
 			convert_string_to_sqlsyntax($_REQUEST["WoRomanization"]) . ', NOW(), ' .  
 make_score_random_insert_update('id') . ')', "Term saved", $sqlerrdie = FALSE);
 
@@ -153,10 +152,6 @@ else {  // if (! isset($_REQUEST['op']))
 	<td class="td1"><input type="text" class="checkoutsidebmp" data_info="Romanization" name="WoRomanization" value="" maxlength="100" size="35" /></td>
 	</tr>
 	<tr>
-	<td class="td1 right">Sentence<br />Term in {...}:</td>
-	<td class="td1"><textarea <?php echo $scrdir; ?> name="WoSentence" cols="35" rows="3" class="textarea-noreturn checklength checkoutsidebmp" data_maxlength="1000" data_info="Sentence"></textarea></td>
-	</tr>
-	<tr>
 	<td class="td1 right">Status:</td>
 	<td class="td1">
 	<?php echo get_wordstatus_radiooptions(1); ?>
@@ -164,7 +159,7 @@ else {  // if (! isset($_REQUEST['op']))
 	</tr>
 	<tr>
 	<td class="td1 right" colspan="2">  &nbsp;
-	<?php echo createDictLinksInEditWin3($lang,'document.forms[\'newword\'].WoSentence','document.forms[\'newword\'].WoText'); ?>
+	<?php echo createDictLinksInEditWin3($lang,'document.forms[\'newword\'].WoText'); ?>
 	&nbsp; &nbsp;
 	<input type="submit" name="op" value="Save" /></td>
 	</tr>
