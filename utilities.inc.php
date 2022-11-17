@@ -1513,7 +1513,6 @@ function get_multiplewordsactions_selectoptions() {
 	$r .= "<option value=\"today\">Set Status Date to Today</option>";
 	$r .= "<option disabled=\"disabled\">------------</option>";
 	$r .= "<option value=\"lower\">Set Marked Terms to Lowercase</option>";
-	$r .= "<option value=\"delsent\">Delete Sentences of Marked Terms</option>";
 	$r .= "<option disabled=\"disabled\">------------</option>";
 	$r .= "<option value=\"addtag\">Add Tag</option>";
 	$r .= "<option value=\"deltag\">Remove Tag</option>";
@@ -1551,7 +1550,6 @@ function get_allwordsactions_selectoptions() {
 	$r .= "<option disabled=\"disabled\">------------</option>";
 	$r .= "<option value=\"lowerall\">Set ALL Terms to Lowercase</option>";
 	$r .= "<option value=\"capall\">Capitalize ALL Terms</option>";
-	$r .= "<option value=\"delsentall\">Delete Sentences of ALL Terms</option>";
 	$r .= "<option disabled=\"disabled\">------------</option>";
 	$r .= "<option value=\"addtagall\">Add Tag</option>";
 	$r .= "<option value=\"deltagall\">Remove Tag</option>";

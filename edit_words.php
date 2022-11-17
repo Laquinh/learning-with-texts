@@ -158,9 +158,6 @@ if (isset($_REQUEST['markaction'])) {
 				elseif ($markaction == 'today' ) {
 					$message = runsql('update ' . $tbpref . 'words set WoStatusChanged = NOW(),' . make_score_random_insert_update('u') . ' where WoID in ' . $list, "Updated Status Date (= Now)");
 				}
-				elseif ($markaction == 'delsent' ) {
-					$message = runsql('update ' . $tbpref . 'words set WoSentence = NULL where WoID in ' . $list, "Term Sentence(s) deleted");
-				}
 				elseif ($markaction == 'lower' ) {
 					$message = runsql('update ' . $tbpref . 'words set WoText = LOWER(WoText) where WoID in ' . $list, "Term(s) set to lowercase");
 				}
@@ -185,7 +182,7 @@ if (isset($_REQUEST['markaction'])) {
 if (isset($_REQUEST['allaction'])) {
 	$allaction = $_REQUEST['allaction'];
 	$actiondata = stripTheSlashesIfNeeded(getreq('data'));
-	if ($allaction == 'delall' || $allaction == 'spl1all' || $allaction == 'smi1all' || $allaction == 's5all' || $allaction == 's1all' || $allaction == 's99all' || $allaction == 's98all' || $allaction == 'todayall' || $allaction == 'addtagall' || $allaction == 'deltagall' || $allaction == 'delsentall' || $allaction == 'lowerall' || $allaction == 'capall') {
+	if ($allaction == 'delall' || $allaction == 'spl1all' || $allaction == 'smi1all' || $allaction == 's5all' || $allaction == 's1all' || $allaction == 's99all' || $allaction == 's98all' || $allaction == 'todayall' || $allaction == 'addtagall' || $allaction == 'deltagall' || $allaction == 'lowerall' || $allaction == 'capall') {
 		
 		$sql = 'select distinct WoID from (' . $tbpref . 'words left JOIN ' . $tbpref . 'wordtags ON WoID = WtWoID) where (1=1) ' . $wh_lang . $wh_stat .  $wh_query . ' group by WoID ' . $wh_tag;
 
@@ -225,9 +222,6 @@ if (isset($_REQUEST['allaction'])) {
 			}
 			elseif ($allaction == 'todayall' ) {
 				$message = runsql('update ' . $tbpref . 'words set WoStatusChanged = NOW(),' . make_score_random_insert_update('u') . ' where WoID = ' . $id, "");
-			}
-			elseif ($allaction == 'delsentall' ) {
-				$message = runsql('update ' . $tbpref . 'words set WoSentence = NULL where WoID = ' . $id, "");
 			}
 			elseif ($allaction == 'lowerall' ) {
 				$message = runsql('update ' . $tbpref . 'words set WoText = LOWER(WoText) where WoID = ' . $id, "");
