@@ -2314,8 +2314,6 @@ function get_setting_data() {
 		array("dft" => '50', "num" => 1, "min" => 5, "max" => 95),
 		'set-text-r-frameheight-percent' => 
 		array("dft" => '50', "num" => 1, "min" => 5, "max" => 95),
-		'set-term-sentence-count' => 
-		array("dft" => '1', "num" => 0),
 		'set-archivedtexts-per-page' => 
 		array("dft" => '100', "num" => 1, "min" => 1, "max" => 9999),
 		'set-texts-per-page' => 

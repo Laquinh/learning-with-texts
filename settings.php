@@ -61,9 +61,6 @@ if (isset($_REQUEST['op'])) {
 		saveSetting('set-text-r-frameheight-percent',
 		$_REQUEST['set-text-r-frameheight-percent']);
 	
-		saveSetting('set-term-sentence-count',
-		$_REQUEST['set-term-sentence-count']);
-	
 		saveSetting('set-archivedtexts-per-page',
 		$_REQUEST['set-archivedtexts-per-page']);
 	
@@ -174,20 +171,6 @@ getSettingWithDefault('set-mobile-display-mode'), true, true, true);
 <?php
 echo get_wordstatus_selectoptions(
 getSettingWithDefault('set-text-visit-statuses-via-key'), true, true, true);
-?>
-</select>
-</td>
-<td class="td1 center"><img src="icn/status-busy.png" title="Field must not be empty" alt="Field must not be empty" /></td>
-</tr>
-<!-- ******************************************************* -->
-<tr>
-<th class="th1 center">Term Sentence<br />Generation</th>
-<td class="td1 center">Number of sentences <br />generated from text, if available</td>
-<td class="td1 center">
-<select name="set-term-sentence-count" class="notempty">
-<?php
-echo get_sentence_count_selectoptions(
-getSettingWithDefault('set-term-sentence-count'));
 ?>
 </select>
 </td>
