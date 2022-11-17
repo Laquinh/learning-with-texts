@@ -31,7 +31,7 @@ For more information, please refer to [http://unlicense.org/].
 ***************************************************************/
 
 /**************************************************************
-Call: all_words_wellknown.php?text=[textid]
+Call: all_words_wellknown.php?text=[textid]&limit=[index of last word]
 Setting all unknown words to Well Known (99)
 ***************************************************************/
 
@@ -50,9 +50,26 @@ $words = array_unique($wordList);
 $count = 0;
 $javascript = "var title='';";
 $changedWords = [];
-foreach($words as $word) {
+
+$limit = 0;
+if(isset($_REQUEST['limit']))
+{
+	$limit = min(intval($_REQUEST['limit']), count($words)-1);
+}
+else
+{
+	$limit = count($words)-1;
+}
+
+for($i = 0; $i <= $limit; ++$i) {
+	$word = $words[$i];
+	if(!$word)
+	{
+		continue;
+	}
 	$wordlc = mb_strtolower($word, 'UTF-8');
 	$wordData = get_word_data($wordlc, $wordsInDB);
+	
 	if(!$wordData)
 	{
 		$count1 = 0 + runsql('insert into ' . $tbpref . 'words (WoLgID, WoText, WoStatus, WoStatusChanged,' .  make_score_random_insert_update('iv') . ') values( ' . 

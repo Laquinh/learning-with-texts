@@ -228,9 +228,10 @@ function word_click_event_do_text_text() {
 	{
 		var data_term = $(this).attr('data_term');
 		var data_language = $(this).attr('data_language');
+		var data_index = $(this).attr('data_index');
 
 		run_overlib_status_unknown(WBLINK1,WBLINK2,WBLINK3,$(this).attr('title'),
-			TID,$(this).attr('data_order'),data_term,$(this).text(),RTL);
+			TID,$(this).attr('data_order'),data_term,$(this).text(),data_index,RTL);
 		top.frames['ro'].location.href='edit_word.php?tid=' + TID +
 			'&term=' + data_term +
 			'&lang=' + data_language +
@@ -241,9 +242,10 @@ function word_click_event_do_text_text() {
 		var data_term = $(this).attr('data_term');
 		var data_language = $(this).attr('data_language');
 		var data_wid = $(this).attr('data_wid');
+		var data_index = $(this).attr('data_index');
 
 		run_overlib_status_99(WBLINK1,WBLINK2,WBLINK3,$(this).attr('title'),
-			TID,$(this).attr('data_order'),$(this).text(),data_term, data_language, data_wid,RTL);
+			TID,$(this).attr('data_order'),$(this).text(),data_term, data_language, data_wid,data_index,RTL);
 		top.frames['ro'].location.href='edit_word.php?tid=' + TID +
 			'&term=' + data_term +
 			'&lang=' + data_language +
@@ -254,9 +256,10 @@ function word_click_event_do_text_text() {
 		var data_term = $(this).attr('data_term');
 		var data_language = $(this).attr('data_language');
 		var data_wid = $(this).attr('data_wid');
+		var data_index = $(this).attr('data_index');
 
 		run_overlib_status_98(WBLINK1,WBLINK2,WBLINK3,$(this).attr('title'),
-			TID,$(this).attr('data_order'),$(this).text(),data_term, data_language, data_wid,RTL);
+			TID,$(this).attr('data_order'),$(this).text(),data_term, data_language, data_wid,data_index,RTL);
 		top.frames['ro'].location.href='edit_word.php?tid=' + TID +
 			'&term=' + data_term +
 			'&lang=' + data_language +
@@ -267,9 +270,10 @@ function word_click_event_do_text_text() {
 		var data_term = $(this).attr('data_term');
 		var data_language = $(this).attr('data_language');
 		var data_wid = $(this).attr('data_wid');
+		var data_index = $(this).attr('data_index');
 
 		run_overlib_status_1_to_5(WBLINK1,WBLINK2,WBLINK3,$(this).attr('title'),
-			TID,$(this).attr('data_order'),$(this).text(),data_term, data_language, data_wid, status, RTL);
+			TID,$(this).attr('data_order'),$(this).text(),data_term, data_language, data_wid, status, data_index,RTL);
 		top.frames['ro'].location.href='edit_word.php?tid=' + TID +
 			'&term=' + data_term +
 			'&lang=' + data_language +

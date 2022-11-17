@@ -53,29 +53,31 @@ Helper functions for overlib
 ***************************************************************/
 
 //#region NEW VERSION
-function run_overlib_status_98(wblink1,wblink2,wblink3,hints,txid,torder,txt,term,lang,wid,rtl)
+function run_overlib_status_98(wblink1,wblink2,wblink3,hints,txid,torder,txt,term,lang,wid,index,rtl)
 {
 	return overlib(
 		'<b>' + escape_html_chars_2(hints) + '</b><br /> ' +
 		make_overlib_link_new_word(txid,torder,term,lang,wid) + ' | ' +
 		make_overlib_link_delete_word(txid,wid) + 
 		+ ' <br /> ' +
+		make_overlib_link_all_words_known(txid, index) + '<br/>' +
 		make_overlib_link_wb(wblink1,wblink2,wblink3,txt,txid,torder), 
 		CAPTION, 'Word');
 }
 
-function run_overlib_status_99(wblink1,wblink2,wblink3,hints,txid,torder,txt,term,lang,wid,rtl)
+function run_overlib_status_99(wblink1,wblink2,wblink3,hints,txid,torder,txt,term,lang,wid,index,rtl)
 {
 	return overlib(
 		'<b>' + escape_html_chars_2(hints) + '</b><br /> ' +
 		make_overlib_link_new_word(txid,torder,term,lang,wid) + ' | ' +
 		make_overlib_link_delete_word(txid,wid) + 
 		+ ' <br /> ' +
+		make_overlib_link_all_words_known(txid, index) + '<br/>' +
 		make_overlib_link_wb(wblink1,wblink2,wblink3,txt,txid,torder), 
 		CAPTION, 'Word');
 }
 
-function run_overlib_status_1_to_5(wblink1,wblink2,wblink3,hints,txid,torder,txt,term,lang,wid,stat,rtl)
+function run_overlib_status_1_to_5(wblink1,wblink2,wblink3,hints,txid,torder,txt,term,lang,wid,stat,index,rtl)
 {
 	return overlib(
 		'<b>' + escape_html_chars_2(hints) + '</b><br /> ' +
@@ -83,18 +85,20 @@ function run_overlib_status_1_to_5(wblink1,wblink2,wblink3,hints,txid,torder,txt
 		make_overlib_link_edit_word(txid,torder,term,lang,wid) + ' | ' +
 		make_overlib_link_delete_word(txid,wid) + 
 		+ ' <br /> ' +
+		make_overlib_link_all_words_known(txid, index) + '<br/>' +
 		make_overlib_link_wb(wblink1,wblink2,wblink3,txt,txid,torder),
 		CAPTION, make_overlib_link_edit_word_title(
 		'Word &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;',txid,torder,wid));
 }
 
-function run_overlib_status_unknown(wblink1,wblink2,wblink3,hints,txid,torder,term,txt,rtl)
+function run_overlib_status_unknown(wblink1,wblink2,wblink3,hints,txid,torder,term,txt,index,rtl)
 {
 	return overlib(
 		'<b>' + escape_html_chars(hints) + '</b><br /> ' +
 		make_overlib_link_wellknown_word(txid,term) + ' <br /> ' +  
 		make_overlib_link_ignore_word(txid,term) + 
 		+ ' <br /> ' +
+		make_overlib_link_all_words_known(txid, index) + '<br/>' +
 		make_overlib_link_wb(wblink1,wblink2,wblink3,txt,txid,torder),
 		CAPTION, 'New Word');
 }
@@ -176,6 +180,12 @@ function make_overlib_link_new_word(txid,torder,term,lang,wid) {
 		'&amp;term=' + term +
 		'&amp;lang=' + lang +
 		'&amp;wid=' + wid + '\x22 target=\x22ro\x22>Learn term</a> ';
+}
+
+function make_overlib_link_all_words_known(txid, index)
+{
+	return ' <a href=\x22all_words_wellknown.php?text=' + txid + 
+		'&amp;limit=' + index + '\x22 target=\x22ro\x22>All words above known</a> ';
 }
 
 function make_overlib_link_edit_multiword(txid,torder,wid) {

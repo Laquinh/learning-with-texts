@@ -96,7 +96,7 @@ $wordsInDB = databaseWordList($langid);
 
 //Main loop
 $showNextSpace = true;
-for($i = 0; $i < count($items); ++$i)
+for($i = 0, $wordIndex = 0; $i < count($items); ++$i)
 {
 	$item = $items[$i];
 
@@ -110,6 +110,7 @@ for($i = 0; $i < count($items); ++$i)
 	}
 	else if(is_word($item)) //item is a word
 	{
+		++$wordIndex;
 		$multiwordData = get_longest_multiword($i, $i, $items, $wordsInDB);
 		if($multiwordData)
 		{
@@ -127,13 +128,13 @@ for($i = 0; $i < count($items); ++$i)
 			echo '<span class="click word wsty ' . 'word' . $wordData['WoID'] . ' ' . 'status'. $wordData['WoStatus'] . ' ' . 'TERM' . strToClassName($wordData['WoText']) .
 			'" data_wid="' . $wordData['WoID'] . '" data_trans="' . tohtml(repl_tab_nl($wordData['WoTranslation']) . getWordTagList($wordData['WoID'],' ',1,0)) .
 			'" data_rom="' . tohtml($wordData['WoRomanization']) . '" data_status="' . $wordData['WoStatus'] .
-			'" data_term="' . $wordData['WoText'] . '" data_language="' . $langid . '">' . tohtml($item) . '</span>';
+			'" data_term="' . $wordData['WoText'] . '" data_language="' . $langid . '" data_index="' . $wordIndex-1 . '">' . tohtml($item) . '</span>';
 		}   
 		else //new word
 		{    		
 			echo '<span class="click word wsty status0 TERM' . strToClassName(mb_strtolower($item, 'UTF-8')) .
 			'" data_trans="" data_rom="" data_status="0" data_wid="" data_term="' . mb_strtolower($item, 'UTF-8') .
-			'" data_language="' . $langid . '">' . tohtml($item) . '</span>';
+			'" data_language="' . $langid . '" data_index="' . $wordIndex-1 . '">' . tohtml($item) . '</span>';
 		}
 	}
 	else //item is a special character
