@@ -1757,7 +1757,7 @@ function createTheDictLink($u,$t) {
 
 // -------------------------------------------------------------
 
-function createDictLinksInEditWin($lang,$word,$sentctljs,$openfirst) {
+function createDictLinksInEditWin($lang,$word,$openfirst) {
 	global $tbpref;
 	$sql = 'select LgDict1URI, LgDict2URI, LgGoogleTranslateURI from ' . $tbpref . 'languages where LgID = ' . $lang;
 	$res = do_mysqli_query($sql);
@@ -1776,9 +1776,7 @@ function createDictLinksInEditWin($lang,$word,$sentctljs,$openfirst) {
 	$r .= 'Lookup Term: ';
 	$r .= makeOpenDictStr(createTheDictLink($wb1,$word), "Dict1"); 
 	if ($wb2 != "") 
-		$r .= makeOpenDictStr(createTheDictLink($wb2,$word), "Dict2"); 
-	if ($wb3 != "") 
-		$r .= makeOpenDictStr(createTheDictLink($wb3,$word), "GTr") . ' | Sent.: ' . makeOpenDictStrDynSent($wb3, $sentctljs, "GTr"); 
+		$r .= makeOpenDictStr(createTheDictLink($wb2,$word), "Dict2");
 	return $r;
 }
 
