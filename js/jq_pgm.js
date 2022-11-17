@@ -76,22 +76,6 @@ function getUTF8Length(s) {
 function scrollToAnchor(aid){
   document.location.href = '#' + aid;
 }
-
-function addTermTranslation(wordid,txid,word,lang) {
-	var thedata = $(txid).val().trim();
-	var pagepos = $(document).scrollTop();
-	if((thedata == '') || (thedata == '*')) {
-		alert('Text Field is empty or = \'*\'!');
-		return;
-	}
-	$.post('ajax_add_term_transl.php', { id: wordid, data : thedata, text: word, lang: lang }
-		, function(d) { 
-				if(d == '') {
-					alert('Adding translation to term OR term creation failed, please reload page and try again!'); 
-				}
-			} 
-	);
-}
  
 function check() {
 	var count = 0;
