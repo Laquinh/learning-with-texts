@@ -2116,11 +2116,12 @@ function get_longest_multiword($i, $j, $items, $wordsInDB)
 		}
 	}
 
-	for($k = 0; $k < count($items)-$k-1 && strlen($multiwords[0]) > strlen($potentialMultiword); ++$k)
+	$k = 0;
+	for(; $k < count($items)-$i-1 && strlen($multiwords[0]) > strlen($potentialMultiword); ++$k)
 	{
 		$potentialMultiword .= $items[$j+$k+1];
 	}
-	if(count($multiwords) === 1 && $multiwords[0] === $potentialMultiword && $i < $j)
+	if(count($multiwords) === 1 && $multiwords[0] === $potentialMultiword && $k > 0)
 	{
 		return get_word_data($multiwords[0], $wordsInDB);
 	}
