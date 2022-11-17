@@ -46,7 +46,7 @@ $wid = getreq('wid');
 
 if ($wid == '') my_die ('Word not found in show_word.php');
 
-$sql = 'select WoLgID, WoText, WoTranslation, WoSentence, WoRomanization, WoStatus from ' . $tbpref . 'words where WoID = ' . $wid;
+$sql = 'select WoLgID, WoText, WoTranslation, WoRomanization, WoStatus from ' . $tbpref . 'words where WoID = ' . $wid;
 $res = do_mysqli_query($sql);
 if ($record = mysqli_fetch_assoc($res)) {
 
@@ -77,10 +77,6 @@ if ($record = mysqli_fetch_assoc($res)) {
 <td class="td1" style="font-size:120%;"><b><?php echo tohtml($rom); ?></b></td>
 </tr>
 <?php } ?>
-<tr>
-<td class="td1 right">Sentence<br />Term in {...}:</td>
-<td class="td1" <?php echo $scrdir; ?>><?php echo tohtml($record['WoSentence']); ?></td>
-</tr>
 <tr>
 <td class="td1 right">Status:</td>
 <td class="td1"><?php echo get_colored_status_msg($record['WoStatus']); ?></span>
