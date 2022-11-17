@@ -1825,7 +1825,7 @@ function makeOpenDictStrDynSent($url, $sentctljs, $txt) {
 
 // -------------------------------------------------------------
 
-function createDictLinksInEditWin2($lang,$sentctljs,$wordctljs) {
+function createDictLinksInEditWin2($lang,$wordctljs) {
 	global $tbpref;
 	$sql = 'select LgDict1URI, LgDict2URI, LgGoogleTranslateURI from ' . $tbpref . 'languages where LgID = ' . $lang;
 	$res = do_mysqli_query($sql);
@@ -1843,7 +1843,7 @@ function createDictLinksInEditWin2($lang,$sentctljs,$wordctljs) {
 	if ($wb2 != "") 
 		$r .= '<span class="click" onclick="translateWord2(' . prepare_textdata_js($wb2) . ',' . $wordctljs . ');">Dict2</span> ';
 	if ($wb3 != "") 
-		$r .= '<span class="click" onclick="translateWord2(' . prepare_textdata_js($wb3) . ',' . $wordctljs . ');">GTr</span> | Sent.: <span class="click" onclick="translateSentence2(' . prepare_textdata_js($wb3) . ',' . $sentctljs . ');">GTr</span>'; 
+		$r .= '<span class="click" onclick="translateWord2(' . prepare_textdata_js($wb3) . ',' . $wordctljs . ');">GTr</span>'; 
 	return $r;
 }
 
@@ -1963,7 +1963,7 @@ function strToClassName($string)
 // -------------------------------------------------------------
 
 function anki_export($sql) {
-	// WoID, LgRightToLeft, LgRegexpWordCharacters, LgName, WoText, WoTranslation, WoRomanization, WoSentence, taglist
+	// WoID, LgRightToLeft, LgRegexpWordCharacters, LgName, WoText, WoTranslation, WoRomanization, taglist
 	$res = do_mysqli_query($sql);
 	$x = '';
 	while ($record = mysqli_fetch_assoc($res)) {
@@ -1972,16 +1972,9 @@ function anki_export($sql) {
 		$span2 = ($rtlScript ? '</span>' : '');
 		$lpar = ($rtlScript ? ']' : '[');
 		$rpar = ($rtlScript ? '[' : ']');
-		$sent = tohtml(repl_tab_nl($record["WoSentence"]));
-		$sent1 = str_replace("{", '<span style="font-weight:600; color:#0000ff;">' . $lpar, str_replace("}", $rpar . '</span>', 
-			mask_term_in_sentence($sent,$record["LgRegexpWordCharacters"])
-		));
-		$sent2 = str_replace("{", '<span style="font-weight:600; color:#0000ff;">', str_replace("}", '</span>', $sent));
 		$x .= $span1 . tohtml(repl_tab_nl($record["WoText"])) . $span2 . "\t" . 
 		tohtml(repl_tab_nl($record["WoTranslation"])) . "\t" . 
-		tohtml(repl_tab_nl($record["WoRomanization"])) . "\t" . 
-		$span1 . $sent1 . $span2 . "\t" . 
-		$span1 . $sent2 . $span2 . "\t" . 
+		tohtml(repl_tab_nl($record["WoRomanization"])) . "\t" .
 		tohtml(repl_tab_nl($record["LgName"])) . "\t" . 
 		tohtml($record["WoID"]) . "\t" . 
 		tohtml($record["taglist"]) .  
@@ -1997,13 +1990,12 @@ function anki_export($sql) {
 // -------------------------------------------------------------
 
 function tsv_export($sql) {
-	// WoID, LgName, WoText, WoTranslation, WoRomanization, WoSentence, WoStatus, taglist
+	// WoID, LgName, WoText, WoTranslation, WoRomanization, WoStatus, taglist
 	$res = do_mysqli_query($sql);
 	$x = '';
 	while ($record = mysqli_fetch_assoc($res)) {
 		$x .= repl_tab_nl($record["WoText"]) . "\t" . 
-		repl_tab_nl($record["WoTranslation"]) . "\t" . 
-		repl_tab_nl($record["WoSentence"]) . "\t" . 
+		repl_tab_nl($record["WoTranslation"]) . "\t" .
 		repl_tab_nl($record["WoRomanization"]) . "\t" . 
 		$record["WoStatus"] . "\t" . 
 		repl_tab_nl($record["LgName"]) . "\t" . 
@@ -2020,7 +2012,7 @@ function tsv_export($sql) {
 // -------------------------------------------------------------
 
 function flexible_export($sql) {
-	// WoID, LgName, LgExportTemplate, LgRightToLeft, WoText, WoTextLC, WoTranslation, WoRomanization, WoSentence, WoStatus, taglist
+	// WoID, LgName, LgExportTemplate, LgRightToLeft, WoText, WoTextLC, WoTranslation, WoRomanization, WoStatus, taglist
 	$res = do_mysqli_query($sql);
 	$x = '';
 	while ($record = mysqli_fetch_assoc($res)) {
@@ -2033,20 +2025,11 @@ function flexible_export($sql) {
 			$term = repl_tab_nl($record['WoText']);
 			$transl = repl_tab_nl($record['WoTranslation']);
 			$rom = repl_tab_nl($record['WoRomanization']);
-			$sent_raw = repl_tab_nl($record['WoSentence']);
-			$sent = str_replace('{','',str_replace('}','',$sent_raw));
-			$sent_c = mask_term_in_sentence_v2($sent_raw);
-			$sent_d = str_replace('{','[',str_replace('}',']',$sent_raw));
-			$sent_x = str_replace('{','{{c1::',str_replace('}','}}',$sent_raw));
-			$sent_y = str_replace('{','{{c1::',str_replace('}','::' . $transl . '}}',$sent_raw));
 			$status = $record['WoStatus'] + 0;
 			$taglist = trim($record['taglist']);
 			$xx = repl_tab_nl($record['LgExportTemplate']);	
 			$xx = str_replace('%w',$term,$xx);		
-			$xx = str_replace('%t',$transl,$xx);		
-			$xx = str_replace('%s',$sent,$xx);		
-			$xx = str_replace('%c',$sent_c,$xx);		
-			$xx = str_replace('%d',$sent_d,$xx);		
+			$xx = str_replace('%t',$transl,$xx);	
 			$xx = str_replace('%r',$rom,$xx);		
 			$xx = str_replace('%a',$status,$xx);		
 			$xx = str_replace('%k',$term_lc,$xx);		
@@ -2055,12 +2038,7 @@ function flexible_export($sql) {
 			$xx = str_replace('%n',$woid,$xx);		
 			$xx = str_replace('%%','%',$xx);		
 			$xx = str_replace('$w',$span1 . tohtml($term) . $span2,$xx);		
-			$xx = str_replace('$t',tohtml($transl),$xx);		
-			$xx = str_replace('$s',$span1 . tohtml($sent) . $span2,$xx);		
-			$xx = str_replace('$c',$span1 . tohtml($sent_c) . $span2,$xx);		
-			$xx = str_replace('$d',$span1 . tohtml($sent_d) . $span2,$xx);		
-			$xx = str_replace('$x',$span1 . tohtml($sent_x) . $span2,$xx);		
-			$xx = str_replace('$y',$span1 . tohtml($sent_y) . $span2,$xx);		
+			$xx = str_replace('$t',tohtml($transl),$xx);	
 			$xx = str_replace('$r',tohtml($rom),$xx);		
 			$xx = str_replace('$k',$span1 . tohtml($term_lc) . $span2,$xx);		
 			$xx = str_replace('$z',tohtml($taglist),$xx);		

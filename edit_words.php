@@ -162,13 +162,13 @@ if (isset($_REQUEST['markaction'])) {
 					$message = runsql('update ' . $tbpref . 'words set WoText = LOWER(WoText) where WoID in ' . $list, "Term(s) set to lowercase");
 				}
 				elseif ($markaction == 'exp' ) {
-					anki_export('select distinct WoID, LgRightToLeft, LgRegexpWordCharacters, LgName, WoText, WoTranslation, WoRomanization, WoSentence, ifnull(group_concat(distinct TgText order by TgText separator \' \'),\'\') as taglist from ((' . $tbpref . 'words left JOIN ' . $tbpref . 'wordtags ON WoID = WtWoID) left join ' . $tbpref . 'tags on TgID = WtTgID), ' . $tbpref . 'languages where WoLgID = LgID AND WoTranslation != \'\' AND WoTranslation != \'*\' and WoSentence like concat(\'%{\',WoText,\'}%\') and WoID in ' . $list . ' group by WoID');
+					anki_export('select distinct WoID, LgRightToLeft, LgRegexpWordCharacters, LgName, WoText, WoTranslation, WoRomanization, ifnull(group_concat(distinct TgText order by TgText separator \' \'),\'\') as taglist from ((' . $tbpref . 'words left JOIN ' . $tbpref . 'wordtags ON WoID = WtWoID) left join ' . $tbpref . 'tags on TgID = WtTgID), ' . $tbpref . 'languages where WoLgID = LgID AND WoTranslation != \'\' AND WoTranslation != \'*\' and WoID in ' . $list . ' group by WoID');
 				}
 				elseif ($markaction == 'exp2' ) {
-					tsv_export('select distinct WoID, LgName, WoText, WoTranslation, WoRomanization, WoSentence, WoStatus, ifnull(group_concat(distinct TgText order by TgText separator \' \'),\'\') as taglist from ((' . $tbpref . 'words left JOIN ' . $tbpref . 'wordtags ON WoID = WtWoID) left join ' . $tbpref . 'tags on TgID = WtTgID), ' . $tbpref . 'languages where WoLgID = LgID and WoID in ' . $list . ' group by WoID');
+					tsv_export('select distinct WoID, LgName, WoText, WoTranslation, WoRomanization, WoStatus, ifnull(group_concat(distinct TgText order by TgText separator \' \'),\'\') as taglist from ((' . $tbpref . 'words left JOIN ' . $tbpref . 'wordtags ON WoID = WtWoID) left join ' . $tbpref . 'tags on TgID = WtTgID), ' . $tbpref . 'languages where WoLgID = LgID and WoID in ' . $list . ' group by WoID');
 				}
 				elseif ($markaction == 'exp3' ) {
-					flexible_export('select distinct WoID, LgName, LgExportTemplate, LgRightToLeft, WoText, WoTranslation, WoRomanization, WoSentence, WoStatus, ifnull(group_concat(distinct TgText order by TgText separator \' \'),\'\') as taglist from ((' . $tbpref . 'words left JOIN ' . $tbpref . 'wordtags ON WoID = WtWoID) left join ' . $tbpref . 'tags on TgID = WtTgID), ' . $tbpref . 'languages where WoLgID = LgID and WoID in ' . $list . ' group by WoID');
+					flexible_export('select distinct WoID, LgName, LgExportTemplate, LgRightToLeft, WoText, WoTranslation, WoRomanization, WoStatus, ifnull(group_concat(distinct TgText order by TgText separator \' \'),\'\') as taglist from ((' . $tbpref . 'words left JOIN ' . $tbpref . 'wordtags ON WoID = WtWoID) left join ' . $tbpref . 'tags on TgID = WtTgID), ' . $tbpref . 'languages where WoLgID = LgID and WoID in ' . $list . ' group by WoID');
 				}
 			}
 		}
@@ -245,15 +245,15 @@ if (isset($_REQUEST['allaction'])) {
 	}
 
 	elseif ($allaction == 'expall' ) {
-		anki_export('select distinct WoID, LgRightToLeft, LgRegexpWordCharacters, LgName, WoText, WoTranslation, WoRomanization, WoSentence, ifnull(group_concat(distinct TgText order by TgText separator \' \'),\'\') as taglist from ((' . $tbpref . 'words left JOIN ' . $tbpref . 'wordtags ON WoID = WtWoID) left join ' . $tbpref . 'tags on TgID = WtTgID), ' . $tbpref . 'languages where WoLgID = LgID AND WoTranslation != \'*\' and WoSentence like concat(\'%{\',WoText,\'}%\') ' . $wh_lang . $wh_stat .  $wh_query . ' group by WoID ' . $wh_tag);
+		anki_export('select distinct WoID, LgRightToLeft, LgRegexpWordCharacters, LgName, WoText, WoTranslation, WoRomanization, ifnull(group_concat(distinct TgText order by TgText separator \' \'),\'\') as taglist from ((' . $tbpref . 'words left JOIN ' . $tbpref . 'wordtags ON WoID = WtWoID) left join ' . $tbpref . 'tags on TgID = WtTgID), ' . $tbpref . 'languages where WoLgID = LgID AND WoTranslation != \'*\' and ' . $wh_lang . $wh_stat .  $wh_query . ' group by WoID ' . $wh_tag);
 	}
 	
 	elseif ($allaction == 'expall2' ) {
-		tsv_export('select distinct WoID, LgName, WoText, WoTranslation, WoRomanization, WoSentence, WoStatus, ifnull(group_concat(distinct TgText order by TgText separator \' \'),\'\') as taglist from ((' . $tbpref . 'words left JOIN ' . $tbpref . 'wordtags ON WoID = WtWoID) left join ' . $tbpref . 'tags on TgID = WtTgID), ' . $tbpref . 'languages where WoLgID = LgID ' . $wh_lang . $wh_stat .  $wh_query . ' group by WoID ' . $wh_tag);
+		tsv_export('select distinct WoID, LgName, WoText, WoTranslation, WoRomanization, WoStatus, ifnull(group_concat(distinct TgText order by TgText separator \' \'),\'\') as taglist from ((' . $tbpref . 'words left JOIN ' . $tbpref . 'wordtags ON WoID = WtWoID) left join ' . $tbpref . 'tags on TgID = WtTgID), ' . $tbpref . 'languages where WoLgID = LgID ' . $wh_lang . $wh_stat .  $wh_query . ' group by WoID ' . $wh_tag);
 	}
 	
 	elseif ($allaction == 'expall3' ) {
-		flexible_export('select distinct WoID, LgName, LgExportTemplate, LgRightToLeft, WoText, LOWER(WoText), WoTranslation, WoRomanization, WoSentence, WoStatus, ifnull(group_concat(distinct TgText order by TgText separator \' \'),\'\') as taglist from ((' . $tbpref . 'words left JOIN ' . $tbpref . 'wordtags ON WoID = WtWoID) left join ' . $tbpref . 'tags on TgID = WtTgID), ' . $tbpref . 'languages where WoLgID = LgID ' . $wh_lang . $wh_stat .  $wh_query . ' group by WoID ' . $wh_tag);
+		flexible_export('select distinct WoID, LgName, LgExportTemplate, LgRightToLeft, WoText, LOWER(WoText), WoTranslation, WoRomanization, WoStatus, ifnull(group_concat(distinct TgText order by TgText separator \' \'),\'\') as taglist from ((' . $tbpref . 'words left JOIN ' . $tbpref . 'wordtags ON WoID = WtWoID) left join ' . $tbpref . 'tags on TgID = WtTgID), ' . $tbpref . 'languages where WoLgID = LgID ' . $wh_lang . $wh_stat .  $wh_query . ' group by WoID ' . $wh_tag);
 	}
 }
 
@@ -282,12 +282,11 @@ elseif (isset($_REQUEST['op'])) {
 	if ($_REQUEST['op'] == 'Save') {
 	
 		$message = runsql('insert into ' . $tbpref . 'words (WoLgID, WoText, ' .
-			'WoStatus, WoTranslation, WoSentence, WoRomanization, WoStatusChanged,' .  make_score_random_insert_update('iv') . ') values( ' . 
+			'WoStatus, WoTranslation, WoRomanization, WoStatusChanged,' .  make_score_random_insert_update('iv') . ') values( ' . 
 			$_REQUEST["WoLgID"] . ', ' .
 			convert_string_to_sqlsyntax(mb_strtolower($_REQUEST["WoText"], 'UTF-8')) . ', ' .
 			$_REQUEST["WoStatus"] . ', ' .
 			convert_string_to_sqlsyntax($translation) . ', ' .
-			convert_string_to_sqlsyntax(repl_tab_nl($_REQUEST["WoSentence"])) . ', ' .
 			convert_string_to_sqlsyntax($_REQUEST["WoRomanization"]) . ', NOW(), ' .  
 make_score_random_insert_update('id') . ')', "Saved", $sqlerrdie = FALSE);
 		$wid = get_last_key();
@@ -306,8 +305,7 @@ make_score_random_insert_update('id') . ')', "Saved", $sqlerrdie = FALSE);
 		$wid = $_REQUEST["WoID"] + 0;
 		$message = runsql('update ' . $tbpref . 'words set WoText = ' . 
 			convert_string_to_sqlsyntax(mb_strtolower($_REQUEST["WoText"], 'UTF-8')) . ', WoTranslation = ' . 
-			convert_string_to_sqlsyntax($translation) . ', WoSentence = ' . 
-			convert_string_to_sqlsyntax(repl_tab_nl($_REQUEST["WoSentence"])) . ', WoRomanization = ' .
+			convert_string_to_sqlsyntax($translation) . ', WoRomanization = ' .
 			convert_string_to_sqlsyntax($_REQUEST["WoRomanization"]) . $xx . ',' . make_score_random_insert_update('u') . ' where WoID = ' . $_REQUEST["WoID"],
 			"Updated", $sqlerrdie = FALSE);
 	}
@@ -357,10 +355,6 @@ if (isset($_REQUEST['new']) && isset($_REQUEST['lang'])) {
 	<td class="td1"><input type="text" class="checkoutsidebmp" data_info="Romanization" name="WoRomanization" value="" maxlength="100" size="40" /></td>
 	</tr>
 	<tr>
-	<td class="td1 right">Sentence<br />Term in {...}:</td>
-	<td class="td1"><textarea <?php echo $scrdir; ?> name="WoSentence" cols="40" rows="3" class="textarea-noreturn checklength checkoutsidebmp" data_maxlength="1000" data_info="Sentence"></textarea></td>
-	</tr>
-	<tr>
 	<td class="td1 right">Status:</td>
 	<td class="td1">
 	<?php echo get_wordstatus_radiooptions(1); ?>
@@ -368,7 +362,7 @@ if (isset($_REQUEST['new']) && isset($_REQUEST['lang'])) {
 	</tr>
 	<tr>
 	<td class="td1 right" colspan="2">  &nbsp;
-		<?php echo createDictLinksInEditWin2($_REQUEST['lang'],'document.forms[\'newword\'].WoSentence','document.forms[\'newword\'].WoText'); ?>
+		<?php echo createDictLinksInEditWin2($_REQUEST['lang'],'document.forms[\'newword\'].WoText'); ?>
 		&nbsp; &nbsp;
 	<input type="button" value="Cancel" onclick="{resetDirty(); location.href='edit_words.php';}" /> 
 	<input type="submit" name="op" value="Save" /></td>
@@ -429,10 +423,6 @@ elseif (isset($_REQUEST['chg'])) {
 		value="<?php echo tohtml($record['WoRomanization']); ?>" /></td>
 		</tr>
 		<tr>
-		<td class="td1 right">Sentence<br />Term in {...}:</td>
-		<td class="td1"><textarea <?php echo $scrdir; ?> class="textarea-noreturn checklength checkoutsidebmp" data_maxlength="1000" data_info="Sentence" name="WoSentence" cols="40" rows="3"><?php echo tohtml(repl_tab_nl($record['WoSentence'])); ?></textarea></td>
-		</tr>
-		<tr>
 		<td class="td1 right">Status:</td>
 		<td class="td1">
 		<?php echo get_wordstatus_radiooptions($record['WoStatus']); ?>
@@ -440,7 +430,7 @@ elseif (isset($_REQUEST['chg'])) {
 		</tr>
 		<tr>
 		<td class="td1 right" colspan="2">  &nbsp;
-		<?php echo createDictLinksInEditWin2($record['WoLgID'],'document.forms[\'editword\'].WoSentence','document.forms[\'editword\'].WoText'); ?>
+		<?php echo createDictLinksInEditWin2($record['WoLgID'],'document.forms[\'editword\'].WoText'); ?>
 		&nbsp; &nbsp;
 		<input type="button" value="Cancel" onclick="{resetDirty(); location.href='edit_words.php#rec<?php echo $_REQUEST['chg']; ?>';}" /> 
 		<input type="submit" name="op" value="Change" /></td>
@@ -584,14 +574,13 @@ Multi Actions <img src="icn/lightning.png" title="Multi Actions" alt="Multi Acti
 <?php if ($currentlang == '') echo '<th class="th1 clickable">Lang.</th>'; ?>
 <th class="th1 clickable">Term /<br />Romanization</th>
 <th class="th1 clickable">Translation [Tags]<br /><span id="waitinfo">Please <img src="icn/waiting2.gif" /> wait ...</span></th>
-<th class="th1 sorttable_nosort">Se.<br />?</th>
 <th class="th1 sorttable_numeric clickable">Stat./<br />Days</th>
 <th class="th1 sorttable_numeric clickable">Score<br />%</th>
 </tr>
 
 <?php
 
-$sql = 'select WoID, WoText, WoTranslation, WoRomanization, WoSentence, ifnull(WoSentence,\'\') like concat(\'%{\',WoText,\'}%\') as SentOK, WoStatus, LgName, LgRightToLeft, DATEDIFF( NOW( ) , WoStatusChanged ) AS Days, WoTodayScore AS Score, WoTomorrowScore AS Score2, ifnull(concat(\'[\',group_concat(distinct TgText order by TgText separator \', \'),\']\'),\'\') as taglist from ((' . $tbpref . 'words left JOIN ' . $tbpref . 'wordtags ON WoID = WtWoID) left join ' . $tbpref . 'tags on TgID = WtTgID), ' . $tbpref . 'languages where WoLgID = LgID ' . $wh_lang . $wh_stat .  $wh_query . ' group by WoID ' . $wh_tag . ' order by ' . $sorts[$currentsort-1] . ' ' . $limit;
+$sql = 'select WoID, WoText, WoTranslation, WoRomanization, WoStatus, LgName, LgRightToLeft, DATEDIFF( NOW( ) , WoStatusChanged ) AS Days, WoTodayScore AS Score, WoTomorrowScore AS Score2, ifnull(concat(\'[\',group_concat(distinct TgText order by TgText separator \', \'),\']\'),\'\') as taglist from ((' . $tbpref . 'words left JOIN ' . $tbpref . 'wordtags ON WoID = WtWoID) left join ' . $tbpref . 'tags on TgID = WtTgID), ' . $tbpref . 'languages where WoLgID = LgID ' . $wh_lang . $wh_stat .  $wh_query . ' group by WoID ' . $wh_tag . ' order by ' . $sorts[$currentsort-1] . ' ' . $limit;
 
 if ($debug) echo $sql;
 flush();
@@ -608,7 +597,6 @@ while ($record = mysqli_fetch_assoc($res)) {
 	if ($currentlang == '') echo '<td class="td1 center">' . tohtml($record['LgName']) . '</td>';
 	echo '<td class="td1 "><span' . ($record['LgRightToLeft'] ? ' dir="rtl" ' : '') . '>' . tohtml($record['WoText']) . '</span>' . ($record['WoRomanization'] != '' ? (' / <span id="roman' . $record['WoID'] . '" class="edit_area clickedit">' . tohtml(repl_tab_nl($record['WoRomanization'])) . '</span>') : (' / <span id="roman' . $record['WoID'] . '" class="edit_area clickedit">*</span>')) . '</td>';
 	echo '<td class="td1"><span id="trans' . $record['WoID'] . '" class="edit_area clickedit">' . tohtml(repl_tab_nl($record['WoTranslation'])) . '</span> <span class="smallgray2">' . tohtml($record['taglist']) . '</span></td>';
-	echo '<td class="td1 center"><b>' . ($record['SentOK']!=0 ? '<img src="icn/status.png" title="' . tohtml($record['WoSentence']) . '" alt="Yes" />' : '<img src="icn/status-busy.png" title="(No valid sentence)" alt="No" />') . '</b></td>';
 	echo '<td class="td1 center" title="' . tohtml(get_status_name($record['WoStatus'])) . '">' . tohtml(get_status_abbr($record['WoStatus'])) . ($record['WoStatus'] < 98 ? '/' . $days : '') . '</td>';
 	echo '<td class="td1 center" nowrap="nowrap">' . $score . '</td>';
 	if ($currentsort == 6) {
