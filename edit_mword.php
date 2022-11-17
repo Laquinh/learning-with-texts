@@ -52,11 +52,9 @@ else $translation = $translation_raw;
 
 #region INS/UPD
 if (isset($_REQUEST['op'])) {
+	$text = mb_strtolower(trim(prepare_textdata($_REQUEST["WoText"])), 'UTF-8');
 	
-	$textlc = trim(prepare_textdata($_REQUEST["WoTextLC"]));
-	$text = trim(prepare_textdata($_REQUEST["WoText"]));
-	
-	if (mb_strtolower($text, 'UTF-8') == $textlc) {
+	if (mb_strtolower($text, 'UTF-8') == $text) {
 	
 		#region INSERT
 		
@@ -69,7 +67,7 @@ if (isset($_REQUEST['op'])) {
 			$message = runsql('insert into ' . $tbpref . 'words (WoLgID, WoText, ' .
 				'WoStatus, WoTranslation, WoRomanization, WoStatusChanged,' .  make_score_random_insert_update('iv') . ') values( ' . 
 				$_REQUEST["WoLgID"] . ', ' .
-				convert_string_to_sqlsyntax($_REQUEST["WoText"]) . ', ' .
+				convert_string_to_sqlsyntax(mb_strtolower($_REQUEST["WoText"], 'UTF-8')) . ', ' .
 				$_REQUEST["WoStatus"] . ', ' .
 				convert_string_to_sqlsyntax($translation) . ', ' .
 				convert_string_to_sqlsyntax($_REQUEST["WoRomanization"]) . ', NOW(), ' .  
