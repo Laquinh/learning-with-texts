@@ -147,7 +147,6 @@ $mb = get_first_value("SELECT round(sum(data_length+index_length)/1024/1024,1) a
 	"CONCAT(" . $p . ",'archivedtexts')," .
 	"CONCAT(" . $p . ",'archtexttags')," .
 	"CONCAT(" . $p . ",'languages')," .
-	"CONCAT(" . $p . ",'sentences')," .
 	"CONCAT(" . $p . ",'settings')," .
 	"CONCAT(" . $p . ",'tags')," .
 	"CONCAT(" . $p . ",'tags2')," .
