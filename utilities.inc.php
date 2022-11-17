@@ -1810,21 +1810,6 @@ function makeOpenDictStrJS($url) {
 
 // -------------------------------------------------------------
 
-function makeOpenDictStrDynSent($url, $sentctljs, $txt) {
-	$r = '';
-	if ($url != '') {
-		if(substr($url,0,1) == '*') {
-			$r = '<span class="click" onclick="translateSentence2(' . prepare_textdata_js(substr($url,1)) . ',' . $sentctljs . ');">' . tohtml($txt) . '</span>';
-		} 
-		else {
-			$r = '<span class="click" onclick="translateSentence(' . prepare_textdata_js($url) . ',' . $sentctljs . ');">' . tohtml($txt) . '</span>';
-		} 
-	}
-	return $r;
-}
-
-// -------------------------------------------------------------
-
 function createDictLinksInEditWin2($lang,$wordctljs) {
 	global $tbpref;
 	$sql = 'select LgDict1URI, LgDict2URI, LgGoogleTranslateURI from ' . $tbpref . 'languages where LgID = ' . $lang;
@@ -2058,59 +2043,11 @@ function flexible_export($sql) {
 
 // -------------------------------------------------------------
 
-function mask_term_in_sentence_v2($s) {
-	$l = mb_strlen($s,'utf-8');
-	$r = '';
-	$on = 0;
-	for ($i=0; $i < $l; $i++) {
-		$c = mb_substr($s, $i, 1, 'UTF-8');
-		if ($c == '}') { 
-			$on = 0;
-			continue;
-		}
-		if ($c == '{') {
-			$on = 1;
-			$r .= '[...]';
-			continue;
-		}
-		if ($on == 0) {
-			$r .= $c;
-		}
-	}
-	return $r;
-}
-
-// -------------------------------------------------------------
-
 function repl_tab_nl($s) {
 	$s = str_replace(array("\r\n", "\r", "\n", "\t"), ' ', $s);
 	$s = preg_replace('/\s/u', ' ', $s);
 	$s = preg_replace('/\s{2,}/u', ' ', $s);
 	return trim($s);
-}
-
-// -------------------------------------------------------------
-
-function mask_term_in_sentence($s,$regexword) {
-	$l = mb_strlen($s,'utf-8');
-	$r = '';
-	$on = 0;
-	for ($i=0; $i < $l; $i++) {
-		$c = mb_substr($s, $i, 1, 'UTF-8');
-		if ($c == '}') $on = 0;
-		if ($on) {
-			if (preg_match('/[' . $regexword . ']/u', $c)) {
-   			$r .= '•';
-			} else {
-   			$r .= $c;
-			}	
-		}
-		else {
-			$r .= $c;
-		}
-		if ($c == '{') $on = 1;
-	}
-	return $r;
 }
 
 // -------------------------------------------------------------

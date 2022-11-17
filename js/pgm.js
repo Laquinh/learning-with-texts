@@ -147,15 +147,6 @@ function make_overlib_link_wbnl(wblink1,wblink2,wblink3,txt,txid,torder) {
 	return s;
 }
 
-function make_overlib_link_wbnl2(wblink1,wblink2,wblink3,txt,sent) {
-	var s =  
-	createTheDictLink(wblink1,txt,'Dict1','Term: ') +
-	createTheDictLink(wblink2,txt,'Dict2','') +
-	createTheDictLink(wblink3,txt,'GTr','') + 
-	((sent == '') ? '' : createTheDictLink(wblink3,sent,'GTr',' | Sentence:'));
-	return s;
-}
-
 function make_overlib_link_change_status_all(txid,torder,wid,oldstat) {
 	var result = 'St: ';
 	for (var newstat=1; newstat<=5; newstat++)
@@ -275,27 +266,6 @@ function getStatusName(status) {
 
 function getStatusAbbr(status) {
 	return (STATUSES[status] ? STATUSES[status]['abbr'] : '?');
-}
-
-function translateSentence(url,sentctl) {
-	if ((typeof sentctl != 'undefined') && (url != '')) {
-		text = sentctl.value;
-		if (typeof text == 'string') {
-			window.parent.frames['ru'].location.href = 
-			createTheDictUrl(url,text.replace(/[{}]/g, ''));
-		}
-	}
-}
-
-function translateSentence2(url,sentctl) {
-	if ((typeof sentctl != 'undefined') && (url != '')) {
-		text = sentctl.value;
-		if (typeof text == 'string') {
-			owin (	
-				createTheDictUrl(url, text.replace(/[{}]/g, '') )
-			);
-		}
-	}
 }
 
 function translateWord(url,wordctl) {
