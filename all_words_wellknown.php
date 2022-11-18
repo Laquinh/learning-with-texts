@@ -45,8 +45,8 @@ $langid = get_first_value("select TxLgID as value from " . $tbpref . "texts wher
 pagestart("Setting all blue words to Well-known",false);
 
 $wordsInDB = databaseWordList($langid);
-$wordList = textWordList($_REQUEST['text'], true);
-$words = array_unique($wordList);
+$words = textWordList($_REQUEST['text'], true);
+#$words = array_unique($wordList);
 $count = 0;
 $javascript = "var title='';";
 $changedWords = [];
@@ -61,8 +61,12 @@ else
 	$limit = count($words)-1;
 }
 
-for($i = 0; $i <= $limit; ++$i) {
-	$word = $words[$i];
+$i = 0;
+foreach($words as $word) {
+	if($i++ > $limit)
+	{
+		break;
+	}
 	if(!$word)
 	{
 		continue;
@@ -83,6 +87,9 @@ for($i = 0; $i <= $limit; ++$i) {
 		$count += $count1;
 		
 		array_push($changedWords, $wordlc);
+		$wordTempData = [];
+		$wordTempData["WoText"] = $wordlc;
+		array_push($wordsInDB, $wordTempData);
 	}
 }
 
