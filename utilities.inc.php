@@ -2164,8 +2164,7 @@ function get_word_data($word, $wordsInDB)
 
 function is_word($item)
 {
-	return (strpbrk($item, "., ¿?¡!:;()[]\"'{}\n") === FALSE);
-	#return (strpbrk($item, "., \n") === FALSE);
+	return (preg_match("#[ :;,.¿?¡!()\[\]{}\s'\"-]#u", $item) === 0);
 }
 
 // -------------------------------------------------------------
