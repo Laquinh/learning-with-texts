@@ -192,14 +192,14 @@ elseif (isset($_REQUEST['op'])) {
 	}
 
 	else {
-		
+		$text = normalizer_normalize($_REQUEST["TxText"], Normalizer::FORM_C);
 		#region INSERT
 		
 		if (substr($_REQUEST['op'],0,4) == 'Save') {
 			$message1 = runsql('insert into ' . $tbpref . 'texts (TxLgID, TxTitle, TxText, TxAudioURI, TxSourceURI) values( ' . 
 			$_REQUEST["TxLgID"] . ', ' . 
 			convert_string_to_sqlsyntax($_REQUEST["TxTitle"]) . ', ' . 
-			convert_string_to_sqlsyntax(remove_soft_hyphens($_REQUEST["TxText"])) . ", " .
+			convert_string_to_sqlsyntax(remove_soft_hyphens($text)) . ", " .
 			convert_string_to_sqlsyntax($_REQUEST["TxAudioURI"]) . ', ' .
 			convert_string_to_sqlsyntax($_REQUEST["TxSourceURI"]) . ')', "Saved");
 			$id = get_last_key();
@@ -212,11 +212,11 @@ elseif (isset($_REQUEST['op'])) {
 		
 		elseif (substr($_REQUEST['op'],0,6) == 'Change') {
 			$oldtext = get_first_value('select TxText as value from ' . $tbpref . 'texts where TxID = ' . $_REQUEST["TxID"]);
-			$textsdiffer = (convert_string_to_sqlsyntax(remove_soft_hyphens($_REQUEST["TxText"])) != convert_string_to_sqlsyntax($oldtext));
+			$textsdiffer = (convert_string_to_sqlsyntax(remove_soft_hyphens($text)) != convert_string_to_sqlsyntax($oldtext));
 			$message1 = runsql('update ' . $tbpref . 'texts set ' .
 			'TxLgID = ' . $_REQUEST["TxLgID"] . ', ' .
 			'TxTitle = ' . convert_string_to_sqlsyntax($_REQUEST["TxTitle"]) . ', ' .
-			'TxText = ' . convert_string_to_sqlsyntax(remove_soft_hyphens($_REQUEST["TxText"])) . ', ' .
+			'TxText = ' . convert_string_to_sqlsyntax(remove_soft_hyphens($text)) . ', ' .
 			'TxAudioURI = ' . convert_string_to_sqlsyntax($_REQUEST["TxAudioURI"]) . ', ' .
 			'TxSourceURI = ' . convert_string_to_sqlsyntax($_REQUEST["TxSourceURI"]) . ' ' .
 			'where TxID = ' . $_REQUEST["TxID"], "Updated");

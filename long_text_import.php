@@ -81,6 +81,7 @@ if (isset($_REQUEST['op'])) {
 			$data = str_replace('¶ ','¶',$data);
 			$data = str_replace('¶',"\n",$data);
 		}
+		$data = normalizer_normalize($data, Normalizer::FORM_C);
 		
 		if ($data == "") {
 			$message = "Error: No text specified!";
