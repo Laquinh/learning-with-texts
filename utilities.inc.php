@@ -2178,7 +2178,7 @@ function textWordList($text, $allLowercase = false)
 	mysqli_free_result($res);
 
 	//Get array of items (words + special characters) from text
-	$lines = preg_split('#(\R)#', $record['TxText'], -1, PREG_SPLIT_DELIM_CAPTURE|PREG_SPLIT_NO_EMPTY);
+	$lines = preg_split('#(\R)#u', $record['TxText'], -1, PREG_SPLIT_DELIM_CAPTURE|PREG_SPLIT_NO_EMPTY);
 	$items = [];
 	foreach($lines as $line)
 	{
@@ -2206,7 +2206,7 @@ function textItemList($text)
 	mysqli_free_result($res);
 
 	//Get array of items (words + special characters) from text
-	$lines = preg_split('#(\R)#', $record['TxText'], -1, PREG_SPLIT_DELIM_CAPTURE|PREG_SPLIT_NO_EMPTY);
+	$lines = preg_split('#(\R)#u', $record['TxText'], -1, PREG_SPLIT_DELIM_CAPTURE|PREG_SPLIT_NO_EMPTY);
 	$items = [];
 	foreach($lines as $line)
 	{
