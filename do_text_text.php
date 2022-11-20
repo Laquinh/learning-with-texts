@@ -96,17 +96,15 @@ $wordsInDB = databaseWordList($langid);
 
 //Main loop
 $showNextSpace = true;
+$whitespaceHTML = ($showNextSpace ? " " : '<span class="whitespace" style="font-size:0"> </span>');
+
 for($i = 0, $wordIndex = 0; $i < count($items); ++$i)
 {
 	$item = $items[$i];
 
 	if($item === " ") //item is space
 	{
-		if($showNextSpace)
-		{
-			echo ' ';
-			$showNextSpace = false;
-		}
+		echo $whitespaceHTML;
 	}
 	else if(is_word($item)) //item is a word
 	{
@@ -144,10 +142,7 @@ for($i = 0, $wordIndex = 0; $i < count($items); ++$i)
 			"\n",
 			'<br />',
 			tohtml($item)) . '</span>';
-		$showNextSpace = true;
 	}
-
-	$showNextSpace = true;
 }
 
 echo '<span id="totalcharcount" class="hide">' . $currcharcount . '</span></p><p style="font-size:' . $textsize . '%;line-height: 1.4; margin-bottom: 300px;">&nbsp;</p></div>';
