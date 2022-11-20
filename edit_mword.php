@@ -216,7 +216,7 @@ else {  // if (! isset($_REQUEST['op']))
 		<?php print_similar_terms_tabrow(); ?>
 		<tr>
 		<td class="td1 right">Translation:</td>
-		<td class="td1"><textarea name="WoTranslation" class="setfocus textarea-noreturn checklength checkoutsidebmp" data_maxlength="500" data_info="Translation" cols="50" rows="10"></textarea></td>
+		<td class="td1"><textarea name="WoTranslation" class="setfocus textarea checklength checkoutsidebmp" data_maxlength="500" data_info="Translation" cols="50" rows="10"></textarea></td>
 		</tr>
 		<tr>
 		<td class="td1 right">Tags:</td>
@@ -258,7 +258,7 @@ else {  // if (! isset($_REQUEST['op']))
 		
 			$status = $record['WoStatus'];
 			if ($status >= 98) $status = 1;
-			$transl = repl_tab_nl($record['WoTranslation']);
+			$transl = $record['WoTranslation'];
 			if($transl == '*') $transl='';
 			?>
 		
@@ -277,7 +277,7 @@ else {  // if (! isset($_REQUEST['op']))
 			<?php print_similar_terms_tabrow(); ?>
 			<tr>
 			<td class="td1 right">Translation:</td>
-			<td class="td1"><textarea name="WoTranslation" class="setfocus textarea-noreturn checklength checkoutsidebmp" data_maxlength="500" data_info="Translation" cols="50" rows="10"><?php echo tohtml($transl); ?></textarea></td>
+			<td class="td1"><textarea name="WoTranslation" class="setfocus textarea checklength checkoutsidebmp" data_maxlength="500" data_info="Translation" cols="50" rows="10"><?php echo tohtml($transl); ?></textarea></td>
 			</tr>
 			<tr>
 			<td class="td1 right">Tags:</td>
