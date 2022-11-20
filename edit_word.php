@@ -45,7 +45,9 @@ require_once( 'dbutils.inc.php' );
 require_once( 'utilities.inc.php' );
 require_once( 'simterms.inc.php' );
 
-$translation = getreq("WoTranslation");
+$translation_raw = getreq("WoTranslation");
+if ( $translation_raw == '' ) $translation = '*';
+else $translation = $translation_raw;
 
 $textId = $_REQUEST['tid'];
 
