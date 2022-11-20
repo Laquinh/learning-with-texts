@@ -48,6 +48,7 @@ require_once( 'simterms.inc.php' );
 $translation_raw = getreq("WoTranslation");
 if ( $translation_raw == '' ) $translation = '*';
 else $translation = $translation_raw;
+$notes = getreq("WoNotes");
 
 $textId = $_REQUEST['tid'];
 
@@ -75,12 +76,12 @@ if (isset($_REQUEST['op'])) {
 			$translation = str_replace('¶',"\n",$translation);
 		
 			$message = runsql('insert into ' . $tbpref . 'words (WoLgID, WoText, ' .
-				'WoStatus, WoTranslation, WoRomanization, WoStatusChanged,' .  make_score_random_insert_update('iv') . ') values( ' . 
+				'WoStatus, WoTranslation, WoRomanization, WoNotes, WoStatusChanged,' .  make_score_random_insert_update('iv') . ') values( ' . 
 				$_REQUEST["WoLgID"] . ', ' .
 				convert_string_to_sqlsyntax($woTextLC) . ', ' .
 				$_REQUEST["WoStatus"] . ', ' .
 				convert_string_to_sqlsyntax($translation) . ', ' .
-				convert_string_to_sqlsyntax($_REQUEST["WoRomanization"]) . ', NOW(), ' .  
+				convert_string_to_sqlsyntax($_REQUEST["WoRomanization"]) . ', ' . convert_string_to_sqlsyntax($notes) . ', NOW(), ' .  
 				make_score_random_insert_update('id') . ')', "Term saved");
 			$wid = get_last_key();
 			
@@ -112,7 +113,8 @@ if (isset($_REQUEST['op'])) {
 			$message = runsql('update ' . $tbpref . 'words set WoText = ' . 
 			convert_string_to_sqlsyntax($woTextLC) . ', WoTranslation = ' . 
 			convert_string_to_sqlsyntax($translation) . ', WoRomanization = ' .
-			convert_string_to_sqlsyntax($_REQUEST["WoRomanization"]) . $xx . ',' . make_score_random_insert_update('u') . ' where WoID = ' . $_REQUEST["WoID"], "Updated");
+			convert_string_to_sqlsyntax($_REQUEST["WoRomanization"]) . ', WoNotes = ' . convert_string_to_sqlsyntax($notes) .
+			$xx . ',' . make_score_random_insert_update('u') . ' where WoID = ' . $_REQUEST["WoID"], "Updated");
 			$wid = $_REQUEST["WoID"];
 			
 		}  // $_REQUEST['op'] != 'Save'
@@ -222,6 +224,10 @@ else {  // if (! isset($_REQUEST['op']))
 		<td class="td1"><textarea name="WoTranslation" class="setfocus textarea checklength checkoutsidebmp" style="white-space: pre-wrap;" data_maxlength="500" data_info="Translation" cols="50" rows="10"></textarea></td>
 		</tr>
 		<tr>
+		<td class="td1 right">Notes:</td>
+		<td class="td1"><textarea name="WoNotes" class="setfocus textarea checklength checkoutsidebmp" style="white-space: pre-wrap;" data_maxlength="200" data_info="Notes" cols="50" rows="5"></textarea></td>
+		</tr>
+		<tr>
 		<td class="td1 right">Tags:</td>
 		<td class="td1">
 		<?php echo getWordTags(0); ?>
@@ -255,7 +261,7 @@ else {  // if (! isset($_REQUEST['op']))
 	
 	else {
 		
-		$sql = 'select WoTranslation, WoRomanization, WoStatus from ' . $tbpref . 'words where WoID = ' . $wid;
+		$sql = 'select WoTranslation, WoRomanization, WoNotes, WoStatus from ' . $tbpref . 'words where WoID = ' . $wid;
 		$res = do_mysqli_query($sql);
 		if ($record = mysqli_fetch_assoc($res)) {
 			
@@ -263,6 +269,7 @@ else {  // if (! isset($_REQUEST['op']))
 			
 			$transl = $record['WoTranslation'];
 			if($transl == '*') $transl='';
+			$notes = $record['WoNotes'];
 			?>
 		
 			<form name="editword" class="validate" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
@@ -279,6 +286,10 @@ else {  // if (! isset($_REQUEST['op']))
 			<tr>
 			<td class="td1 right">Translation:</td>
 			<td class="td1"><textarea name="WoTranslation" class="setfocus textarea checklength checkoutsidebmp" style="white-space: pre-wrap;" data_maxlength="500" data_info="Translation" cols="50" rows="10"><?php echo tohtml($transl); ?></textarea></td>
+			</tr>
+			<tr>
+			<td class="td1 right">Notes:</td>
+			<td class="td1"><textarea name="WoNotes" class="setfocus textarea checklength checkoutsidebmp" style="white-space: pre-wrap;" data_maxlength="200" data_info="Notes" cols="50" rows="5"><?php echo tohtml($notes); ?></textarea></td>
 			</tr>
 			<tr>
 			<td class="td1 right">Tags:</td>
