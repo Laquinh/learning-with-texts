@@ -44,11 +44,6 @@ input[type=text] {
 	border: 1px solid #C6C6C6;
 	padding: 3px;
 }
-form {
-	display: block;
-	text-align: center;
-}
-
 p {
 	margin: 5px 0 5px 0;
 	padding: 0;
@@ -86,25 +81,22 @@ span.status5 {
 	color: #000000;
 }
 span.status99 {
-	/*background-color: #F8F8F8;
-	border-bottom: solid 2px #CCFFCC;  */
+	background-color: #F8F8F8;
+	border-bottom: solid 2px #CCFFCC;  
 	color: #000000;
 }
 span.status98 {
-	/*background-color: #F8F8F8;
-	border-bottom: dashed 1px #000000; */
+	background-color: #F8F8F8;
+	border-bottom: dashed 1px #000000; 
 	color: #000000;
 }
 span.mwsty {
-	border-radius: .25rem;
 	font-size: 60%;
 	font-weight: bold;
 	color: #000000;
-	vertical-align: top;
-	border-bottom: dashed 1px #000000;
+	vertical-align: top; 
 }
 span.wsty {
-	border-radius: .25rem;
 	color: #000000;
 }
 span.todosty {
@@ -236,9 +228,6 @@ img {
 .center {
 	text-align: center;
 }
-.justify {
-	text-align: justify;
-}
 .bigger {
 	font-size: 130%;
 }
@@ -268,9 +257,6 @@ img {
 	font-size:70%;
 	width: 850px;
 	margin-bottom: 20px;
-}
-#thetext {
-	margin: 15% 15% 15% 15%;
 }
 #learnstatus {
 	color: #000000;
@@ -399,7 +385,7 @@ dt {
 }
 .wizard {
 	margin: 20px 0 5px 0;
-}
+} 
 
 /**************************************************************
 Additional styles for printing

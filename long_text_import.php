@@ -107,7 +107,6 @@ if (isset($_REQUEST['op'])) {
 					$bytes = $item_len;
 				}
 			}
-			$texts = array_filter($texts);
 			$textcount = count($texts);
 			$plural = ($textcount==1 ? '' : 's');
 			$shorter = ($textcount==1 ? ' ' : ' shorter ');
