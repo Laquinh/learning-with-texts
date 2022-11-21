@@ -86,8 +86,8 @@ $(document).ready( function() {
 </script>
 <?php
 
-echo '<div id="thetext" ' .  ($rtlScript ? 'dir="rtl"' : '') . '><p style="' . ($removeSpaces ? 'word-break:break-all;' : '') . 
-'font-size:' . $textsize . '%;line-height: 1.4; margin-bottom: 10px;">';
+echo '<div id="thetext" class="justify" ' .  ($rtlScript ? 'dir="rtl"' : '') . '><p style="' . ($removeSpaces ? 'word-break:break-all;' : '') . 
+'font-size:' . $textsize . '%;line-height: 1.6; margin-bottom: 10px; font-family:\'Meiryo\'">';
 
 $currcharcount = 0;
 
@@ -95,7 +95,7 @@ $items = textItemList($_REQUEST["text"]);
 $wordsInDB = databaseWordList($langid);
 
 //Main loop
-$showNextSpace = true;
+$showNextSpace = false;
 $whitespaceHTML = ($showNextSpace ? " " : '<span class="whitespace" style="font-size:0"> </span>');
 
 for($i = 0, $wordIndex = 0; $i < count($items); ++$i)
