@@ -95,8 +95,7 @@ $items = textItemList($_REQUEST["text"]);
 $wordsInDB = databaseWordList($langid);
 
 //Main loop
-$showNextSpace = true;
-$whitespaceHTML = ($showNextSpace ? " " : '<span class="whitespace" style="font-size:0"> </span>');
+$whitespaceHTML = ($removeSpaces ? '<span class="whitespace" style="font-size:0"> </span>' : " ");
 
 for($i = 0, $wordIndex = 0; $i < count($items); ++$i)
 {
@@ -118,7 +117,6 @@ for($i = 0, $wordIndex = 0; $i < count($items); ++$i)
 			'" data_term="' . $multiwordData['WoText'] . '" data_language="' . $langid . '" data_wordcount="'. str_word_count($multiwordData['WoText']) .'">&nbsp' . str_word_count($multiwordData['WoText']) . '&nbsp</span>&nbsp';
 		}
 
-		$showNextSpace = false;
 		$wordData = get_word_data($item, $wordsInDB);
 		
 		if ($wordData) //seen word
