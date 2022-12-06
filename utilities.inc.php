@@ -2086,7 +2086,6 @@ function splitTextIntoSentences($text)
 
 function get_longest_multiword($i, $j, $items, $wordsInDB)
 {
-	
 	if($j >= count($items))
 	{
 		return null;
@@ -2121,7 +2120,7 @@ function get_longest_multiword($i, $j, $items, $wordsInDB)
 	{
 		$potentialMultiword .= $items[$j+$k+1];
 	}
-	if(count($multiwords) === 1 && $multiwords[0] === $potentialMultiword && ($k > 0 || $j > $i))
+	if(count($multiwords) === 1 && mb_strtolower($multiwords[0], "UTF-8") === mb_strtolower($potentialMultiword, "UTF-8") && ($k > 0 || $j > $i))
 	{
 		return get_word_data($multiwords[0], $wordsInDB);
 	}
@@ -2138,7 +2137,7 @@ function find_multiword($beginning, $array)
 	$multiwords = [];
 	foreach ($array as $key => $string) {
 		#consoleLog($key . " ------- " . $string['WoText']);
-		if (strpos($string['WoText'], $beginning) === 0) {
+		if (strpos(mb_strtolower($string['WoText'], 'UTF-8'), mb_strtolower($beginning, 'UTF-8')) === 0) {
 			array_push($multiwords, $string['WoText']);
 		}
 	}
