@@ -2051,6 +2051,13 @@ function repl_tab_nl($s) {
 }
 
 // -------------------------------------------------------------
+function strwordcount($str) {
+	$words = preg_split("/ |[,.] /", $str);
+
+	return count($words);
+}
+
+// -------------------------------------------------------------
 
 function textwordcount($text) {
 	global $tbpref;
