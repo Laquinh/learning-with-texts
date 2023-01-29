@@ -2085,7 +2085,8 @@ function textworkcount($text) {
 // Source: https://stackoverflow.com/questions/16377437/split-a-text-into-sentences
 function splitTextIntoSentences($text)
 {
-	$sentences = preg_split('/(?<=[.?!])\s+(?=[a-z])/i', $text);
+	$sentences = preg_split('#(?<=[.?!。！？…])(\s|[\r\n])#u', $text);
+	//$sentences = preg_split('#(?<=[.?!。！？…])\s#u', $text);
 	return $sentences;
 }
 
