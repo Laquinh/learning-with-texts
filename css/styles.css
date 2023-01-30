@@ -44,6 +44,10 @@ input[type=text] {
 	border: 1px solid #C6C6C6;
 	padding: 3px;
 }
+form {
+	display: block;
+	text-align: center;
+}
 p {
 	margin: 5px 0 5px 0;
 	padding: 0;
@@ -57,37 +61,33 @@ h4 {
 	padding: 0;
 }
 span.status0 {
-	background-color: #ADDFFF;
+	background-color: #ADDFF4FF;
 	color: #000000;
 }
 span.status1 {
-	background-color: #F5B8A9;
+	background-color: #F5B8A9FF;
 	color: #000000;
 }
 span.status2 {
-	background-color: #F5CCA9;
+	background-color: #F5CCA9E5;
 	color: #000000;
 }
 span.status3 {
-	background-color: #F5E1A9;
+	background-color: #F5E1A9BF;
 	color: #000000;
 }
 span.status4 {
-	background-color: #F5F3A9;
+	background-color: #F5F3A99F;
 	color: #000000;
 }
 span.status5 {
-	background-color: #DDFFDD;
+	background-color: #DDFFDD7F;
 	color: #000000;
 }
 span.status99 {
-	background-color: #F8F8F8;
-	border-bottom: solid 2px #CCFFCC;  
 	color: #000000;
 }
 span.status98 {
-	background-color: #F8F8F8;
-	border-bottom: dashed 1px #000000; 
 	color: #000000;
 }
 span.mwsty {
@@ -95,7 +95,8 @@ span.mwsty {
 	font-size: 60%;
 	font-weight: bold;
 	color: #000000;
-	vertical-align: top; 
+	vertical-align: top;
+	border-bottom: dashed 1px #000000;
 }
 span.wsty {
 	border-radius: .25rem;
@@ -236,6 +237,9 @@ img {
 .smaller {
 	font-size: 80%;
 }
+.justify {
+	text-align: justify;
+}
 .backgray {
 	background-color: #DDDDDD;
 }
@@ -264,6 +268,9 @@ img {
 	color: #000000;
 	font-size: 120%;
 	font-weight: bold;
+}
+#thetext {
+	margin: 10% 10% 10% 10%;
 }
 #iknowall {
 	background-color: #ADDFFF;
