@@ -286,11 +286,15 @@ function word_click_event_do_text_text() {
 function mword_click_event_do_text_text() {
 	console.log("clicked!");
 	var status = $(this).attr('data_status');
+	var data_wid = $(this).attr('data_wid');
+
 	if (status !== '') {
 		run_overlib_multiword(WBLINK1,WBLINK2,WBLINK3,$(this).attr('title'),
 		TID, $(this).attr('data_order'),$(this).attr('data_term'),
 		$(this).attr('data_wid'), status,$(this).attr('data_wordcount'));
 	}
+	top.frames['ro'].location.href='edit_mword.php?tid=' + TID +
+		'&wid=' + data_wid;
 	return false;
 }
 //#endregion

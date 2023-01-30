@@ -584,7 +584,7 @@ For more information, please refer to [http://unlicense.org/].
 
 // -------------------------------------------------------------
 
-function pagestart_nobody($titletext, $addcss='') {
+function pagestart_nobody($titletext, $addcss='', $includeStylesheet=true) {
 	global $debug;
 	global $tbpref;
 	@header( 'Expires: Wed, 11 Jan 1984 05:00:00 GMT' );
@@ -636,7 +636,11 @@ For more information, please refer to [http://unlicense.org/].
 	
 	<link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
 	<link rel="stylesheet" type="text/css" href="css/jquery.tagit.css">
-	<link rel="stylesheet" type="text/css" href="css/styles.css">
+	<?php
+	if($includeStylesheet) {
+		echo '<link rel="stylesheet" type="text/css" href="css/styles.css">';
+	}
+	?>
 	<style type="text/css">
 	<?php echo $addcss . "\n"; ?>
 	</style>
@@ -1728,13 +1732,17 @@ function makeStatusClassFilterHelper($status,&$array) {
 
 // -------------------------------------------------------------
 
-function createTheDictLink($u,$t) {
+function createTheDictLink($u,$t,$removeSpaces=false) {
 	// Case 1: url without any ###: append UTF-8-term
 	// Case 2: url with one ###: substitute UTF-8-term
 	// Case 3: url with two ###enc###: substitute enc-encoded-term
 	// see http://php.net/manual/en/mbstring.supported-encodings.php for supported encodings
 	$url = trim($u);
 	$trm = trim($t);
+	if($removeSpaces)
+	{
+		$trm = str_replace(" ", "", $trm);
+	}
 	$pos = stripos ($url, '###');
 	if ($pos !== false) {  // ### found
 		$pos2 = strripos ($url, '###');
@@ -1750,6 +1758,24 @@ function createTheDictLink($u,$t) {
 	}
 	else  // no ### found
 		$r = $url . urlencode($trm);
+	return $r;
+}
+
+// -------------------------------------------------------------
+function openDictInEdit($lang, $word)
+{global $tbpref;
+	$sql = 'select LgDict1URI, LgDict2URI, LgGoogleTranslateURI, LgRemoveSpaces from ' . $tbpref . 'languages where LgID = ' . $lang;
+	$res = do_mysqli_query($sql);
+	$record = mysqli_fetch_assoc($res);
+	$wb1 = isset($record['LgDict1URI']) ? $record['LgDict1URI'] : "";
+	$wb2 = isset($record['LgDict2URI']) ? $record['LgDict2URI'] : "";
+	$wb3 = isset($record['LgGoogleTranslateURI']) ? $record['LgGoogleTranslateURI'] : "";
+	mysqli_free_result($res);
+	$removeSpaces = $record['LgRemoveSpaces'];
+	$r = '<script type="text/javascript">';
+	$r .= "\n//<![CDATA[\n";
+	$r .= makeOpenDictStrJS(createTheDictLink($wb1,$word, $removeSpaces));
+	$r .= "//]]>\n</script>\n";
 	return $r;
 }
 
