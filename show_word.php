@@ -31,7 +31,7 @@ For more information, please refer to [http://unlicense.org/].
 ***************************************************************/
 
 /**************************************************************
-Call: show_word.php?wid=...&ann=...
+Call: show_word.php?wid=...
 Show term
 ***************************************************************/
 
@@ -43,11 +43,10 @@ require_once( 'utilities.inc.php' );
 pagestart_nobody('Term');
 
 $wid = getreq('wid');
-$ann = stripTheSlashesIfNeeded($_REQUEST["ann"]);
 
 if ($wid == '') my_die ('Word not found in show_word.php');
 
-$sql = 'select WoLgID, WoText, WoTranslation, WoSentence, WoRomanization, WoStatus from ' . $tbpref . 'words where WoID = ' . $wid;
+$sql = 'select WoLgID, WoText, WoTranslation, WoRomanization, WoStatus from ' . $tbpref . 'words where WoID = ' . $wid;
 $res = do_mysqli_query($sql);
 if ($record = mysqli_fetch_assoc($res)) {
 
@@ -66,12 +65,6 @@ if ($record = mysqli_fetch_assoc($res)) {
 <td class="td1 right" style="width:30px;">Term:</td>
 <td class="td1" style="font-size:120%;" <?php echo $scrdir; ?>><b><?php echo tohtml($record['WoText']); ?></b></td>
 </tr>
-<tr>
-<td class="td1 right">Translation:</td>
-<td class="td1" style="font-size:120%;"><b><?php echo 
-	str_replace_first(tohtml($ann), '<span style="color:red">' . tohtml($ann) . 
-	'</span>', tohtml($transl)); ?></b></td>
-</tr>
 <?php if ($tags != '') { ?>
 <tr>
 <td class="td1 right">Tags:</td>
@@ -84,10 +77,6 @@ if ($record = mysqli_fetch_assoc($res)) {
 <td class="td1" style="font-size:120%;"><b><?php echo tohtml($rom); ?></b></td>
 </tr>
 <?php } ?>
-<tr>
-<td class="td1 right">Sentence<br />Term in {...}:</td>
-<td class="td1" <?php echo $scrdir; ?>><?php echo tohtml($record['WoSentence']); ?></td>
-</tr>
 <tr>
 <td class="td1 right">Status:</td>
 <td class="td1"><?php echo get_colored_status_msg($record['WoStatus']); ?></span>

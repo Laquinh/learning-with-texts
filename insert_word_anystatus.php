@@ -31,8 +31,8 @@ For more information, please refer to [http://unlicense.org/].
 ***************************************************************/
 
 /**************************************************************
-Call: insert_word_wellknown.php?tid=[textid]&ord=[textpos]
-Ignore single word (new term with status 99)
+Call: insert_word_anystatus.php?tid=[textid]&term=[term]&status=[status]
+Ignore single word (new term with status 98)
 ***************************************************************/
 
 require_once( 'settings.inc.php' );
@@ -40,33 +40,48 @@ require_once( 'connect.inc.php' );
 require_once( 'dbutils.inc.php' );
 require_once( 'utilities.inc.php' );
 
-$word = get_first_value("select TiText as value from " . $tbpref . "textitems where TiWordCount = 1 and TiTxID = " . $_REQUEST['tid'] . " and TiOrder = " . $_REQUEST['ord']);
+$term = mb_strtolower($_REQUEST['term'], 'UTF-8');
+$textId = $_REQUEST['tid'];
+$langid = get_first_value("select TxLgID as value from " . $tbpref . "texts where TxID = " . $textId);
+$status = $_REQUEST['status'];
 
-$wordlc =	mb_strtolower($word, 'UTF-8');
+pagestart("Term: " . $term, false);
 
-$langid = get_first_value("select TxLgID as value from " . $tbpref . "texts where TxID = " . $_REQUEST['tid']);
-
-pagestart("Term: " . $word,false);
-
-$m1 = runsql('insert into ' . $tbpref . 'words (WoLgID, WoText, WoTextLC, WoStatus, WoStatusChanged,' .  make_score_random_insert_update('iv') . ') values( ' . 
+$m1 = runsql('insert into ' . $tbpref . 'words (WoLgID, WoText, WoStatus, WoStatusChanged,' .  make_score_random_insert_update('iv') . ') values( ' . 
 $langid . ', ' . 
-convert_string_to_sqlsyntax($word) . ', ' . 
-convert_string_to_sqlsyntax($wordlc) . ', 99, NOW(), ' .  
+convert_string_to_sqlsyntax($term) . ', ' . $status . ', NOW(), ' .  
 make_score_random_insert_update('id') . ')','Term added');
 $wid = get_last_key();
 
-echo "<p>OK, you know this term well!</p>";
+if($status == 98)
+{
+    echo "<p>OK, this term will be ignored!</p>";
+}
+else if($status == 99)
+{
+    echo "<p>OK, you know this term well!</p>";
+}
+else
+{
+    echo "<p>OK, term status set to " . $status . "!</p>";
+}
 
-$hex = strToClassName($wordlc);
+$hex = strToClassName($term);
 
 ?>
 <script type="text/javascript">
 //<![CDATA[
 var context = window.parent.frames['l'].document;
 var contexth = window.parent.frames['h'].document;
-var title = make_tooltip(<?php echo prepare_textdata_js($word); ?>,'*','','99');
-$('.TERM<?php echo $hex; ?>', context).removeClass('status0').addClass('status99 word<?php echo $wid; ?>').attr('data_status','99').attr('data_wid','<?php echo $wid; ?>').attr('title',title);
-$('#learnstatus', contexth).html('<?php echo texttodocount2($_REQUEST['tid']); ?>');
+var title = make_tooltip(<?php echo prepare_textdata_js($term); ?>,'*','',<?php echo $status; ?>);
+
+$('.TERM<?php echo $hex; ?>', context)
+    .removeClass('status0')
+    .addClass('status<?php echo $status; ?> word<?php echo $wid; ?>')
+    .attr('data_status',<?php echo $status; ?>)
+    .attr('data_wid','<?php echo $wid; ?>')
+    .attr('title',title);
+$('#learnstatus', contexth).html('<?php echo texttodocount2($textId); ?>');
 window.parent.frames['l'].focus();
 window.parent.frames['l'].setTimeout('cClick()', 100);
 //]]>
@@ -75,5 +90,4 @@ window.parent.frames['l'].setTimeout('cClick()', 100);
 
 pageend();
 
-?> 
-
+?>

@@ -61,27 +61,6 @@ if (isset($_REQUEST['op'])) {
 		saveSetting('set-text-r-frameheight-percent',
 		$_REQUEST['set-text-r-frameheight-percent']);
 	
-		saveSetting('set-test-h-frameheight',
-		$_REQUEST['set-test-h-frameheight']);
-		
-		saveSetting('set-test-l-framewidth-percent',
-		$_REQUEST['set-test-l-framewidth-percent']);
-	
-		saveSetting('set-test-r-frameheight-percent',
-		$_REQUEST['set-test-r-frameheight-percent']);
-	
-		saveSetting('set-test-main-frame-waiting-time',
-		$_REQUEST['set-test-main-frame-waiting-time']);
-	
-		saveSetting('set-test-edit-frame-waiting-time',
-		$_REQUEST['set-test-edit-frame-waiting-time']);
-
-		saveSetting('set-test-sentence-count',
-		$_REQUEST['set-test-sentence-count']);
-	
-		saveSetting('set-term-sentence-count',
-		$_REQUEST['set-term-sentence-count']);
-	
 		saveSetting('set-archivedtexts-per-page',
 		$_REQUEST['set-archivedtexts-per-page']);
 	
@@ -171,52 +150,6 @@ value="<?php echo tohtml(getSettingWithDefault('set-text-r-frameheight-percent')
 </tr>
 <!-- ******************************************************* -->
 <tr>
-<th class="th1 center middle" rowspan="5">Test<br />Screen</th>
-<td class="td1 center">Height of left top frame</td>
-<td class="td1 center">
-<input class="notempty posintnumber right" type="text" 
-name="set-test-h-frameheight" data_info="Height of left top frame" 
-value="<?php echo tohtml(getSettingWithDefault('set-test-h-frameheight')); ?>" maxlength="3" size="3" /><br />Pixel </td>
-<td class="td1 center"><img src="icn/status-busy.png" title="Field must not be empty" alt="Field must not be empty" /></td>
-</tr>
-<!-- ******************************************************* -->
-<tr>
-<td class="td1 center">Width of left frames</td>
-<td class="td1 center">
-<input class="notempty posintnumber right" type="text" 
-name="set-test-l-framewidth-percent"  data_info="Width of left frames" 
-value="<?php echo tohtml(getSettingWithDefault('set-test-l-framewidth-percent')); ?>" maxlength="2" size="2" /><br />Percent </td>
-<td class="td1 center"><img src="icn/status-busy.png" title="Field must not be empty" alt="Field must not be empty" /></td>
-</tr>
-<!-- ******************************************************* -->
-<tr>
-<td class="td1 center">Height of right top frame</td>
-<td class="td1 center">
-<input class="notempty posintnumber right" type="text" 
-name="set-test-r-frameheight-percent"  data_info="Height of right top frame"  
-value="<?php echo tohtml(getSettingWithDefault('set-test-r-frameheight-percent')); ?>" maxlength="2" size="2" /><br />Percent </td>
-<td class="td1 center"><img src="icn/status-busy.png" title="Field must not be empty" alt="Field must not be empty" /></td>
-</tr>
-<!-- ******************************************************* -->
-<tr>
-<td class="td1 center">Waiting time after assessment<br />to display next test<br /></td>
-<td class="td1 center">
-<input class="notempty zeroposintnumber right" type="text" 
-name="set-test-main-frame-waiting-time" data_info="Waiting time after assessment to display next test" 
-value="<?php echo tohtml(getSettingWithDefault('set-test-main-frame-waiting-time')); ?>" maxlength="4" size="4" /><br />Milliseconds </td>
-<td class="td1 center"><img src="icn/status-busy.png" title="Field must not be empty" alt="Field must not be empty" /></td>
-</tr>
-<!-- ******************************************************* -->
-<tr>
-<td class="td1 center">Waiting Time <br />to clear the message/edit frame </td>
-<td class="td1 center">
-<input class="notempty zeroposintnumber right" type="text" 
-name="set-test-edit-frame-waiting-time"  data_info="Waiting Time to clear the message/edit frame" 
-value="<?php echo tohtml(getSettingWithDefault('set-test-edit-frame-waiting-time')); ?>" maxlength="8" size="8" /><br />Milliseconds </td>
-<td class="td1 center"><img src="icn/status-busy.png" title="Field must not be empty" alt="Field must not be empty" /></td>
-</tr>
-<!-- ******************************************************* -->
-<tr>
 <th class="th1 center">Frame Set<br />Display Mode</th>
 <td class="td1 center">Select how frame sets are<br />displayed on different devices</td>
 <td class="td1 center">
@@ -238,34 +171,6 @@ getSettingWithDefault('set-mobile-display-mode'), true, true, true);
 <?php
 echo get_wordstatus_selectoptions(
 getSettingWithDefault('set-text-visit-statuses-via-key'), true, true, true);
-?>
-</select>
-</td>
-<td class="td1 center"><img src="icn/status-busy.png" title="Field must not be empty" alt="Field must not be empty" /></td>
-</tr>
-<!-- ******************************************************* -->
-<tr>
-<th class="th1 center">Testing</th>
-<td class="td1 center">Number of sentences <br />displayed from text, if available</td>
-<td class="td1 center">
-<select name="set-test-sentence-count" class="notempty">
-<?php
-echo get_sentence_count_selectoptions(
-getSettingWithDefault('set-test-sentence-count'));
-?>
-</select>
-</td>
-<td class="td1 center"><img src="icn/status-busy.png" title="Field must not be empty" alt="Field must not be empty" /></td>
-</tr>
-<!-- ******************************************************* -->
-<tr>
-<th class="th1 center">Term Sentence<br />Generation</th>
-<td class="td1 center">Number of sentences <br />generated from text, if available</td>
-<td class="td1 center">
-<select name="set-term-sentence-count" class="notempty">
-<?php
-echo get_sentence_count_selectoptions(
-getSettingWithDefault('set-term-sentence-count'));
 ?>
 </select>
 </td>

@@ -74,28 +74,15 @@ function check_dupl_lang(curr) {
 
 $message = '';
 
-// REFRESH 
+#region REFRESH
 
 if (isset($_REQUEST['refresh'])) {
 	$id = $_REQUEST['refresh'] + 0;
-	$message2 = runsql('delete from ' . $tbpref . 'sentences where SeLgID = ' . $id, 
-		"Sentences deleted");
-	$message3 = runsql('delete from ' . $tbpref . 'textitems where TiLgID = ' . $id, 
-		"Text items deleted");
-	adjust_autoincr('sentences','SeID');
-	adjust_autoincr('textitems','TiID');
-	$sql = "select TxID, TxText from " . $tbpref . "texts where TxLgID = " . $id . " order by TxID";
-	$res = do_mysqli_query($sql);
-	while ($record = mysqli_fetch_assoc($res)) {
-		$txtid = $record["TxID"];
-		$txttxt = $record["TxText"];
-		splitCheckText($txttxt, $id, $txtid );
-	}
-	mysqli_free_result($res);
-	$message = $message2 . " / " . $message3 . " / Sentences added: " . get_first_value('select count(*) as value from ' . $tbpref . 'sentences where SeLgID = ' . $id) . " / Text items added: " . get_first_value('select count(*) as value from ' . $tbpref . 'textitems where TiLgID = ' . $id);
 }
 
-// DEL
+#endregion
+
+#region DELETE
 
 if (isset($_REQUEST['del'])) {
 	$anztexts = get_first_value(
@@ -116,11 +103,13 @@ if (isset($_REQUEST['del'])) {
 	}
 }
 
-// INS/UPD
+#endregion
+
+#region INS/UPD
 
 elseif (isset($_REQUEST['op'])) {
 	
-	// INSERT
+	#region INSERT
 	
 	if ($_REQUEST['op'] == 'Save')
 		$message = runsql('insert into ' . $tbpref . 'languages (LgName, LgDict1URI, LgDict2URI, LgGoogleTranslateURI, LgExportTemplate, LgTextSize, LgCharacterSubstitutions, LgRegexpSplitSentences, LgExceptionsSplitSentences, LgRegexpWordCharacters, LgRemoveSpaces, LgSplitEachChar, LgRightToLeft) values(' . 
@@ -139,7 +128,9 @@ elseif (isset($_REQUEST['op'])) {
 		$_REQUEST["LgRightToLeft"] . 
 		')', 'Saved');
 	
-	// UPDATE
+	#endregion
+	
+	#region UPDATE
 	
 	elseif ($_REQUEST['op'] == 'Change') {
 		// Get old values
@@ -185,35 +176,14 @@ elseif (isset($_REQUEST['op'])) {
 		'LgSplitEachChar = ' . $_REQUEST["LgSplitEachChar"] . ', ' . 
 		'LgRightToLeft = ' . $_REQUEST["LgRightToLeft"] . 
 		' where LgID = ' . $_REQUEST["LgID"], 'Updated');
-		
-		if ($needReParse) {
-			$id = $_REQUEST["LgID"] + 0;
-			runsql('delete from ' . $tbpref . 'sentences where SeLgID = ' . $id, 
-				"Sentences deleted");
-			runsql('delete from ' . $tbpref . 'textitems where TiLgID = ' . $id, 
-				"Text items deleted");
-			adjust_autoincr('sentences','SeID');
-			adjust_autoincr('textitems','TiID');
-			$sql = "select TxID, TxText from " . $tbpref . "texts where TxLgID = " . $id . " order by TxID";
-			$res = do_mysqli_query($sql);
-			$cntrp = 0;
-			while ($record = mysqli_fetch_assoc($res)) {
-				$txtid = $record["TxID"];
-				$txttxt = $record["TxText"];
-				splitCheckText($txttxt, $id, $txtid );
-				$cntrp++;
-			}
-			mysqli_free_result($res);
-			$message .= " / Reparsed texts: " . $cntrp;
-		} else {
-			$message .= " / Reparsing not needed";
-		}
 
 	}
-
+	#endregion
 }
 
-// NEW
+#endregion
+
+#region NEW
 
 if (isset($_REQUEST['new'])) {
 	
@@ -295,7 +265,9 @@ if (isset($_REQUEST['new'])) {
 	
 }
 
-// CHG
+#endregion
+
+#region CHANGE
 
 elseif (isset($_REQUEST['chg'])) {
 	
@@ -375,7 +347,9 @@ elseif (isset($_REQUEST['chg'])) {
 	mysqli_free_result($res);
 }
 
-// DISPLAY
+#endregion
+
+#region DISPLAY
 
 else {
 	
@@ -400,7 +374,6 @@ if ($recno==0) {
 <table class="sortable tab1" cellspacing="0" cellpadding="5">
 <tr>
 <th class="th1 sorttable_nosort">Curr.<br />Lang.</th>
-<th class="th1 sorttable_nosort">Test<br />↓↓↓</th>
 <th class="th1 sorttable_nosort">Actions</th>
 <th class="th1 clickable">Language</th>
 <th class="th1 sorttable_numeric clickable">Texts,<br />Reparse</th>
@@ -426,7 +399,6 @@ while ($record = mysqli_fetch_assoc($res)) {
 		$tdth = 'td';
 		echo '<td class="td1 center"><a href="save_setting_redirect.php?k=currentlanguage&amp;v=' . $record['LgID'] . '&amp;u=edit_languages.php"><img src="icn/tick-button.png" title="Set as Current Language" alt="Set as Current Language" /></a></td>';
 	}
-	echo '<' . $tdth . ' class="' . $tdth . '1 center"><a href="do_test.php?lang=' . $record['LgID'] . '"><img src="icn/question-balloon.png" title="Test" alt="Test" /></a></' . $tdth . '>';
 	echo '<' . $tdth . ' class="' . $tdth . '1 center" nowrap="nowrap">&nbsp;<a href="' . $_SERVER['PHP_SELF'] . '?chg=' . $record['LgID'] . '"><img src="icn/document--pencil.png" title="Edit" alt="Edit" /></a>';
 	if ($textcount == 0 && $archtextcount == 0 && $wordcount == 0) 
 		echo '&nbsp; <span class="click" onclick="if (confirmDelete()) location.href=\'' . $_SERVER['PHP_SELF'] . '?del=' . $record['LgID'] . '\';"><img src="icn/minus-button.png" title="Delete" alt="Delete" /></span>';
@@ -454,6 +426,8 @@ mysqli_free_result($res);
 
 }
 }
+
+#endregion
 
 pageend();
 

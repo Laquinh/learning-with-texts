@@ -81,13 +81,14 @@ if (isset($_REQUEST['op'])) {
 			$data = str_replace('¶ ','¶',$data);
 			$data = str_replace('¶',"\n",$data);
 		}
+		$data = normalizer_normalize($data, Normalizer::FORM_C);
 		
 		if ($data == "") {
 			$message = "Error: No text specified!";
 			echo error_message_with_hide($message,0);
 		}
 		else {
-			$sent_array = splitCheckText($data, $langid, -2);
+			$sent_array = splitTextIntoSentences($data);
 			$texts = array();
 			$text_index = 0;
 			$texts[$text_index] = array();
@@ -186,8 +187,7 @@ if (isset($_REQUEST['op'])) {
 				convert_string_to_sqlsyntax($texts[$i]) . ", '', NULL, " .
 				convert_string_to_sqlsyntax($source_uri) . ')', '');
 				$id = get_last_key();
-				saveTextTags($id);	
-				splitCheckText ($texts[$i], $langid, $id);
+				saveTextTags($id);
 			}
 		
 		}

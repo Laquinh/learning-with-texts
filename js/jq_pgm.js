@@ -42,7 +42,6 @@ var WBLINK3 = '';
 var SOLUTION = '';
 var ADDFILTER = '';
 var RTL = 0;
-var ANN_ARRAY = {};
  
 /**************************************************************
 LWT jQuery functions
@@ -76,65 +75,6 @@ function getUTF8Length(s) {
 
 function scrollToAnchor(aid){
   document.location.href = '#' + aid;
-}
-
-function changeImprAnnText() {
-	var textid = $('#editimprtextdata').attr('data_id');
-	$(this).prev('input:radio').attr('checked', 'checked');
-	var elem = $(this).attr('name');
-	var idwait = '#wait' + elem.substring(2);
-	$(idwait).html('<img src="icn/waiting2.gif" />');
-	var thedata = JSON.stringify($('form').serializeObject());
-	$.post('ajax_save_impr_text.php', { id: textid, elem: elem, data : thedata }
-		, function(d) { 
-				$(idwait).html('<img src="icn/empty.gif" />');
-				if(d != 'OK') 
-					alert('Saving your changes failed, please reload page and try again!'); 
-			} 
-	);
-}
- 
-function changeImprAnnRadio() {
-	var textid = $('#editimprtextdata').attr('data_id');
-	var elem = $(this).attr('name');
-	var idwait = '#wait' + elem.substring(2);
-	$(idwait).html('<img src="icn/waiting2.gif" />');
-	var thedata = JSON.stringify($('form').serializeObject());
-	$.post('ajax_save_impr_text.php', { id: textid, elem: elem, data : thedata }
-		, function(d) { 
-				$(idwait).html('<img src="icn/empty.gif" />');
-				if(d != 'OK') 
-					alert('Saving your changes failed, please reload page and try again!'); 
-			} 
-	);
-}
-
-function addTermTranslation(wordid,txid,word,lang) {
-	var thedata = $(txid).val().trim();
-	var pagepos = $(document).scrollTop();
-	if((thedata == '') || (thedata == '*')) {
-		alert('Text Field is empty or = \'*\'!');
-		return;
-	}
-	$.post('ajax_add_term_transl.php', { id: wordid, data : thedata, text: word, lang: lang }
-		, function(d) { 
-				if(d == '') {
-					alert('Adding translation to term OR term creation failed, please reload page and try again!'); 
-				} else {
-					do_ajax_edit_impr_text(pagepos,d);
-				}
-			} 
-	);
-}
-
-function changeTableTestStatus(wordid,up) {
-	$.post('ajax_chg_term_status.php', { id: wordid, data: (up ? 1 : 0) }
-		, function(data) { 
-				if(data != '') {
-					$('#STAT' + wordid).html(data);
-				}
-			} 
-	);
 }
  
 function check() {
@@ -258,81 +198,9 @@ function setTheFocus() {
 	$('.setfocus').focus().select();
 }
 
-function word_click_event_do_test_test() {
-	run_overlib_test(
-		WBLINK1, WBLINK2, WBLINK3, 
-		$(this).attr('data_wid'),
-		$(this).attr('data_text'),
-		$(this).attr('data_trans'),
-		$(this).attr('data_rom'),
-		$(this).attr('data_status'),
-		$(this).attr('data_sent'),
-		$(this).attr('data_todo'));
-	$('.todo').text(SOLUTION);
-	return false;
-}
-
-function keydown_event_do_test_test(e) {
-	if (e.which == 32 && OPENED == 0) {  // space : show sol.
-		$('.word').click();
-		cClick();
-		window.parent.frames['ro'].location.href = 'show_word.php?wid=' + $('.word').attr('data_wid') + '&ann=';
-		OPENED = 1;
-		return false;
-	}
-	if (OPENED == 0) return true;
-	if (e.which == 38) {  // up : status+1
-		window.parent.frames['ro'].location.href = 
-			'set_test_status.php?wid=' + WID + '&stchange=1';
-		return false;
-	}
-	if (e.which == 40) {  // down : status-1
-		window.parent.frames['ro'].location.href = 
-			'set_test_status.php?wid=' + WID + '&stchange=-1';
-		return false;
-	}
-	if (e.which == 27) {  // esc : dont change status
-		window.parent.frames['ro'].location.href = 
-			'set_test_status.php?wid=' + WID + '&status=' + $('.word').attr('data_status');
-		return false;
-	}
-	for (var i=1; i<=5; i++) {
-		if (e.which == (48+i) || e.which == (96+i)) {  // 1,.. : status=i
-			window.parent.frames['ro'].location.href = 
-				'set_test_status.php?wid=' + WID + '&status=' + i;
-			return false;
-		}
-	}
-	if (e.which == 73) {  // I : status=98
-		window.parent.frames['ro'].location.href = 
-			'set_test_status.php?wid=' + WID + '&status=98';
-		return false;
-	}
-	if (e.which == 87) {  // W : status=99
-		window.parent.frames['ro'].location.href = 
-			'set_test_status.php?wid=' + WID + '&status=99';
-		return false;
-	}
-	if (e.which == 69) {  // E : EDIT
-		window.parent.frames['ro'].location.href = 
-			'edit_tword.php?wid=' + WID;
-		return false;
-	}
-	return true;
-}
-
 function word_each_do_text_text(i) {
 	this.title = make_tooltip($(this).text(), $(this).attr('data_trans'), 
 		$(this).attr('data_rom'), $(this).attr('data_status'));
-	var wid = $(this).attr('data_wid');
-	if (wid != '') {
-		var order = $(this).attr('data_order');
-		if (order in ANN_ARRAY) {
-			if (wid == ANN_ARRAY[order][1]) {
-				$(this).attr('data_ann',ANN_ARRAY[order][2]);
-			}
-		}
-	}
 }
 
 function mword_each_do_text_text(i) {
@@ -340,19 +208,6 @@ function mword_each_do_text_text(i) {
 		this.title = make_tooltip($(this).attr('data_text'), 
 		$(this).attr('data_trans'), $(this).attr('data_rom'), 
 		$(this).attr('data_status'));
-		var wid = $(this).attr('data_wid');
-		if (wid != '') {
-			var order = parseInt($(this).attr('data_order'));
-			for (var j = 2; j <= 16; j = j+2) {
-				var index = (order+j).toString();
-				if (index in ANN_ARRAY) {
-					if (wid == ANN_ARRAY[index][1]) {
-						$(this).attr('data_ann',ANN_ARRAY[index][2]);
-						break;
-					}
-				}
-			}
-		}
 	}
 }
 
@@ -365,54 +220,80 @@ function word_dblclick_event_do_text_text() {
 		window.parent.frames['h'].new_pos(p);
 }
 
+//#region NEW VERSION
 function word_click_event_do_text_text() {
 	var status = $(this).attr('data_status');
-	var ann = '';
-	if ((typeof $(this).attr('data_ann')) != 'undefined') 
-		ann = $(this).attr('data_ann');
 		
-	if ( status < 1 ) {
+	if ( status < 1 )
+	{
+		var data_term = $(this).attr('data_term');
+		var data_language = $(this).attr('data_language');
+		var data_index = $(this).attr('data_index');
+
 		run_overlib_status_unknown(WBLINK1,WBLINK2,WBLINK3,$(this).attr('title'),
-			TID,$(this).attr('data_order'),$(this).text(),$(this).attr('data_mw2'),
-			$(this).attr('data_mw3'),$(this).attr('data_mw4'),$(this).attr('data_mw5'),
-			$(this).attr('data_mw6'),$(this).attr('data_mw7'),$(this).attr('data_mw8'),
-			$(this).attr('data_mw9'),RTL);
-		top.frames['ro'].location.href='edit_word.php?tid=' + TID + '&ord=' + 
-			$(this).attr('data_order') + '&wid=';
+			TID,$(this).attr('data_order'),data_term,$(this).text(),data_index,RTL);
+		top.frames['ro'].location.href='edit_word.php?tid=' + TID +
+			'&term=' + data_term +
+			'&lang=' + data_language +
+			'&wid=';
 	}
 	else if ( status == 99 )
+	{
+		var data_term = $(this).attr('data_term');
+		var data_language = $(this).attr('data_language');
+		var data_wid = $(this).attr('data_wid');
+		var data_index = $(this).attr('data_index');
+
 		run_overlib_status_99(WBLINK1,WBLINK2,WBLINK3,$(this).attr('title'),
-			TID,$(this).attr('data_order'),$(this).text(),$(this).attr('data_wid'),
-			$(this).attr('data_mw2'),$(this).attr('data_mw3'),$(this).attr('data_mw4'),
-			$(this).attr('data_mw5'),$(this).attr('data_mw6'),$(this).attr('data_mw7'),
-			$(this).attr('data_mw8'),$(this).attr('data_mw9'),RTL,ann);
+			TID,$(this).attr('data_order'),$(this).text(),data_term, data_language, data_wid,data_index,RTL);
+		top.frames['ro'].location.href='edit_word.php?tid=' + TID +
+			'&term=' + data_term +
+			'&lang=' + data_language +
+			'&wid=' + data_wid;
+	}
 	else if ( status == 98 )
+	{
+		var data_term = $(this).attr('data_term');
+		var data_language = $(this).attr('data_language');
+		var data_wid = $(this).attr('data_wid');
+		var data_index = $(this).attr('data_index');
+
 		run_overlib_status_98(WBLINK1,WBLINK2,WBLINK3,$(this).attr('title'),
-			TID,$(this).attr('data_order'),$(this).text(),$(this).attr('data_wid'),
-			$(this).attr('data_mw2'),$(this).attr('data_mw3'),$(this).attr('data_mw4'),
-			$(this).attr('data_mw5'),$(this).attr('data_mw6'),$(this).attr('data_mw7'),
-			$(this).attr('data_mw8'),$(this).attr('data_mw9'),RTL,ann);
+			TID,$(this).attr('data_order'),$(this).text(),data_term, data_language, data_wid,data_index,RTL);
+		top.frames['ro'].location.href='edit_word.php?tid=' + TID +
+			'&term=' + data_term +
+			'&lang=' + data_language +
+			'&wid=' + data_wid;
+	}
 	else
+	{
+		var data_term = $(this).attr('data_term');
+		var data_language = $(this).attr('data_language');
+		var data_wid = $(this).attr('data_wid');
+		var data_index = $(this).attr('data_index');
+
 		run_overlib_status_1_to_5(WBLINK1,WBLINK2,WBLINK3,$(this).attr('title'),
-			TID,$(this).attr('data_order'),$(this).text(),$(this).attr('data_wid'),status,
-			$(this).attr('data_mw2'),$(this).attr('data_mw3'),$(this).attr('data_mw4'),
-			$(this).attr('data_mw5'),$(this).attr('data_mw6'),$(this).attr('data_mw7'),
-			$(this).attr('data_mw8'),$(this).attr('data_mw9'),RTL,ann);
+			TID,$(this).attr('data_order'),$(this).text(),data_term, data_language, data_wid, status, data_index,RTL);
+		top.frames['ro'].location.href='edit_word.php?tid=' + TID +
+			'&term=' + data_term +
+			'&lang=' + data_language +
+			'&wid=' + data_wid;
+	}
+		
 	return false;
 }
-	
+
 function mword_click_event_do_text_text() {
+	console.log("clicked!");
 	var status = $(this).attr('data_status');
-	if (status != '') {
-		var ann = '';
-		if ((typeof $(this).attr('data_ann')) != 'undefined') 
-			ann = $(this).attr('data_ann');
+	if (status !== '') {
 		run_overlib_multiword(WBLINK1,WBLINK2,WBLINK3,$(this).attr('title'),
-		TID, $(this).attr('data_order'),$(this).attr('data_text'),
-		$(this).attr('data_wid'), status,$(this).attr('data_code'), ann);
+		TID, $(this).attr('data_order'),$(this).attr('data_term'),
+		$(this).attr('data_wid'), status,$(this).attr('data_wordcount'));
 	}
 	return false;
 }
+//#endregion
 
 function get_position_from_id(id_string) {
 	if ((typeof id_string) == 'undefined') return -1;
@@ -452,10 +333,7 @@ function keydown_event_do_text_text(e) {
 		curr = knownwordlist.eq(TEXTPOS);
 		curr.addClass('kwordmarked');
 		$(window).scrollTo(curr,{axis:'y', offset:-150});
-		var ann = '';
-		if ((typeof curr.attr('data_ann')) != 'undefined') 
-			ann = curr.attr('data_ann');
-		window.parent.frames['ro'].location.href = 'show_word.php?wid=' + curr.attr('data_wid') + '&ann=' + encodeURIComponent(ann);
+		window.parent.frames['ro'].location.href = 'show_word.php?wid=' + curr.attr('data_wid');
 		return false;
 	}
 	if (e.which == 35) {  // end : known word navigation -> last
@@ -464,10 +342,7 @@ function keydown_event_do_text_text(e) {
 		curr = knownwordlist.eq(TEXTPOS);
 		curr.addClass('kwordmarked');
 		$(window).scrollTo(curr,{axis:'y', offset:-150});
-		var ann = '';
-		if ((typeof curr.attr('data_ann')) != 'undefined') 
-			ann = curr.attr('data_ann');
-		window.parent.frames['ro'].location.href = 'show_word.php?wid=' + curr.attr('data_wid') + '&ann=' + encodeURIComponent(ann);
+		window.parent.frames['ro'].location.href = 'show_word.php?wid=' + curr.attr('data_wid');
 		return false;
 	}
 	if (e.which == 37) {  // left : known word navigation
@@ -490,10 +365,7 @@ function keydown_event_do_text_text(e) {
 		curr = knownwordlist.eq(TEXTPOS);
 		curr.addClass('kwordmarked');
 		$(window).scrollTo(curr,{axis:'y', offset:-150});
-		var ann = '';
-		if ((typeof curr.attr('data_ann')) != 'undefined') 
-			ann = curr.attr('data_ann');
-		window.parent.frames['ro'].location.href = 'show_word.php?wid=' + curr.attr('data_wid') + '&ann=' + encodeURIComponent(ann);
+		window.parent.frames['ro'].location.href = 'show_word.php?wid=' + curr.attr('data_wid');
 		return false;
 	}
 	if (e.which == 39 || e.which == 32) {  // space /right : known word navigation
@@ -516,10 +388,7 @@ function keydown_event_do_text_text(e) {
 		curr = knownwordlist.eq(TEXTPOS);
 		curr.addClass('kwordmarked');
 		$(window).scrollTo(curr,{axis:'y', offset:-150});
-		var ann = '';
-		if ((typeof curr.attr('data_ann')) != 'undefined') 
-			ann = curr.attr('data_ann');
-		window.parent.frames['ro'].location.href = 'show_word.php?wid=' + curr.attr('data_wid') + '&ann=' + encodeURIComponent(ann);
+		window.parent.frames['ro'].location.href = 'show_word.php?wid=' + curr.attr('data_wid');
 		return false;
 	}
 
@@ -583,13 +452,6 @@ function do_ajax_update_media_select() {
 	);
 }
 
-function do_ajax_show_sentences(lang,word,ctl) {
-	$('#exsent').html('<img src="icn/waiting2.gif" />');
-	$.post('ajax_show_sentences.php', { lang: lang, word: word, ctl: ctl }, 
-		function(data) { $('#exsent').html(data); } 
-	);
-}
-
 function do_ajax_show_similar_terms() {
 	$('#simwords').html('<img src="icn/waiting2.gif" />');
 	$.post('ajax_show_similar_terms.php', { lang: $('#langfield').val(), word: $('#wordfield').val() }, 
@@ -612,20 +474,6 @@ function do_ajax_word_counts() {
 				}
 			);
 		}
-	);
-}
-
-function do_ajax_edit_impr_text(pagepos, word) {
-	if (word=='') $('#editimprtextdata').html('<img src="icn/waiting2.gif" />');
-	var textid = $('#editimprtextdata').attr('data_id');
-	$.post('ajax_edit_impr_text.php', { id: textid, word: word }, 
-		function(data) {
-			// alert(data);
-			eval(data);
-			$.scrollTo(pagepos); 
-			$('input.impr-ann-text').change(changeImprAnnText);
-			$('input.impr-ann-radio').change(changeImprAnnRadio);
-		} 
 	);
 }
 
@@ -658,8 +506,6 @@ $(document).ready( function() {
 			cols      : 35
 		}
 	);
-	$('input.impr-ann-text').change(changeImprAnnText);
-	$('input.impr-ann-radio').change(changeImprAnnRadio);
 	$('form.validate').submit(check);
 	$('input.markcheck').click(markClick);
 	$('.confirmdelete').click(confirmDelete);

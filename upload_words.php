@@ -90,7 +90,7 @@ if (isset($_REQUEST['op'])) {
 		$lang = $_REQUEST["LgID"];
 		$status = $_REQUEST["WoStatus"];
 		
-		$protokoll = '<h4>Import Report (Language: ' . getLanguage($lang) . ', Status: ' . $status . ')</h4><table class="tab1" cellspacing="0" cellpadding="5"><tr><th class="th1">Line</th><th class="th1">Term</th><th class="th1">Translation</th><th class="th1">Romanization</th><th class="th1">Sentence</th><th class="th1">Tag List</th><th class="th1">Message</th></tr>';
+		$protokoll = '<h4>Import Report (Language: ' . getLanguage($lang) . ', Status: ' . $status . ')</h4><table class="tab1" cellspacing="0" cellpadding="5"><tr><th class="th1">Line</th><th class="th1">Term</th><th class="th1">Translation</th><th class="th1">Romanization</th><th class="th1">Tag List</th><th class="th1">Message</th></tr>';
 		
 		if ( isset($_FILES["thefile"]) && $_FILES["thefile"]["tmp_name"] != "" && $_FILES["thefile"]["error"] == 0 ) {
 			$lines = file($_FILES["thefile"]["tmp_name"], FILE_IGNORE_NEW_LINES);
@@ -112,38 +112,34 @@ if (isset($_REQUEST['op'])) {
 			else
   			$lines[$i] = explode("\t",trim($lines[$i]));
   		$k = count($lines[$i]);
-  		unset($w,$t,$r,$s,$g);
+  		unset($w,$t,$r,$g);
   		for ($j=0; $j<5; $j++) {
   			if ($k > $j) eval('if (! isset($' . $col[$j] . ')) { $' . $col[$j] . ' = trim($lines[$i][' . $j . ']); }');
   		}
 			if (! isset($w)) $w='';
 			if (! isset($t)) $t='';
 			if (! isset($r)) $r='';
-			if (! isset($s)) $s='';
 			if (! isset($g)) $g='';
 			$w = limitlength($w,250);
 			$wl = limitlength(mb_strtolower($w, 'UTF-8'),250);
 			$t = limitlength($t,500);
 			$r = limitlength($r,100);
-			$s = limitlength($s,1000);
 			$g = explode(",",trim(str_replace(" ", ",",$g)));
 			$g = array_filter($g, "notempty");
  			array_walk($g, 'limit20');
-  		$protokoll .= '<tr><td class="td1 right">' . ($i+1) . '</td><td class="td1">' . tohtml($w) . '</td><td class="td1">' . tohtml($t) . '</td><td class="td1">' . tohtml($r) . '</td><td class="td1">' . tohtml($s) . '</td><td class="td1">' . implode(", ", $g) . '</td>';
+  		$protokoll .= '<tr><td class="td1 right">' . ($i+1) . '</td><td class="td1">' . tohtml($w) . '</td><td class="td1">' . tohtml($t) . '</td><td class="td1">' . tohtml($r) . '</td><td class="td1">' . implode(", ", $g) . '</td>';
  			if ( $w != '' ) {
  				if ($t == '') $t = '*';
- 				$excnt = get_first_value('select count(*) as value from ' . $tbpref . 'words where WoLgID = ' . $lang . ' and WoTextLC=' . convert_string_to_sqlsyntax($wl));
+ 				$excnt = get_first_value('select count(*) as value from ' . $tbpref . 'words where WoLgID = ' . $lang . ' and LOWER(WoText)=' . convert_string_to_sqlsyntax($wl));
  				if ($excnt > 0 ) { // exists
  					if ($overwrite) { // update
-	 					$msg1 = runsql('delete from ' . $tbpref . 'words where WoLgID = ' . $lang . ' and WoTextLC=' . convert_string_to_sqlsyntax($wl), "Exists, deleted");
+	 					$msg1 = runsql('delete from ' . $tbpref . 'words where WoLgID = ' . $lang . ' and LOWER(WoText)=' . convert_string_to_sqlsyntax($wl), "Exists, deleted");
 	 					runsql("DELETE " . $tbpref . "wordtags FROM (" . $tbpref . "wordtags LEFT JOIN " . $tbpref . "words on WtWoID = WoID) WHERE WoID IS NULL",'');
-	 					$msg2 = runsql('insert into ' . $tbpref . 'words (WoLgID, WoTextLC, WoText, WoStatus, WoTranslation, WoRomanization, WoSentence, WoStatusChanged,' .  make_score_random_insert_update('iv') . ') values ( ' . $lang . ', ' .
+	 					$msg2 = runsql('insert into ' . $tbpref . 'words (WoLgID, WoText, WoStatus, WoTranslation, WoRomanization, WoStatusChanged,' .  make_score_random_insert_update('iv') . ') values ( ' . $lang . ', ' .
 						convert_string_to_sqlsyntax($wl) . ', ' .
-						convert_string_to_sqlsyntax($w) . ', ' .
 						$status . ', ' .
 						convert_string_to_sqlsyntax($t) . ', ' .
-						convert_string_to_sqlsyntax($r) . ', ' .
-						convert_string_to_sqlsyntax($s) . ', NOW(), ' .  
+						convert_string_to_sqlsyntax($r) . ', NOW(), ' .  
 make_score_random_insert_update('id') . ')',"Imported");
 						$wid = get_last_key();
 						array_walk($g,'savetag',$wid);
@@ -155,13 +151,11 @@ make_score_random_insert_update('id') . ')',"Imported");
  					} // no overwrite
  				} // exists
  				else { // exists not
- 					$msg1 = runsql('insert into ' . $tbpref . 'words (WoLgID, WoTextLC, WoText, WoStatus, WoTranslation, WoRomanization, WoSentence, WoStatusChanged,' .  make_score_random_insert_update('iv') . ') values ( ' . $lang . ', ' .
+ 					$msg1 = runsql('insert into ' . $tbpref . 'words (WoLgID, WoText, WoStatus, WoTranslation, WoRomanization, WoStatusChanged,' .  make_score_random_insert_update('iv') . ') values ( ' . $lang . ', ' .
 					convert_string_to_sqlsyntax($wl) . ', ' .
-					convert_string_to_sqlsyntax($w) . ', ' .
 					$status . ', ' .
 					convert_string_to_sqlsyntax($t) . ', ' .
-					convert_string_to_sqlsyntax($r) . ', ' .
-					convert_string_to_sqlsyntax($s) . ', NOW(), ' .  
+					convert_string_to_sqlsyntax($r) . ', NOW(), ' .  
 make_score_random_insert_update('id') . ')',"Imported");
 					$wid = get_last_key();
 					array_walk($g,'savetag',$wid);
@@ -219,7 +213,6 @@ make_score_random_insert_update('id') . ')',"Imported");
 	<option value="w" selected="selected">Term</option>
 	<option value="t">Translation</option>
 	<option value="r">Romanization</option>
-	<option value="s">Sentence</option>
 	<option value="g">Tag List</option>
 	<option value="x">Don't import</option>
 	</select><br />
@@ -227,7 +220,6 @@ make_score_random_insert_update('id') . ')',"Imported");
 	<option value="w">Term</option>
 	<option value="t" selected="selected">Translation</option>
 	<option value="r">Romanization</option>
-	<option value="s">Sentence</option>
 	<option value="g">Tag List</option>
 	<option value="x">Don't import</option>
 	</select><br />
@@ -235,7 +227,6 @@ make_score_random_insert_update('id') . ')',"Imported");
 	<option value="w">Term</option>
 	<option value="t">Translation</option>
 	<option value="r">Romanization</option>
-	<option value="s">Sentence</option>
 	<option value="g">Tag List</option>
 	<option value="x" selected="selected">Don't import</option>
 	</select><br />
@@ -243,7 +234,6 @@ make_score_random_insert_update('id') . ')',"Imported");
 	<option value="w">Term</option>
 	<option value="t">Translation</option>
 	<option value="r">Romanization</option>
-	<option value="s">Sentence</option>
 	<option value="g">Tag List</option>
 	<option value="x" selected="selected">Don't import</option>
 	</select><br />
@@ -251,7 +241,6 @@ make_score_random_insert_update('id') . ')',"Imported");
 	<option value="w">Term</option>
 	<option value="t">Translation</option>
 	<option value="r">Romanization</option>
-	<option value="s">Sentence</option>
 	<option value="g">Tag List</option>
 	<option value="x" selected="selected">Don't import</option>
 	</select><br />
@@ -281,10 +270,6 @@ make_score_random_insert_update('id') . ')',"Imported");
 	</tr>
 	</table>
 	</form>
-	
-	<p>Sentences should contain the term in curly brackets "... {term} ...".<br />
-	If not, such sentences can be automatically created later with the <br />"Set Term Sentences" action in the <input type="button" value="My Texts" onclick="location.href='edit_texts.php?query=&amp;page=1';" /> screen.</p>
-
 <?php
 
 }

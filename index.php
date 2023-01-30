@@ -51,17 +51,6 @@ if ($tbpref == '') {
 	$span2 = "Table Set: <i>" . tohtml(substr($tbpref,0,-1)) . "</i></span>";
 }
 
-if ($fixed_tbpref) {
-	$span1 = '<span>';
-	$span3 = '<span>';
-} else {
-	$span1 = '<span title="Manage Table Sets" onclick="location.href=\'table_set_management.php\';" class="click">';
-	if (count(getprefixes()) > 0)
-		$span3 = '<span title="Select Table Set" onclick="location.href=\'start.php\';" class="click">';
-	else
-		$span3 = '<span>';	
-}
-
 pagestart_nobody("Home");
 echo '<h4>' . $span3;
 echo_lwt_logo();
@@ -103,18 +92,6 @@ if (! areCookiesEnabled()) document.write('<p class="red">*** Cookies are not en
 			<li>My last Text (in <?php echo tohtml($lngname); ?>):<br /> <i><?php echo tohtml($txttit); ?></i>
 			<br />
 			<a href="do_text.php?start=<?php echo $currenttext; ?>"><img src="icn/book-open-bookmark.png" title="Read" alt="Read" />&nbsp;Read</a>
-			&nbsp; &nbsp; 
-			<a href="do_test.php?text=<?php echo $currenttext; ?>"><img src="icn/question-balloon.png" title="Test" alt="Test" />&nbsp;Test</a>
-			&nbsp; &nbsp; 
-			<a href="print_text.php?text=<?php echo $currenttext; ?>"><img src="icn/printer.png" title="Print" alt="Print" />&nbsp;Print</a>
-<?php
-			if ((get_first_value("select length(TxAnnotatedText) as value from " . $tbpref . "texts where TxID = " . (int)$currenttext) + 0) > 0) {
-?>
-			&nbsp; &nbsp; 
-			<a href="print_impr_text.php?text=<?php echo $currenttext; ?>"><img src="icn/tick.png" title="Improved Annotated Text" alt="Improved Annotated Text" />&nbsp;Ann. Text</a>
-<?php
-			}
-?>
 			</li>
 			</ul>
 <?php
@@ -135,7 +112,6 @@ if (! areCookiesEnabled()) document.write('<p class="red">*** Cookies are not en
 	<br /><br /></li>
 <li><a href="statistics.php">My Statistics</a>
 	<br /><br /></li>
-<li><a href="check_text.php">Check a Text</a></li>
 <li><a href="long_text_import.php">Long Text Import</a></li>
 <li><a href="upload_words.php">Import Terms</a></li>
 <li><a href="backup_restore.php">Backup/Restore/Empty Database</a>
@@ -171,11 +147,9 @@ $mb = get_first_value("SELECT round(sum(data_length+index_length)/1024/1024,1) a
 	"CONCAT(" . $p . ",'archivedtexts')," .
 	"CONCAT(" . $p . ",'archtexttags')," .
 	"CONCAT(" . $p . ",'languages')," .
-	"CONCAT(" . $p . ",'sentences')," .
 	"CONCAT(" . $p . ",'settings')," .
 	"CONCAT(" . $p . ",'tags')," .
 	"CONCAT(" . $p . ",'tags2')," .
-	"CONCAT(" . $p . ",'textitems')," .
 	"CONCAT(" . $p . ",'texts')," .
 	"CONCAT(" . $p . ",'texttags')," .
 	"CONCAT(" . $p . ",'words')," .

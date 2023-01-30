@@ -31,7 +31,7 @@ For more information, please refer to [http://unlicense.org/].
 ***************************************************************/
 
 /**************************************************************
-Call: all_words_wellknown.php?text=[textid]
+Call: all_words_wellknown.php?text=[textid]&limit=[index of last word]
 Setting all unknown words to Well Known (99)
 ***************************************************************/
 
@@ -44,25 +44,54 @@ $langid = get_first_value("select TxLgID as value from " . $tbpref . "texts wher
 
 pagestart("Setting all blue words to Well-known",false);
 
-$sql = 'select distinct TiText, TiTextLC from (' . $tbpref . 'textitems left join ' . $tbpref . 'words on (TiTextLC = WoTextLC) and (TiLgID = WoLgID)) where TiIsNotWord = 0 and WoID is null and TiWordCount = 1 and TiTxID = ' . $_REQUEST['text'] . ' order by TiOrder';
-$res = do_mysqli_query($sql);
+$wordsInDB = databaseWordList($langid);
+$words = textWordList($_REQUEST['text'], true);
+#$words = array_unique($wordList);
 $count = 0;
 $javascript = "var title='';";
-while ($record = mysqli_fetch_assoc($res)) {
-	$term = $record['TiText'];	
-	$termlc = $record['TiTextLC'];	
-	$count1 = 0 + runsql('insert into ' . $tbpref . 'words (WoLgID, WoText, WoTextLC, WoStatus, WoStatusChanged,' .  make_score_random_insert_update('iv') . ') values( ' . 
-	$langid . ', ' . 
-	convert_string_to_sqlsyntax($term) . ', ' . 
-	convert_string_to_sqlsyntax($termlc) . ', 99 , NOW(), ' .  
-make_score_random_insert_update('id') . ')',''); 
-	$wid = get_last_key(); 
-	if ($count1 > 0 ) 
-		$javascript .= "title = make_tooltip(" . prepare_textdata_js($term) . ",'*','','99');";
-		$javascript .= "$('.TERM" . strToClassName($termlc) . "', context).removeClass('status0').addClass('status99 word" . $wid . "').attr('data_status','99').attr('data_wid','" . $wid . "').attr('title',title);";
-	$count += $count1;
+$changedWords = [];
+
+$limit = 0;
+if(isset($_REQUEST['limit']))
+{
+	$limit = min(intval($_REQUEST['limit']), count($words)-1);
 }
-mysqli_free_result($res);
+else
+{
+	$limit = count($words)-1;
+}
+
+$i = 0;
+foreach($words as $word) {
+	if($i++ > $limit)
+	{
+		break;
+	}
+	if(!$word)
+	{
+		continue;
+	}
+	$wordlc = mb_strtolower($word, 'UTF-8');
+	$wordData = get_word_data($wordlc, $wordsInDB);
+	
+	if(!$wordData)
+	{
+		$count1 = 0 + runsql('insert into ' . $tbpref . 'words (WoLgID, WoText, WoStatus, WoStatusChanged,' .  make_score_random_insert_update('iv') . ') values( ' . 
+		$langid . ', ' . 
+		convert_string_to_sqlsyntax($wordlc) . ', 99 , NOW(), ' .  
+	make_score_random_insert_update('id') . ')',''); 
+		$wid = get_last_key(); 
+		if ($count1 > 0 ) 
+			$javascript .= "title = make_tooltip(" . prepare_textdata_js($term) . ",'*','','99');";
+			$javascript .= "$('.TERM" . strToClassName($termlc) . "', context).removeClass('status0').addClass('status99 word" . $wid . "').attr('data_status','99').attr('data_wid','" . $wid . "').attr('title',title);";
+		$count += $count1;
+		
+		array_push($changedWords, $wordlc);
+		$wordTempData = [];
+		$wordTempData["WoText"] = $wordlc;
+		array_push($wordsInDB, $wordTempData);
+	}
+}
 
 echo "<p>OK, you know all " . $count . " word(s) well!</p>";
 

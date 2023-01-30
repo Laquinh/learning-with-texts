@@ -40,13 +40,11 @@ require_once( 'connect.inc.php' );
 require_once( 'dbutils.inc.php' );
 require_once( 'utilities.inc.php' );
 
-$sql = 'select TxLgID, TxTitle, TxAnnotatedText from ' . $tbpref . 'texts where TxID = ' . $_REQUEST['text'];
+$sql = 'select TxLgID, TxTitle from ' . $tbpref . 'texts where TxID = ' . $_REQUEST['text'];
 $res = do_mysqli_query($sql);
 $record = mysqli_fetch_assoc($res);
 $title = $record['TxTitle'];
 $langid = $record['TxLgID'];
-$ann = $record['TxAnnotatedText'];
-$ann_exists = (strlen($ann) > 0);
 mysqli_free_result($res);
 
 pagestart_nobody(tohtml($title));
@@ -67,7 +65,6 @@ $showAll = getSettingZeroOrOne('showallwords',1);
 ?>
 <script type="text/javascript">
 //<![CDATA[
-ANN_ARRAY = <?php echo annotation_to_json($ann); ?>;
 TEXTPOS = -1;
 OPENED = 0;
 WBLINK1 = '<?php echo $wb1; ?>';
@@ -94,98 +91,58 @@ echo '<div id="thetext" ' .  ($rtlScript ? 'dir="rtl"' : '') . '><p style="' . (
 
 $currcharcount = 0;
 
-$sql = 'select TiWordCount as Code, TiText, TiTextLC, TiOrder, TiIsNotWord, CHAR_LENGTH(TiText) AS TiTextLength, WoID, WoText, WoTextLC, WoStatus, WoTranslation, WoRomanization from (' . $tbpref . 'textitems left join ' . $tbpref . 'words on (TiTextLC = WoTextLC) and (TiLgID = WoLgID)) where TiTxID = ' . $_REQUEST['text'] . ' order by TiOrder asc, TiWordCount desc';
+$items = textItemList($_REQUEST["text"]);
+$wordsInDB = databaseWordList($langid);
 
-$titext = array('','','','','','','','','','','');
-$hideuntil = -1;
-$hidetag = '';
+//Main loop
+$whitespaceHTML = ($removeSpaces ? '<span class="whitespace" style="font-size:0"> </span>' : " ");
 
-$res = do_mysqli_query($sql);
+for($i = 0, $wordIndex = 0; $i < count($items); ++$i)
+{
+	$item = $items[$i];
 
-while ($record = mysqli_fetch_assoc($res)) {  // MAIN LOOP
-
-	$actcode = $record['Code'] + 0;
-	$spanid = 'ID-' . $record['TiOrder'] . '-' . $actcode;
-
-	if ( $hideuntil > 0  ) {
-		if ( $record['TiOrder'] <= $hideuntil )
-			$hidetag = ' hide';
-		else {
-			$hideuntil = -1;
-			$hidetag = '';
+	if($item === " ") //item is space
+	{
+		echo $whitespaceHTML;
+	}
+	else if(is_word($item)) //item is a word
+	{
+		++$wordIndex;
+		$multiwordData = get_longest_multiword($i, $i, $items, $wordsInDB);
+		if($multiwordData)
+		{
+			consoleLog($i . ": " . $multiwordData['WoText'], "warn");
+			echo '&nbsp<span class="click mword mwsty word' . $multiwordData['WoID'] . ' status'. $multiwordData['WoStatus'] . ' TERM' . strToClassName($multiwordData['WoText']) . '" data_wid="' . $multiwordData['WoID'] . '" data_trans="' . tohtml($multiwordData['WoTranslation'] . getWordTagList($multiwordData['WoID'],' ',1,0)) .
+			'" data_rom="' . tohtml($multiwordData['WoRomanization']) . '" data_status="' . $multiwordData['WoStatus'] .
+			'" data_term="' . $multiwordData['WoText'] . '" data_language="' . $langid . '" data_wordcount="'. strwordcount($multiwordData['WoText']) .'">&nbsp' . strwordcount($multiwordData['WoText']) . '&nbsp</span>&nbsp';
 		}
-	}				
-	
-	if ($record['TiIsNotWord'] != 0) {  // NOT A TERM
-	
-		echo '<span id="' . $spanid . '" class="' . 
-			$hidetag . '">' . 
+
+		$wordData = get_word_data($item, $wordsInDB);
+		
+		if ($wordData) //seen word
+		{
+			echo '<span class="click word wsty ' . 'word' . $wordData['WoID'] . ' ' . 'status'. $wordData['WoStatus'] . ' ' . 'TERM' . strToClassName($wordData['WoText']) .
+			'" data_wid="' . $wordData['WoID'] . '" data_trans="' . tohtml($wordData['WoTranslation'] . getWordTagList($wordData['WoID'],' ',1,0)) .
+			'" data_rom="' . tohtml($wordData['WoRomanization']) . '" data_status="' . $wordData['WoStatus'] .
+			'" data_term="' . $wordData['WoText'] . '" data_language="' . $langid . '" data_index="' . ($wordIndex-1) . '">' . tohtml($item) . '</span>';
+		}   
+		else //new word
+		{    		
+			echo '<span class="click word wsty status0 TERM' . strToClassName(mb_strtolower($item, 'UTF-8')) .
+			'" data_trans="" data_rom="" data_status="0" data_wid="" data_term="' . mb_strtolower($item, 'UTF-8') .
+			'" data_language="' . $langid . '" data_index="' . ($wordIndex-1) . '">' . tohtml($item) . '</span>';
+		}
+	}
+	else //item is a special character
+	{
+		echo '<span>' . 
 			str_replace(
-			"¶",
+			"\n",
 			'<br />',
-			tohtml($record['TiText'])) . '</span>';
-			
-	}  // $record['TiIsNotWord'] != 0  --  NOT A TERM
-	
-	/////////////////////////////////////////////////
-	
-	else {   // $record['TiIsNotWord'] == 0  -- A TERM
-	
-		if ($actcode > 1) {   // A MULTIWORD FOUND
-		
-			$titext[$actcode] = $record['TiText'];
-			
-			if (isset($record['WoID'])) {  // MULTIWORD FOUND - DISPLAY (Status 1-5, display)
-			
-				if (! $showAll) {
-					if ($hideuntil == -1) {
-						$hideuntil = $record['TiOrder'] + ($record['Code'] - 1) * 2;
-					}
-				}
-								
-?><span id="<?php echo $spanid; ?>" class="<?php echo $hidetag; ?> click mword <?php echo ($showAll ? 'mwsty' : 'wsty'); ?> <?php echo 'order'. $record['TiOrder']; ?> <?php echo 'word'. $record['WoID']; ?> <?php echo 'status'. $record['WoStatus']; ?> TERM<?php echo strToClassName($record['TiTextLC']); ?>" data_pos="<?php echo $currcharcount; ?>" data_order="<?php echo $record['TiOrder']; ?>" data_wid="<?php echo $record['WoID']; ?>" data_trans="<?php echo tohtml(repl_tab_nl($record['WoTranslation']) . getWordTagList($record['WoID'],' ',1,0)); ?>" data_rom="<?php echo tohtml($record['WoRomanization']); ?>" data_status="<?php echo $record['WoStatus']; ?>"  data_code="<?php echo $record['Code']; ?>" data_text="<?php echo tohtml($record['TiText']); ?>"><?php echo ($showAll ? ('&nbsp;' . $record['Code'] . '&nbsp;') : tohtml($record['TiText'])); ?></span><?php	
+			tohtml($item)) . '</span>';
+	}
+}
 
-			}
-			
-			////////////////////////////////////////////////
-			
-			else {  // MULTIWORD PLACEHOLDER - NO DISPLAY 
-			
-?><span id="<?php echo $spanid; ?>" class="click mword <?php echo ($showAll ? 'mwsty' : 'wsty'); ?> hide <?php echo 'order'. $record['TiOrder']; ?> TERM<?php echo strToClassName($record['TiTextLC']); ?>" data_pos="<?php echo $currcharcount; ?>" data_order="<?php echo $record['TiOrder']; ?>" data_wid="" data_trans="" data_rom="" data_status="" data_code="<?php echo $record['Code']; ?>" data_text="<?php echo tohtml($record['TiText']); ?>"><?php echo ($showAll ? ('&nbsp;' . $record['Code'] . '&nbsp;') : tohtml($record['TiText'])); ?></span><?php	
-
-			}   // MULTIWORD PLACEHOLDER - NO DISPLAY 
-			
-		} // ($actcode > 1) -- A MULTIWORD FOUND
-
-		////////////////////////////////////////////////
-		
-		else {  // ($actcode == 1)  -- A WORD FOUND
-		
-			if (isset($record['WoID'])) {  // WORD FOUND STATUS 1-5,98,99
-
-?><span id="<?php echo $spanid; ?>" class="<?php echo $hidetag; ?> click word wsty <?php echo 'word'. $record['WoID']; ?> <?php echo 'status'. $record['WoStatus']; ?> TERM<?php echo strToClassName($record['TiTextLC']); ?>" data_pos="<?php echo $currcharcount; ?>" data_order="<?php echo $record['TiOrder']; ?>" data_wid="<?php echo $record['WoID']; ?>" data_trans="<?php echo tohtml(repl_tab_nl($record['WoTranslation']) . getWordTagList($record['WoID'],' ',1,0)); ?>" data_rom="<?php echo tohtml($record['WoRomanization']); ?>" data_status="<?php echo $record['WoStatus']; ?>" data_mw2="<?php echo tohtml($titext[2]); ?>" data_mw3="<?php echo tohtml($titext[3]); ?>" data_mw4="<?php echo tohtml($titext[4]); ?>" data_mw5="<?php echo tohtml($titext[5]); ?>" data_mw6="<?php echo tohtml($titext[6]); ?>" data_mw7="<?php echo tohtml($titext[7]); ?>" data_mw8="<?php echo tohtml($titext[8]); ?>" data_mw9="<?php echo tohtml($titext[9]); ?>"><?php echo tohtml($record['TiText']); ?></span><?php	
-
-			}   // WORD FOUND STATUS 1-5,98,99
-			
-			////////////////////////////////////////////////
-			
-			else {    // NOT A WORD AND NOT A MULTIWORD FOUND - STATUS 0
-			
-?><span id="<?php echo $spanid; ?>" class="<?php echo $hidetag; ?> click word wsty status0 TERM<?php echo strToClassName($record['TiTextLC']); ?>" data_pos="<?php echo $currcharcount; ?>" data_order="<?php echo $record['TiOrder']; ?>" data_trans="" data_rom="" data_status="0" data_wid="" data_mw2="<?php echo tohtml($titext[2]); ?>" data_mw3="<?php echo tohtml($titext[3]); ?>" data_mw4="<?php echo tohtml($titext[4]); ?>" data_mw5="<?php echo tohtml($titext[5]); ?>" data_mw6="<?php echo tohtml($titext[6]); ?>" data_mw7="<?php echo tohtml($titext[7]); ?>" data_mw8="<?php echo tohtml($titext[8]); ?>" data_mw9="<?php echo tohtml($titext[9]); ?>"><?php echo tohtml($record['TiText']); ?></span><?php	
-
-			}  // NOT A WORD AND NOT A MULTIWORD FOUND - STATUS 0
-			
-			$titext = array('','','','','','','','','','','');
-			
-		}  // ($actcode == 1)  -- A WORD FOUND
-		
-	} // $record['TiIsNotWord'] == 0  -- A TERM
-	
-	if ($actcode == 1) $currcharcount += $record['TiTextLength']; 
-	
-} // while ($record = mysqli_fetch_assoc($res))  -- MAIN LOOP
-
-mysqli_free_result($res);
 echo '<span id="totalcharcount" class="hide">' . $currcharcount . '</span></p><p style="font-size:' . $textsize . '%;line-height: 1.4; margin-bottom: 300px;">&nbsp;</p></div>';
 
 pageend();

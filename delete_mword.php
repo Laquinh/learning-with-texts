@@ -58,9 +58,7 @@ var context = window.parent.frames['l'].document;
 var contexth = window.parent.frames['h'].document;
 $('.word<?php echo $wid; ?>', context).removeClass('status1 status2 status3 status4 status5 status98 status99 word<?php echo $wid; ?>').addClass('hide').attr('data_status','').attr('data_trans','').attr('data_rom','').attr('data_wid','').attr('title','');
 $('#learnstatus', contexth).html('<?php echo texttodocount2($tid); ?>');
-<?php 
-if (! $showAll) echo refreshText($word,$tid);
-?>
+
 window.parent.frames['l'].focus();
 window.parent.frames['l'].setTimeout('cClick()', 100);
 //]]>
