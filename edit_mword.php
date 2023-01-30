@@ -242,7 +242,7 @@ else {  // if (! isset($_REQUEST['op']))
 		<tr>
 		<tr>
 		<td class="td1 right" colspan="2">
-		<?php echo createDictLinksInEditWin($lang,$term,1); ?>
+		<?php /*echo createDictLinksInEditWin($lang,$term,1); */?>
 		&nbsp; &nbsp; &nbsp; 
 		<input type="submit" name="op" value="Save" /></td>
 		</tr>
@@ -308,7 +308,7 @@ else {  // if (! isset($_REQUEST['op']))
 			</tr>
 			<tr>
 			<td class="td1 right" colspan="2">
-			<?php echo createDictLinksInEditWin($lang,$term,1); ?>
+			<?php /*echo createDictLinksInEditWin($lang,$term,1);*/ ?>
 			&nbsp; &nbsp; &nbsp; 
 			<input type="submit" name="op" value="Change" /></td>
 			</tr>
