@@ -97,7 +97,8 @@ require_once('simterms.inc.php');
     }
 
     .controls textarea,
-    .controls input {
+    .controls input,
+    .controls button {
         font-size: 12px;
         padding: 3px;
     }
@@ -117,30 +118,16 @@ if (isset($_REQUEST['op'])) {
 
     if (mb_strtolower($text, 'UTF-8') == $text) {
 
+        $opType = substr($_REQUEST['op'], 0, 2);
+        $woStatus = substr($_REQUEST['op'], 2);
+
         #region INSERT
 
-        if ($_REQUEST['op'] == 'Save') {
+        if ($opType == 'S-') {
 
             $titletext = "New Term: " . tohtml(prepare_textdata($_REQUEST["WoTextLC"]));
             pagestart_nobody($titletext, '', false);
             echo '<h4><span class="bigger">' . $titletext . '</span></h4>';
-
-            $woStatus = "0";
-            switch ($_REQUEST['op']) {
-                case "1":
-                case "2":
-                case "3":
-                case "4":
-                case "5":
-                    $woStatus = $_REQUEST['op'];
-                    break;
-                case "WKn":
-                    $woStatus = "99";
-                    break;
-                default:
-                    $woStatus = "98";
-                    break;
-            }
 
             $message = runsql('insert into ' . $tbpref . 'words (WoLgID, WoText, ' .
                 'WoStatus, WoTranslation, WoRomanization, WoNotes, WoStatusChanged,' . make_score_random_insert_update('iv') . ') values( ' .
@@ -167,26 +154,9 @@ if (isset($_REQUEST['op'])) {
 
             $oldstatus = $_REQUEST["WoOldStatus"];
 
-            $newstatus = "0";
-            switch ($_REQUEST['op']) {
-                case "1":
-                case "2":
-                case "3":
-                case "4":
-                case "5":
-                    $newstatus = $_REQUEST['op'];
-                    break;
-                case "WKn":
-                    $newstatus = "99";
-                    break;
-                default:
-                    $newstatus = "98";
-                    break;
-            }
-
             $xx = '';
-            if ($oldstatus != $newstatus)
-                $xx = ', WoStatus = ' . $newstatus . ', WoStatusChanged = NOW()';
+            if ($oldstatus != $woStatus)
+                $xx = ', WoStatus = ' . $woStatus . ', WoStatusChanged = NOW()';
 
             $message = runsql('update ' . $tbpref . 'words set WoText = ' .
                 convert_string_to_sqlsyntax($_REQUEST["WoText"]) . ', WoTranslation = ' .
@@ -259,6 +229,37 @@ if (isset($_REQUEST['op'])) {
 #region FORM
 else { // if (! isset($_REQUEST['op']))
     // edit_mword.php?tid=..&ord=..&wid=..  ODER  edit_mword.php?tid=..&ord=..&txt=..
+	$numbers[1] = "1";
+	$numbers[2] = "2";
+	$numbers[3] = "3";
+	$numbers[4] = "4";
+	$numbers[5] = "5";
+	$numbers[6] = "99";
+	$numbers[7] = "98";
+
+	$texts["1"] = "1";
+	$texts["2"] = "2";
+	$texts["3"] = "3";
+	$texts["4"] = "4";
+	$texts["5"] = "5";
+	$texts["99"] = "WKn";
+	$texts["98"] = "Ign";
+
+	$bgColors["1"] = "#F5B8A9FF";
+	$bgColors["2"] = "#F5CCA9EF";
+	$bgColors["3"] = "#F5E1A9DF";
+	$bgColors["4"] = "#F5F3A9BF";
+	$bgColors["5"] = "#DDFFDD9F";
+	$bgColors["99"] = "#FFFFFFCC";
+	$bgColors["98"] = "#FFFFFF11";
+
+	$borderColors["1"] = "#CC998DFF";
+	$borderColors["2"] = "#CCAA8DEF";
+	$borderColors["3"] = "#CCBC8DDF";
+	$borderColors["4"] = "#CCCA8DBF";
+	$borderColors["5"] = "#B8D4B89F";
+	$borderColors["99"] = "#D4D4D4CC";
+	$borderColors["98"] = "#D4D4D455";
 
     $wid = getreq('wid');
 
@@ -333,7 +334,7 @@ else { // if (! isset($_REQUEST['op']))
                                                 <div class="form-group">
                                                     <label for="form_message">Translation</label>
                                                     <textarea id="form_message" name="WoTranslation" data_maxlength="500"
-                                                        data_info="Translation" <?php echo tohtml($transl); ?>
+                                                        data_info="Translation" 
                                                         class="form-control" placeholder="Translation" rows="6"></textarea>
                                                 </div>
                                             </div>
@@ -363,41 +364,19 @@ else { // if (! isset($_REQUEST['op']))
 
                                         </div>
                                         <div class="row">
-                                            <div class="col p-2">
-                                                <input type="submit" name="op" class="btn btn-send  pt-2 btn-block"
-                                                    style="background-color: #F5B8A9FF; border-color: #CC998DFF; color: #000000FF"
-                                                    value="1">
-                                            </div>
-                                            <div class="col p-2">
-                                                <input type="submit" name="op" class="btn btn-send  pt-2 btn-block"
-                                                    style="background-color: #F5CCA9EF; border-color: #CCAA8DEF; color: #000000FF"
-                                                    value="2">
-                                            </div>
-                                            <div class="col p-2">
-                                                <input type="submit" name="op" class="btn btn-send  pt-2 btn-block"
-                                                    style="background-color: #F5E1A9DF; border-color: #CCBC8DDF; color: #000000FF"
-                                                    value="3">
-                                            </div>
-                                            <div class="col p-2">
-                                                <input type="submit" name="op" class="btn btn-send  pt-2 btn-block"
-                                                    style="background-color: #F5F3A9BF; border-color: #CCCA8DBF; color: #000000FF"
-                                                    value="4">
-                                            </div>
-                                            <div class="col p-2">
-                                                <input type="submit" name="op" class="btn btn-send  pt-2 btn-block"
-                                                    style="background-color: #DDFFDD9F; border-color: #B8D4B89F; color: #000000FF"
-                                                    value="5">
-                                            </div>
-                                            <div class="col p-2">
-                                                <input type="submit" name="op" class="btn btn-send  pt-2 btn-block"
-                                                    style="background-color: #FFFFFFCC; border-color: #D4D4D4CC; color: #000000FF"
-                                                    value="WKn">
-                                            </div>
-                                            <div class="col p-2">
-                                                <input type="submit" name="op" class="btn btn-send  pt-2 btn-block"
-                                                    style="background-color: #FFFFFF11; border-color: #D4D4D455; color: #000000FF"
-                                                    value="Ign">
-                                            </div>
+										<?php
+										for($i = 1; $i <= 7; ++$i)
+										{
+											$number = $numbers[$i];
+											$text = $texts[$number];
+											$bgColor = $bgColors[$number];
+											$borderColor = $borderColors[$number];
+
+											echo "<div class=\"col p-2\">";
+											echo "<button type=\"submit\" name=\"op\" class=\"btn pt-2 btn-block\" style=\"background-color: $bgColor; border-color: $borderColor; color: #000000FF\" value=\"S-$number\">$text</button>";
+											echo "</div>";
+										}
+										?>
                                         </div>
                                     </div>
                                 </form>
@@ -502,41 +481,31 @@ else { // if (! isset($_REQUEST['op']))
 
                                             </div>
                                             <div class="row">
-                                                <div class="col p-2">
-                                                    <input type="submit" name="op" class="btn btn-send  pt-2 btn-block"
-                                                        style="background-color: #F5B8A9FF; border-color: #CC998DFF; color: #000000FF"
-                                                        value="1">
-                                                </div>
-                                                <div class="col p-2">
-                                                    <input type="submit" name="op" class="btn btn-send  pt-2 btn-block"
-                                                        style="background-color: #F5CCA9EF; border-color: #CCAA8DEF; color: #000000FF"
-                                                        value="2">
-                                                </div>
-                                                <div class="col p-2">
-                                                    <input type="submit" name="op" class="btn btn-send  pt-2 btn-block"
-                                                        style="background-color: #F5E1A9DF; border-color: #CCBC8DDF; color: #000000FF"
-                                                        value="3">
-                                                </div>
-                                                <div class="col p-2">
-                                                    <input type="submit" name="op" class="btn btn-send  pt-2 btn-block"
-                                                        style="background-color: #F5F3A9BF; border-color: #CCCA8DBF; color: #000000FF"
-                                                        value="4">
-                                                </div>
-                                                <div class="col p-2">
-                                                    <input type="submit" name="op" class="btn btn-send  pt-2 btn-block"
-                                                        style="background-color: #DDFFDD9F; border-color: #B8D4B89F; color: #000000FF"
-                                                        value="5">
-                                                </div>
-                                                <div class="col p-2">
-                                                    <input type="submit" name="op" class="btn btn-send  pt-2 btn-block"
-                                                        style="background-color: #FFFFFFCC; border-color: #D4D4D4CC; color: #000000FF"
-                                                        value="WKn">
-                                                </div>
-                                                <div class="col p-2">
-                                                    <input type="submit" name="op" class="btn btn-send  pt-2 btn-block"
-                                                        style="background-color: #FFFFFF11; border-color: #D4D4D455; color: #000000FF"
-                                                        value="Ign">
-                                                </div>
+                                                <?php
+                                                for($i = 1; $i <= 7; ++$i)
+												{
+													$number = $numbers[$i];
+													$text = $texts[$number];
+													$bgColor = $bgColors[$number];
+													$borderColor = $borderColors[$number];
+
+													$checked = false;
+													if($number == $status)
+													{
+														$checked = true;
+													}
+													echo "<div class=\"col p-2\">";
+													if($checked)
+													{
+														echo "<button type=\"submit\" name=\"op\" class=\"btn pt-2 btn-block\" style=\"background-color: $bgColor; border-color: #444444FF; color: #000000FF\" value=\"C-$number\">$text</button>";
+													}
+													else
+													{
+														echo "<button type=\"submit\" name=\"op\" class=\"btn pt-2 btn-block\" style=\"background-color: $bgColor; border-color: $borderColor; color: #000000FF\" value=\"C-$number\">$text</button>";
+													}
+													echo "</div>";
+												}
+                                                ?>
                                             </div>
                                         </div>
 
