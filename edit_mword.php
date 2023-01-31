@@ -206,7 +206,7 @@ if (isset($_REQUEST['op'])) {
             $('.TERM<?php echo $hex; ?>', context).removeClass('hide').addClass('word' + woid + ' ' + 'status' + status).attr('data_trans', trans).attr('data_rom', roman).attr('data_status', status).attr('data_wid', woid).attr('title', title);
             $('#learnstatus', contexth).html('<?php echo texttodocount2($_REQUEST['tid']); ?>');
 
-        <?php
+            <?php
         } else {
             ?>
             var status = '<?php echo $newstatus; ?>';
@@ -218,7 +218,7 @@ if (isset($_REQUEST['op'])) {
         ?>
         window.parent.frames['l'].focus();
         window.parent.frames['l'].setTimeout('cClick()', 100);
-    //]]>
+        //]]>
     </script>
 
     <?php
@@ -229,37 +229,37 @@ if (isset($_REQUEST['op'])) {
 #region FORM
 else { // if (! isset($_REQUEST['op']))
     // edit_mword.php?tid=..&ord=..&wid=..  ODER  edit_mword.php?tid=..&ord=..&txt=..
-	$numbers[1] = "1";
-	$numbers[2] = "2";
-	$numbers[3] = "3";
-	$numbers[4] = "4";
-	$numbers[5] = "5";
-	$numbers[6] = "99";
-	$numbers[7] = "98";
+    $numbers[1] = "1";
+    $numbers[2] = "2";
+    $numbers[3] = "3";
+    $numbers[4] = "4";
+    $numbers[5] = "5";
+    $numbers[6] = "99";
+    $numbers[7] = "98";
 
-	$texts["1"] = "1";
-	$texts["2"] = "2";
-	$texts["3"] = "3";
-	$texts["4"] = "4";
-	$texts["5"] = "5";
-	$texts["99"] = "WKn";
-	$texts["98"] = "Ign";
+    $texts["1"] = "1";
+    $texts["2"] = "2";
+    $texts["3"] = "3";
+    $texts["4"] = "4";
+    $texts["5"] = "5";
+    $texts["99"] = "WKn";
+    $texts["98"] = "Ign";
 
-	$bgColors["1"] = "#F5B8A9FF";
-	$bgColors["2"] = "#F5CCA9EF";
-	$bgColors["3"] = "#F5E1A9DF";
-	$bgColors["4"] = "#F5F3A9BF";
-	$bgColors["5"] = "#DDFFDD9F";
-	$bgColors["99"] = "#FFFFFFCC";
-	$bgColors["98"] = "#FFFFFF11";
+    $bgColors["1"] = "#F5B8A9FF";
+    $bgColors["2"] = "#F5CCA9EF";
+    $bgColors["3"] = "#F5E1A9DF";
+    $bgColors["4"] = "#F5F3A9BF";
+    $bgColors["5"] = "#DDFFDD9F";
+    $bgColors["99"] = "#FFFFFFCC";
+    $bgColors["98"] = "#FFFFFF11";
 
-	$borderColors["1"] = "#CC998DFF";
-	$borderColors["2"] = "#CCAA8DEF";
-	$borderColors["3"] = "#CCBC8DDF";
-	$borderColors["4"] = "#CCCA8DBF";
-	$borderColors["5"] = "#B8D4B89F";
-	$borderColors["99"] = "#D4D4D4CC";
-	$borderColors["98"] = "#D4D4D455";
+    $borderColors["1"] = "#CC998DFF";
+    $borderColors["2"] = "#CCAA8DEF";
+    $borderColors["3"] = "#CCBC8DDF";
+    $borderColors["4"] = "#CCCA8DBF";
+    $borderColors["5"] = "#B8D4B89F";
+    $borderColors["99"] = "#D4D4D4CC";
+    $borderColors["98"] = "#D4D4D455";
 
     $wid = getreq('wid');
 
@@ -302,98 +302,78 @@ else { // if (! isset($_REQUEST['op']))
     if ($new) {
 
         ?>
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="card mt-2 pt-2 bg-light">
-                        <div class="bg-light">
-                            <div class="container" style="font-size: 10px">
-                                <form id="contact-form" role="form" name="newword" class="validate"
-                                    action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-                                    <input type="hidden" name="WoLgID" id="langfield" value="<?php echo $lang; ?>" />
-                                    <input type="hidden" name="WoTextLC" value="<?php echo tohtml($termlc); ?>" />
-                                    <input type="hidden" name="tid" value="<?php echo $_REQUEST['tid']; ?>" />
-                                    <div class="controls">
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <label for="form_name">Term</label>
-                                                <input <?php echo $scrdir; ?> data_info="New Term" type="text" name="WoText"
-                                                    id="wordfield" class="form-control" value="<?php echo tohtml($term); ?>"
-                                                    maxlength="250" placeholder="Term" required="required"
-                                                    data-error="Term is required.">
-                                            </div>
-                                            <div class="col-6">
-                                                <label for="form_name">Alt. writing</label>
-                                                <input type="text" data_info="Romanization" name="WoRomanization" id="form_name"
-                                                    class="form-control" value="" maxlength="100"
-                                                    placeholder="Alternative writing">
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <label for="form_message">Translation</label>
-                                                    <textarea id="form_message" name="WoTranslation" data_maxlength="500"
-                                                        data_info="Translation" 
-                                                        class="form-control" placeholder="Translation" rows="6"></textarea>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <label for="form_message">Notes</label>
-                                                    <textarea name="WoNotes" data_maxlength="200" data_info="Notes"
-                                                        id="form_message" class="form-control" placeholder="Notes"
-                                                        rows="4"></textarea>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <label for="form_message">Tags</label>
-                                                    <?php echo getWordTags(0); ?>
-                                                </div>
-
-                                            </div>
-
-
-
-
-                                        </div>
-                                        <div class="row">
-										<?php
-										for($i = 1; $i <= 7; ++$i)
-										{
-											$number = $numbers[$i];
-											$text = $texts[$number];
-											$bgColor = $bgColors[$number];
-											$borderColor = $borderColors[$number];
-
-											echo "<div class=\"col p-2\">";
-											echo "<button type=\"submit\" name=\"op\" class=\"btn pt-2 btn-block\" style=\"background-color: $bgColor; border-color: $borderColor; color: #000000FF\" value=\"S-$number\">$text</button>";
-											echo "</div>";
-										}
-										?>
-                                        </div>
-                                    </div>
-                                </form>
+        <div class="container" style="font-size: 10px; margin-top: 8px">
+            <form id="contact-form" role="form" name="newword" class="validate" action="<?php echo $_SERVER['PHP_SELF']; ?>"
+                method="post">
+                <input type="hidden" name="WoLgID" id="langfield" value="<?php echo $lang; ?>" />
+                <input type="hidden" name="WoTextLC" value="<?php echo tohtml($termlc); ?>" />
+                <input type="hidden" name="tid" value="<?php echo $_REQUEST['tid']; ?>" />
+                <div class="controls">
+                    <div class="row">
+                        <div class="col-6">
+                            <label for="form_name">Term</label>
+                            <input <?php echo $scrdir; ?> data_info="New Term" type="text" name="WoText" id="wordfield"
+                                class="form-control" value="<?php echo tohtml($term); ?>" maxlength="250" placeholder="Term"
+                                required="required" data-error="Term is required.">
+                        </div>
+                        <div class="col-6">
+                            <label for="form_name">Alt. writing</label>
+                            <input type="text" data_info="Romanization" name="WoRomanization" id="form_name"
+                                class="form-control" value="" maxlength="100" placeholder="Alternative writing">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="form_message">Translation</label>
+                                <textarea id="form_message" name="WoTranslation" data_maxlength="500" data_info="Translation"
+                                    class="form-control" placeholder="Translation" rows="6"></textarea>
                             </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="form_message">Notes</label>
+                                <textarea name="WoNotes" data_maxlength="200" data_info="Notes" id="form_message"
+                                    class="form-control" placeholder="Notes" rows="4"></textarea>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="form_message">Tags</label>
+                                <?php echo getWordTags(0); ?>
+                            </div>
+
                         </div>
 
 
+
+
                     </div>
-                    <!-- /.8 -->
+                    <div class="row">
+                        <?php
+                        for ($i = 1; $i <= 7; ++$i) {
+                            $number = $numbers[$i];
+                            $text = $texts[$number];
+                            $bgColor = $bgColors[$number];
+                            $borderColor = $borderColors[$number];
 
+                            echo "<div class=\"col p-2\">";
+                            echo "<button type=\"submit\" name=\"op\" class=\"btn pt-2 btn-block\" style=\"background-color: $bgColor; border-color: $borderColor; color: #000000FF\" value=\"S-$number\">$text</button>";
+                            echo "</div>";
+                        }
+                        ?>
+                    </div>
                 </div>
-                <!-- /.row-->
-
-            </div>
+            </form>
         </div>
 
-        <script type='text/javascript' src='https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js'></script>
+        <script type='text/javascript'
+            src='https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js'></script>
         <?php
     }
 
@@ -413,118 +393,93 @@ else { // if (! isset($_REQUEST['op']))
                 $transl = '';
             $notes = $record['WoNotes'];
             ?>
-
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card mt-2 pt-2 bg-light">
-                            <div class="bg-light">
-                                <div class="container" style="font-size: 10px">
-                                    <form id="contact-form" role="form" name="editword" class="validate"
-                                        action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-                                        <input type="hidden" name="WoLgID" id="langfield" value="<?php echo $lang; ?>" />
-                                        <input type="hidden" name="WoID" value="<?php echo $wid; ?>" />
-                                        <input type="hidden" name="WoOldStatus" value="<?php echo $record['WoStatus']; ?>" />
-                                        <input type="hidden" name="WoStatus" value="<?php echo $status; ?>" />
-                                        <input type="hidden" name="WoTextLC" value="<?php echo tohtml($termlc); ?>" />
-                                        <input type="hidden" name="tid" value="<?php echo $_REQUEST['tid']; ?>" />
-                                        <div class="controls">
-                                            <div class="row">
-                                                <div class="col-6">
-                                                    <label for="form_name">Term</label>
-                                                    <input <?php echo $scrdir; ?> data_info="Term" type="text" name="WoText"
-                                                        id="wordfield" class="form-control" value="<?php echo tohtml($term); ?>"
-                                                        maxlength="250" placeholder="Term" required="required"
-                                                        data-error="Term is required.">
-                                                </div>
-                                                <div class="col-6">
-                                                    <label for="form_name">Alt. writing</label>
-                                                    <input type="text" data_info="Romanization" name="WoRomanization" id="form_name"
-                                                        class="form-control"
-                                                        value="<?php echo tohtml($record['WoRomanization']); ?>" maxlength="100"
-                                                        placeholder="Alternative writing">
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <div class="form-group">
-                                                        <label for="form_message">Translation</label>
-                                                        <textarea id="form_message" name="WoTranslation" data_maxlength="500"
-                                                            data_info="Translation" <?php echo tohtml($transl); ?>
-                                                            class="form-control" placeholder="Translation"
-                                                            rows="6"><?php echo tohtml($transl); ?></textarea>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <div class="form-group">
-                                                        <label for="form_message">Notes</label>
-                                                        <textarea name="WoNotes" data_maxlength="200" data_info="Notes"
-                                                            id="form_message" class="form-control" placeholder="Notes"
-                                                            rows="4"><?php echo tohtml($notes); ?></textarea>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <div class="form-group">
-                                                        <label for="form_message">Tags</label>
-                                                        <?php echo getWordTags($wid); ?>
-                                                    </div>
-
-                                                </div>
-
-
-
-
-                                            </div>
-                                            <div class="row">
-                                                <?php
-                                                for($i = 1; $i <= 7; ++$i)
-												{
-													$number = $numbers[$i];
-													$text = $texts[$number];
-													$bgColor = $bgColors[$number];
-													$borderColor = $borderColors[$number];
-
-													$checked = false;
-													if($number == $status)
-													{
-														$checked = true;
-													}
-													echo "<div class=\"col p-2\">";
-													if($checked)
-													{
-														echo "<button type=\"submit\" name=\"op\" class=\"btn pt-2 btn-block\" style=\"background-color: $bgColor; border-color: #444444FF; color: #000000FF\" value=\"C-$number\">$text</button>";
-													}
-													else
-													{
-														echo "<button type=\"submit\" name=\"op\" class=\"btn pt-2 btn-block\" style=\"background-color: $bgColor; border-color: $borderColor; color: #000000FF\" value=\"C-$number\">$text</button>";
-													}
-													echo "</div>";
-												}
-                                                ?>
-                                            </div>
-                                        </div>
-
-                                        <?php echo openDictInEdit($lang, $term); ?>
-                                    </form>
+            <div class="container" style="font-size: 10px; margin-top: 8px">
+                <form id="contact-form" role="form" name="editword" class="validate" action="<?php echo $_SERVER['PHP_SELF']; ?>"
+                    method="post">
+                    <input type="hidden" name="WoLgID" id="langfield" value="<?php echo $lang; ?>" />
+                    <input type="hidden" name="WoID" value="<?php echo $wid; ?>" />
+                    <input type="hidden" name="WoOldStatus" value="<?php echo $record['WoStatus']; ?>" />
+                    <input type="hidden" name="WoStatus" value="<?php echo $status; ?>" />
+                    <input type="hidden" name="WoTextLC" value="<?php echo tohtml($termlc); ?>" />
+                    <input type="hidden" name="tid" value="<?php echo $_REQUEST['tid']; ?>" />
+                    <div class="controls">
+                        <div class="row">
+                            <div class="col-6">
+                                <label for="form_name">Term</label>
+                                <input <?php echo $scrdir; ?> data_info="Term" type="text" name="WoText" id="wordfield"
+                                    class="form-control" value="<?php echo tohtml($term); ?>" maxlength="250" placeholder="Term"
+                                    required="required" data-error="Term is required.">
+                            </div>
+                            <div class="col-6">
+                                <label for="form_name">Alt. writing</label>
+                                <input type="text" data_info="Romanization" name="WoRomanization" id="form_name"
+                                    class="form-control" value="<?php echo tohtml($record['WoRomanization']); ?>" maxlength="100"
+                                    placeholder="Alternative writing">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="form_message">Translation</label>
+                                    <textarea id="form_message" name="WoTranslation" data_maxlength="500" data_info="Translation"
+                                        <?php echo tohtml($transl); ?> class="form-control" placeholder="Translation"
+                                        rows="6"><?php echo tohtml($transl); ?></textarea>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="form_message">Notes</label>
+                                    <textarea name="WoNotes" data_maxlength="200" data_info="Notes" id="form_message"
+                                        class="form-control" placeholder="Notes" rows="4"><?php echo tohtml($notes); ?></textarea>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="form_message">Tags</label>
+                                    <?php echo getWordTags($wid); ?>
+                                </div>
+
                             </div>
 
 
+
+
                         </div>
-                        <!-- /.8 -->
+                        <div class="row">
+                            <?php
+                            for ($i = 1; $i <= 7; ++$i) {
+                                $number = $numbers[$i];
+                                $text = $texts[$number];
+                                $bgColor = $bgColors[$number];
+                                $borderColor = $borderColors[$number];
 
+                                $checked = false;
+                                if ($number == $status) {
+                                    $checked = true;
+                                }
+                                echo "<div class=\"col p-2\">";
+                                if ($checked) {
+                                    echo "<button type=\"submit\" name=\"op\" class=\"btn pt-2 btn-block\" style=\"background-color: $bgColor; border-color: #444444FF; color: #000000FF\" value=\"C-$number\">$text</button>";
+                                } else {
+                                    echo "<button type=\"submit\" name=\"op\" class=\"btn pt-2 btn-block\" style=\"background-color: $bgColor; border-color: $borderColor; color: #000000FF\" value=\"C-$number\">$text</button>";
+                                }
+                                echo "</div>";
+                            }
+                            ?>
+                        </div>
                     </div>
-                    <!-- /.row-->
 
-                </div>
+                    <?php echo openDictInEdit($lang, $term); ?>
+                </form>
             </div>
 
-            <script type='text/javascript' src='https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js'></script>
+            <script type='text/javascript'
+                src='https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js'></script>
             <?php
         }
         mysqli_free_result($res);
