@@ -353,9 +353,7 @@ else { // if (! isset($_REQUEST['op']))
                                             <div class="col-12">
                                                 <div class="form-group">
                                                     <label for="form_message">Tags</label>
-                                                    <input id="form_name" type="text" name="name" class="form-control"
-                                                        placeholder="Tags">
-                                                    <!--?php echo getWordTags(0); ?-->
+                                                    <?php echo getWordTags(0); ?>
                                                 </div>
 
                                             </div>
@@ -494,8 +492,6 @@ else { // if (! isset($_REQUEST['op']))
                                                 <div class="col-12">
                                                     <div class="form-group">
                                                         <label for="form_message">Tags</label>
-                                                        <!--input id="form_name" type="text" name="name" class="form-control"
-                                                                placeholder="Tags"-->
                                                         <?php echo getWordTags($wid); ?>
                                                     </div>
 
