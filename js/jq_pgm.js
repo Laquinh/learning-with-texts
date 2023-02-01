@@ -313,7 +313,7 @@ function text_selected_event_do_text_text() {
 	var text = getSelText();
 	if (text[0] == ' ') text = text.substr(1);
 	if (text[text.length - 1] == ' ') text = text.substr(0, text.length - 1);
-	if (text.length < 3) return;
+	if (text == '') return;
 
 	top.frames['ro'].location.href = 'edit_mword.php?tid=' + TID + '&woText=' + text;
 }
