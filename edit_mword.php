@@ -300,7 +300,7 @@ else { // if (! isset($_REQUEST['op']))
     #region NEW
 
     if ($new) {
-
+        $term = $_REQUEST['woText'];
         ?>
         <div class="container" style="font-size: 10px; margin-top: 8px">
             <form id="contact-form" role="form" name="newword" class="validate" action="<?php echo $_SERVER['PHP_SELF']; ?>"
@@ -369,6 +369,8 @@ else { // if (! isset($_REQUEST['op']))
                         ?>
                     </div>
                 </div>
+
+                <?php if($term) echo openDictInEdit($lang, $term); ?>
             </form>
         </div>
 
