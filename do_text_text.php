@@ -97,6 +97,8 @@ $wordsInDB = databaseWordList($langid);
 //Main loop
 $whitespaceHTML = ($removeSpaces ? '<span class="whitespace" style="font-size:0"> </span>' : " ");
 
+$start = microtime(true);
+
 for($i = 0, $wordIndex = 0; $i < count($items); ++$i)
 {
 	$item = $items[$i];
@@ -108,7 +110,7 @@ for($i = 0, $wordIndex = 0; $i < count($items); ++$i)
 	else if(is_word($item)) //item is a word
 	{
 		++$wordIndex;
-		$multiwordData = get_longest_multiword($i, $i, $items, $wordsInDB);
+		$multiwordData = get_longest_multiword($i, $i, $items, $wordsInDB, $langid);
 		if($multiwordData)
 		{
 			consoleLog($i . ": " . $multiwordData['WoText'], "warn");
@@ -117,14 +119,16 @@ for($i = 0, $wordIndex = 0; $i < count($items); ++$i)
 			'" data_term="' . $multiwordData['WoText'] . '" data_language="' . $langid . '" data_wordcount="'. strwordcount($multiwordData['WoText']) .'">&nbsp' . strwordcount($multiwordData['WoText']) . '&nbsp</span>&nbsp';
 		}
 
-		$wordData = get_word_data($item, $wordsInDB);
+		$wordData = get_word_data($item, $langid);
 		
 		if ($wordData) //seen word
 		{
 			echo '<span class="click word wsty ' . 'word' . $wordData['WoID'] . ' ' . 'status'. $wordData['WoStatus'] . ' ' . 'TERM' . strToClassName($wordData['WoText']) .
-			'" data_wid="' . $wordData['WoID'] . '" data_trans="' . tohtml($wordData['WoTranslation'] . getWordTagList($wordData['WoID'],' ',1,0)) .
+			'" data_wid="' . $wordData['WoID'] . '" data_trans="' . tohtml($wordData['WoTranslation']) .
 			'" data_rom="' . tohtml($wordData['WoRomanization']) . '" data_status="' . $wordData['WoStatus'] .
 			'" data_term="' . $wordData['WoText'] . '" data_language="' . $langid . '" data_index="' . ($wordIndex-1) . '">' . tohtml($item) . '</span>';
+			//echo tohtml($item);
+			//echo '<span class="click word wsty status'. $wordData['WoStatus'] . '">' . tohtml($item) . '</span>';
 		}   
 		else //new word
 		{    		
@@ -144,6 +148,10 @@ for($i = 0, $wordIndex = 0; $i < count($items); ++$i)
 }
 
 echo '<span id="totalcharcount" class="hide">' . $currcharcount . '</span></p><p style="font-size:' . $textsize . '%;line-height: 1.4; margin-bottom: 300px;">&nbsp;</p></div>';
+
+$time_elapsed_secs = microtime(true) - $start;
+
+echo $time_elapsed_secs;
 
 pageend();
 

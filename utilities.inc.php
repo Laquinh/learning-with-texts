@@ -2118,7 +2118,24 @@ function splitTextIntoSentences($text)
 
 // -------------------------------------------------------------
 
-function get_longest_multiword($i, $j, $items, $wordsInDB)
+function only_beginning_with($substring, $langid)
+{
+    $result = array();
+
+	$sql = 'select * from words where WoText LIKE "' . $substring . '%" AND WoLgID = ' . $langid;
+	$res = do_mysqli_query($sql);
+	while($line = mysqli_fetch_assoc($res))
+	{
+		array_push($result, $line['WoText']);
+	}
+	mysqli_free_result($res);
+
+    return $result;
+}
+
+// -------------------------------------------------------------
+
+function optimized_longest_multiword($i, $j, $items, $wordsInDB)
 {
 	if($j >= count($items))
 	{
@@ -2129,12 +2146,37 @@ function get_longest_multiword($i, $j, $items, $wordsInDB)
 	{
 		$potentialMultiword .= $items[$k];
 	}
-	$multiwords = find_multiword($potentialMultiword, $wordsInDB);
+	$candidates = only_beginning_with($potentialMultiword);
+	if(count($candidates) < 0)
+	{
+		return null;
+	}
+	if(count($candidates) == 1)
+	{
+		return get_word_data($candidates[0], $wordsInDB);
+	}
+	return get_word_data(optimized_longest_multiword($i, $j+1, $items, $wordsInDB), $wordsInDB);
+}
+
+// -------------------------------------------------------------
+
+function get_longest_multiword($i, $j, $items, $wordsInDB, $langid)
+{
+	if($j >= count($items))
+	{
+		return null;
+	}
+	$potentialMultiword = "";
+	for($k = $i; $k <= $j; ++$k)
+	{
+		$potentialMultiword .= $items[$k];
+	}
+	$multiwords = only_beginning_with($potentialMultiword, $langid);
 
 	if(count($multiwords) > 1)
 	{
-		$nextLongest = get_longest_multiword($i, $j+1, $items, $wordsInDB);
-		$wordData = get_word_data($potentialMultiword, $wordsInDB);
+		$nextLongest = get_longest_multiword($i, $j+1, $items, $wordsInDB, $langid);
+		$wordData = get_word_data($potentialMultiword, $langid);
 		if($nextLongest)
 		{
 			return $nextLongest;
@@ -2156,7 +2198,7 @@ function get_longest_multiword($i, $j, $items, $wordsInDB)
 	}
 	if(count($multiwords) === 1 && mb_strtolower($multiwords[0], "UTF-8") === mb_strtolower($potentialMultiword, "UTF-8") && ($k > 0 || $j > $i))
 	{
-		return get_word_data($multiwords[0], $wordsInDB);
+		return get_word_data($multiwords[0], $langid);
 	}
 	else
 	{
@@ -2180,7 +2222,20 @@ function find_multiword($beginning, $array)
 
 // -------------------------------------------------------------
 
-function get_word_data($word, $wordsInDB)
+function get_word_data($word, $langid)
+{
+	$sql = 'select * from words where WoText = "' . mb_strtolower($word, 'UTF-8') . '" and WoLgID = ' . $langid;
+
+	$res = do_mysqli_query($sql);
+	$val = mysqli_fetch_assoc($res);
+	mysqli_free_result($res);
+
+	return $val;
+}
+
+// -------------------------------------------------------------
+
+function get_word_data_legacy($word, $wordsInDB)
 {
 	$index = array_search(mb_strtolower($word, 'UTF-8'), array_column($wordsInDB, "WoText"));
 	if($index !== false)
