@@ -72,7 +72,7 @@ foreach($words as $word) {
 		continue;
 	}
 	$wordlc = mb_strtolower($word, 'UTF-8');
-	$wordData = get_word_data($wordlc, $wordsInDB);
+	$wordData = get_word_data_legacy($wordlc, $wordsInDB);
 	
 	if(!$wordData)
 	{
