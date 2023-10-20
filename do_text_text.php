@@ -127,8 +127,6 @@ for($i = 0, $wordIndex = 0; $i < count($items); ++$i)
 			'" data_wid="' . $wordData['WoID'] . '" data_trans="' . tohtml($wordData['WoTranslation']) .
 			'" data_rom="' . tohtml($wordData['WoRomanization']) . '" data_status="' . $wordData['WoStatus'] .
 			'" data_term="' . $wordData['WoText'] . '" data_language="' . $langid . '" data_index="' . ($wordIndex-1) . '">' . tohtml($item) . '</span>';
-			//echo tohtml($item);
-			//echo '<span class="click word wsty status'. $wordData['WoStatus'] . '">' . tohtml($item) . '</span>';
 		}   
 		else //new word
 		{    		
